@@ -1,0 +1,110 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {{ widget("backend.flash") }}
+            </div>
+        </div>
+        
+        <div class="row" style="margin-bottom: 15px">
+            <div class="col-md-2 col-md-offset-10">
+                <button type="button" class="btn btn-success btn-block" data-action="createCarrier"><i class="fa fa-plus"></i> Nový dopravce</button>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for carrier in carriers %}
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <span class="carrierNameEditable" data-url="{{ path('backend_ajax_carrier_change_name', { carrier: carrier.id }) }}" data-pk="{{ carrier.id }}">{{ carrier.name }}</span>
+                            ({{ carrier.code }})
+                            <button type="button" data-action="saveCarrier" class="btn btn-xs btn-success pull-right">Uložit změny</button>
+                            <button data-action="removeCarrier" class="btn btn-xs btn-default pull-right" style="margin-right: 10px"><i class="fa fa-times"></i> Odstranit</button>
+                            <form action="{{ path("backend_carrier_remove", { carrier: carrier.id }) }}" data-action="removeCarrier" method="post"></form>
+                        </div>
+                        <form data-action="saveCarrier" action="{{ path("backend_carrier_save", { carrier: carrier.id }) }}" method="post">
+                            <button type="submit" style="display: none"></button>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="surcharge">Příplatek</label>
+                                            <div class="input-group" style="width: 100px">
+                                                <input name="surcharge" type="text" id="surcharge" class="form-control text-right" value="{{ carrier.surcharge }}" placeholder="0">
+                                                <span class="input-group-addon">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="commission">Provize</label>
+                                            <div class="input-group" style="width: 100px">
+                                                <input name="commission" type="text" id="commission" class="form-control text-right" value="{{ carrier.commission }}" placeholder="0">
+                                                <span class="input-group-addon">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Zablokovat platby</label>
+                                            <input type="checkbox" data-toggle="toggle" name="cantPayOnline" data-on="Zablokováno" data-off="-" data-onstyle="danger" data-size="normal"{% if carrier.cantPayOnline %} checked{% endif %}>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            {% endfor %}
+        </div>
+        
+        {% if deletedCarriers is defined and deletedCarriers|length > 0 %}
+            <hr style="margin-top: 30px; margin-bottom: 20px;">
+            <h3>Smazaní dopravci</h3>
+            <div class="row" style="margin-top: 20px;">
+                {% for carrier in deletedCarriers %}
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <span>{{ carrier.name }}</span>
+                                ({{ carrier.code }})
+                                <button data-action="restoreCarrier" data-url="{{ path('backend_carrier_restore', { carrier: carrier.id }) }}" class="btn btn-xs btn-success pull-right"><i class="fa fa-undo"></i> Obnovit</button>
+                                <form action="{{ path("backend_carrier_restore", { carrier: carrier.id }) }}" data-action="restoreCarrier" method="post"></form>
+                            </div>
+                            <div class="panel-body text-center">
+                                <p class="text-muted">Tento dopravce je smazaný. Pro úpravu jej nejprve obnovte.</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <div style="display: none;" data-modal-body="createCarrier">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="{{ path("backend_carrier_create") }}" method="post">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="code">Kód dopravce</label>
+                            <input id="code" type="text" class="form-control" name="code" placeholder="Kód dopravce" value="">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="name">Název dopravce</label>
+                            <input id="name" type="text" class="form-control" name="name" placeholder="Název dopravce" value="">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

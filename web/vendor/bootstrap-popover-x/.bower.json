@@ -1,0 +1,44 @@
+{
+  "name": "bootstrap-popover-x",
+  "version": "1.4.4",
+  "homepage": "https://github.com/kartik-v/bootstrap-popover-x",
+  "authors": [
+    "Kartik Visweswaran <kartikv2@gmail.com>"
+  ],
+  "description": "Bootstrap Popover Extended - Popover with modal behavior, styling enhancements and more.",
+  "main": [
+    "./css/bootstrap-popover-x.min.css",
+    "./js/bootstrap-popover-x.min.js"
+  ],
+  "keywords": [
+    "bootstrap",
+    "popover",
+    "extended",
+    "modal",
+    "modal-popover",
+    "jquery"
+  ],
+  "dependencies": {
+    "jquery": ">= 1.9.0",
+    "bootstrap": ">= 3.0.0"
+  },
+  "license": "BSD-3",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "composer.json",
+    "examples",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "1.4.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.4.4",
+    "commit": "16704c0a6a7d2960b9a35dfc03b54211d642e43c"
+  },
+  "_source": "https://github.com/kartik-v/bootstrap-popover-x.git",
+  "_target": "^1.4.3",
+  "_originalSource": "bootstrap-popover-x"
+}

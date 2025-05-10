@@ -1,0 +1,97 @@
+{% extends "AppBundle:Frontend/Layout:Skeleton.html.twig" %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-md-3">
+			<div id="left-search">
+				{{ widget("frontend.searchForm") }}
+			</div>
+		</div>
+		<div class="col-md-9">
+			<div class="row">
+				<div class="col-md-7">
+					<h2>{{ "order.paymentOfOrder"|trans }}</h2>
+				</div>
+				<div class="col-md-5">
+					<a href="{{ payment.url }}" class="btn btn-lg btn-block btn-success" style="margin-top: 10px"><i class="fa fa-credit-card"></i> {{ "order.payByCard"|trans }}</a>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<p style="font-size: 1.5em; font-weight: bold; padding: 3px 10px; background-color: #EC02A6; color: white; margin: 15px 0 25px 0">{{ "search.totalPrice"|trans  }}: {{ order.price }} Kč</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-7">
+					<div class="row order-there">
+						<div class="col-md-5">
+							<div class="time">{{ order.routeThere.datetimeDeparture|date("j. n. Y H:i") }}</div>
+							<div class="city">{{ order.routeThere.simpleFromCityName|language }}</div>
+							{% if order.routeThere.fromStation %}
+								<div class="station">{{ order.routeThere.fromStation.name|language }}</div>
+							{% elseif order.routeThere.fromExternalStation %}
+								<div class="station">{{ order.routeThere.fromExternalStation.name|language }}</div>
+							{% else %}
+								<div class="station">&nbsp;</div>
+							{% endif %}
+						</div>
+						<div class="col-md-1">
+							<div class="arrow"><i class="fa fa-arrow-right"></i></div>
+						</div>
+						<div class="col-md-6">
+							<div class="time">{{ order.routeThere.datetimeArrival|date("j. n. Y H:i") }}</div>
+							<div class="city">{{ order.routeThere.simpleToCityName|language }}</div>
+							{% if order.routeThere.toStation %}
+								<div class="station">{{ order.routeThere.toStation.name|language }}</div>
+							{% elseif order.routeThere.toExternalStation %}
+								<div class="station">{{ order.routeThere.toExternalStation.name|language }}</div>
+							{% else %}
+								<div class="station">&nbsp;</div>
+							{% endif %}
+						</div>
+					</div>
+					{% if order.routeBack %}
+						<div class="row order-there">
+							<div class="col-md-5">
+								<div class="time">{{ order.routeBack.datetimeDeparture|date("j. n. Y H:i") }}</div>
+								<div class="city">{{ order.routeBack.simpleFromCityName|language }}</div>
+								{% if order.routeBack.fromStation %}
+									<div class="station">{{ order.routeBack.fromStation.name|language }}</div>
+								{% elseif order.routeBack.fromExternalStation %}
+									<div class="station">{{ order.routeBack.fromExternalStation.name|language }}</div>
+								{% else %}
+									<div class="station">&nbsp;</div>
+								{% endif %}
+							</div>
+							<div class="col-md-1">
+								<div class="arrow"><i class="fa fa-arrow-right"></i></div>
+							</div>
+							<div class="col-md-6">
+								<div class="time">{{ order.routeBack.datetimeArrival|date("j. n. Y H:i") }}</div>
+								<div class="city">{{ order.routeBack.simpleToCityName|language }}</div>
+								{% if order.routeBack.toStation %}
+									<div class="station">{{ order.routeBack.toStation.name|language }}</div>
+								{% elseif order.routeBack.toExternalStation %}
+									<div class="station">{{ order.routeBack.toExternalStation.name|language }}</div>
+								{% else %}
+									<div class="station">&nbsp;</div>
+								{% endif %}
+							</div>
+						</div>
+					{% endif %}
+				</div>
+				<div class="col-md-5">
+					<ul class="list-group">
+						{% for orderPerson in order.orderPersons %}
+						<li class="list-group-item">
+							<h4>{{ orderPerson.name }}</h4>
+							<p><strong>{{ "order.phone"|trans }}:</strong> {{ orderPerson.phone }}</p>
+							<p><strong>{{ "order.price"|trans }}:</strong> {{ orderPerson.routeTariffThere.priceIncludeSurchargeprice }} Kč</p>
+						</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

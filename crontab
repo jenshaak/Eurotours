@@ -1,0 +1,6 @@
+# Crontab se ze souboru na provoznim serveru "praha" neaktivuje automaticky, je potreba definovat rucne
+
+* * * * * docker exec eurotours-app bin/console swiftmailer:spool:send > /dev/null
+12 5 * * * docker exec eurotours-app bin/console eurotours:externals:sync > /dev/null
+06 6 * * * docker exec eurotours-app bin/console eurotours:clean:database > /dev/null
+32 0 * * * docker exec eurotours-app bin/console eurotours:orders:cancelExpired > /dev/null

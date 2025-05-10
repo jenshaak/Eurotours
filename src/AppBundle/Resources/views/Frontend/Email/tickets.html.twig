@@ -1,0 +1,55 @@
+{% macro trRouteTariff(order, orderPerson, routeTariff, direction) %}
+	{% if routeTariff.route.line %}
+		<tr>
+			<td style="padding: 6px">{{ routeTariff.route.carrier.name }}</td>
+			<td style="padding: 6px">{{ routeTariff.route.simpleFromCityName|language }}, {{ routeTariff.route.datetimeDeparture|date("j. n. Y H:i") }}</td>
+			<td style="padding: 6px">{{ routeTariff.route.simpleToCityName|language }}, {{ routeTariff.route.datetimeArrival|date("j. n. Y H:i") }}</td>
+			<td style="padding: 6px">{{ orderPerson.name }}</td>
+			<td style="padding: 6px">{{ routeTariff.tariff.name|language }}</td>
+			<td style="text-align: right; padding: 6px;">{{ routeTariff.priceCurrencyIncludeSurcharge|priceCurrency }}</td>
+		</tr>
+	{% else %}
+		<tr>
+			<td style="padding: 6px">{{ routeTariff.route.carrier.name }}</td>
+			<td style="padding: 6px">{{ routeTariff.route.simpleFromCityName|language }}, {{ routeTariff.route.datetimeDeparture|date("j. n. Y H:i") }}</td>
+			<td style="padding: 6px">{{ routeTariff.route.simpleToCityName|language }}, {{ routeTariff.route.datetimeArrival|date("j. n. Y H:i") }}</td>
+			<td style="padding: 6px">{{ orderPerson.name }}</td>
+			<td style="padding: 6px">{{ routeTariff.externalTariff.name|language }}</td>
+			<td style="text-align: right; padding: 6px;">{{ routeTariff.priceCurrencyIncludeSurcharge|priceCurrency }}</td>
+		</tr>
+	{% endif %}
+{% endmacro %}
+
+<p>{{ "email.tickets.introduction"|trans }}</p>
+
+<h3>Objednané spoje</h3>
+<table class="table table-striped table-hover" style="border-collapse: collapse; width: 100%" border="1">
+	<thead>
+	<tr>
+		<th style="text-align: left; padding: 6px">Dopravce</th>
+		<th style="text-align: left; padding: 6px">Odjezd</th>
+		<th style="text-align: left; padding: 6px">Příjezd</th>
+		<th style="text-align: left; padding: 6px">Cestující</th>
+		<th style="text-align: left; padding: 6px">Tarif</th>
+		<th style="text-align: right; padding: 6px">Cena</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for orderPerson in order.orderPersons %}
+		{{ _self.trRouteTariff(order, orderPerson, orderPerson.routeTariffThere, "there") }}
+	{% endfor %}
+	{% if order.routeBack %}
+		{% for orderPerson in order.orderPersons %}
+			{{ _self.trRouteTariff(order, orderPerson, orderPerson.routeTariffBack, "back") }}
+		{% endfor %}
+	{% endif %}
+	</tbody>
+</table>
+
+<p>
+	--<br>
+	EUROTOURS s.r.o.<br>
+	autobusové nádraží Florenc - NOVA HALA - pokladna 15,<br>
+	tel. +420 / 221 895 601, 224 21 02 21,<br>
+	hotline: +420 / 724 13 23 65<br>
+</p>

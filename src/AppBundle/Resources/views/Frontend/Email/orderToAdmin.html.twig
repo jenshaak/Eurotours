@@ -1,0 +1,109 @@
+{% macro trRouteTariff(orderPerson, routeTariff, direction) %}
+	{% if routeTariff.route.line %}
+		<tr>
+			<td style="padding: 6px">{{ routeTariff.route.carrier.name }}</td>
+			<td style="padding: 6px">
+				{% if direction == "there" %}
+					&#8594;
+				{% else %}
+					&#8592;
+				{% endif %}
+				{{ routeTariff.route.line.code }}
+			</td>
+			<td style="padding: 6px">{{ routeTariff.route.datetimeDeparture|date("j. n. Y H:i") }}</td>
+			<td style="padding: 6px">{{ routeTariff.route.datetimeArrival|date("j. n. Y H:i") }}</td>
+			<td style="padding: 6px">{{ orderPerson.name }}</td>
+			<td style="padding: 6px">{{ routeTariff.tariff.name|language }}</td>
+			<td style="text-align: right; padding: 6px;">{{ routeTariff.priceCurrencyIncludeSurcharge|priceCurrency }}</td>
+		</tr>
+	{% else %}
+		<tr>
+			<td style="padding: 6px">{{ routeTariff.route.carrier.name }}</td>
+			<td style="padding: 6px">
+				{% if direction == "there" %}
+					&#8594;
+				{% else %}
+					&#8592;
+				{% endif %}
+			</td>
+			<td style="padding: 6px">{{ routeTariff.route.datetimeDeparture|date("j. n. Y H:i") }}</td>
+			<td style="padding: 6px">{{ routeTariff.route.datetimeArrival|date("j. n. Y H:i") }}</td>
+			<td style="padding: 6px">{{ orderPerson.name }}</td>
+			<td style="padding: 6px">{{ routeTariff.externalTariff.name|language }}</td>
+			<td style="text-align: right; padding: 6px;">{{ routeTariff.priceCurrencyIncludeSurcharge|priceCurrency }}</td>
+		</tr>
+	{% endif %}
+{% endmacro %}
+
+<p><a style="border: 1px solid #777777; padding: 6px; background-color: #9ede94" href="{{ url("backend_order", { order: order.id }) }}">Zobrazit detail {% if order.orderType == "order" %}objednávky{% else %}rezervace{% endif %}</a></p>
+
+<h3>Informace o {% if order.orderType == "order" %}objednávce{% else %}rezervaci{% endif %}</h3>
+<table class="table" border="1" style="border-collapse: collapse;">
+	<tr>
+		<th style="text-align: right; padding: 6px">Odkud:</th>
+		<td style="padding: 6px">{{ order.routeThere.simpleFromCityName|languageEN }}</td>
+	</tr>
+	<tr>
+		<th style="text-align: right; padding: 6px">Kam:</th>
+		<td style="padding: 6px">{{ order.routeThere.simpleToCityName|languageEN }}</td>
+	</tr>
+	<tr>
+		<th style="text-align: right; padding: 6px">Datum {% if order.orderType == "order" %}objednávky{% else %}rezervace{% endif %}:</th>
+		<td style="padding: 6px">{{ order.datetimeOrdered|date("j. n. Y H:i") }}</td>
+	</tr>
+	<tr>
+		<th style="text-align: right; padding: 6px">Jméno a přijmení:</th>
+		<td style="padding: 6px">{{ order.name }}</td>
+	</tr>
+	<tr>
+		<th style="text-align: right; padding: 6px">E-mail:</th>
+		<td style="padding: 6px">{{ order.email }}</td>
+	</tr>
+	<tr>
+		<th style="text-align: right; padding: 6px">Telefon:</th>
+		<td style="padding: 6px">{{ order.phone }}</td>
+	</tr>
+</table>
+
+<h3>{% if order.orderType == "order" %}Objednané{% else %}Rezervované{% endif %} spoje</h3>
+<table class="table table-striped table-hover" style="border-collapse: collapse; width: 100%" border="1">
+	<thead>
+	<tr>
+		<th style="text-align: left; padding: 6px">Dopravce</th>
+		<th style="text-align: left; padding: 6px">Linka</th>
+		<th style="text-align: left; padding: 6px">Odjezd</th>
+		<th style="text-align: left; padding: 6px">Příjezd</th>
+		<th style="text-align: left; padding: 6px">Cestující</th>
+		<th style="text-align: left; padding: 6px">Tarif</th>
+		<th style="text-align: right; padding: 6px">Cena</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for orderPerson in order.orderPersons %}
+		{{ _self.trRouteTariff(orderPerson, orderPerson.routeTariffThere, "there") }}
+	{% endfor %}
+	{% if order.routeBack %}
+		{% for orderPerson in order.orderPersons %}
+			{{ _self.trRouteTariff(orderPerson, orderPerson.routeTariffBack, "back") }}
+		{% endfor %}
+	{% endif %}
+	</tbody>
+</table>
+
+<h3>Cestující</h3>
+<table class="table table-striped table-hover" border="1" style="border-collapse: collapse;">
+	<thead>
+	<tr>
+		<th style="text-align: left; padding: 6px">Cestující</th>
+		<th style="text-align: left; padding: 6px">Telefon</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for orderPerson in order.orderPersons %}
+		<tr>
+			<td style="padding: 6px">{{ orderPerson.name }}</td>
+			<td style="padding: 6px">{{ orderPerson.phone }}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>

@@ -1,0 +1,41 @@
+{% extends "AppBundle:Frontend/Layout:Skeleton.html.twig" %}
+
+{% block container %}
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				{{ widget("frontend.languageCurrencySwitcher") }}
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid" id="home-header">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-3 col-md-6">
+					<div id="home-search">
+						<h2 class="text-center">{{ 'homepage.searchFormTitle'|trans }}</h2>
+						{{ widget("frontend.searchForm", { type: "home" }) }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container" style="margin-top: 30px">
+		<div class="row">
+			<div class="col-md-8">
+				<h2 style="font-size: 3em; margin-bottom: 30px">Požadovaná stránka neexistuje</h2>
+				<p style="font-size: 1.5em; font-weight: 700">Hledáte-li autobusouvou jízdenku, použijte formulář výše.</p>
+				<p>Jedná-li se o chybu, kontaktujte nás pomocí e-mailu nebo telefonu vpravo.</p>
+			</div>
+			<div class="col-md-4">
+				{{ include("@App/Frontend/ContactBox/contactBox.twig") }}
+			</div>
+		</div>
+		<br><br>
+	</div>
+
+
+{% endblock %}

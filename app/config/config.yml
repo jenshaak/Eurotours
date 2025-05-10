@@ -1,0 +1,90 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+
+framework:
+    #esi: ~
+    translator: { fallbacks: [ "en", "cs", "ru", "uk", "bg" ] }
+    secret: '%secret%'
+    router:
+        resource: '%kernel.root_dir%/config/routing.yml'
+        strict_requirements: ~
+    form: ~
+    csrf_protection: ~
+    validation: { enable_annotations: true }
+    #serializer: { enable_annotations: true }
+    templating:
+        engines: ['twig']
+    default_locale: 'en'
+    trusted_hosts: ~
+    trusted_proxies: ~
+    session:
+        # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
+        handler_id:  session.handler.native_file
+        save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
+        cookie_lifetime: 43200
+        gc_maxlifetime: 43200
+    fragments: ~
+    http_method_override: true
+    php_errors:
+        log: true
+    assets:
+        version: "v53"
+
+assetic:
+    use_controller: false
+
+# Twig Configuration
+twig:
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver: pdo_mysql
+        host: '%database_host%'
+        port: '%database_port%'
+        dbname: '%database_name%'
+        user: '%database_user%'
+        password: '%database_password%'
+        charset: UTF8
+
+    orm:
+        auto_generate_proxy_classes: '%kernel.debug%'
+        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_mapping: true
+
+        dql:
+            datetime_functions:
+                date: DoctrineExtensions\Query\Mysql\Date
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: '%mailer_transport%'
+    host: '%mailer_host%'
+    port: '%mailer_port%'
+    username: '%mailer_user%'
+    password: '%mailer_password%'
+    encryption: tls
+    spool:
+        type:
+            file
+
+snc_redis:
+    clients:
+        default:
+            type: predis
+            alias: default
+            dsn: '%redis_dsn%'
+
+lexik_translation:
+    fallback_locale: [en]
+    managed_locales: [ "en", "cs", "ru", "uk", "bg" ]
+
+knp_snappy:
+    pdf:
+        enabled:    true
+        binary:     /usr/local/bin/wkhtmltopdf
+        options:    []

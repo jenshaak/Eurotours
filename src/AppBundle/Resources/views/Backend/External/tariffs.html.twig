@@ -1,0 +1,126 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+
+	<div class="container">
+		<form action="{{ path("backend_externals_tariffs_save") }}" method="post">
+			<div class="row">
+				<div class="col-md-12">
+					<table class="table table-striped">
+						<thead>
+						<tr>
+							<th>Externí systém</th>
+							<th>Identifikátor</th>
+							<th>English</th>
+							<th>Čeština</th>
+							<th>Ruština</th>
+                            <th>Bulharsky</th>
+                            <th>Ukrajinsky</th>
+							<td></td>
+						</tr>
+						</thead>
+						<tbody>
+						{% for externalTariff in externalTariffs %}
+							<tr>
+								<td>
+									{% if externalTariff is externalTariffStudentAgency %}
+										Student Agency
+									{% elseif externalTariff is externalTariffEcolines %}
+										Ecolines
+									{% elseif externalTariff is externalTariffInfobus %}
+										Infobus
+									{% elseif externalTariff is externalTariffEastExpress %}
+										East Express
+									{% elseif externalTariff is externalTariffFlixbus %}
+										Flixbus
+									{% elseif externalTariff is externalTariffEurolines %}
+										Eurolines
+									{% elseif externalTariff is externalTariffNikolo %}
+										Nikolo
+                                    {% elseif externalTariff is externalTariffRegabus %}
+                                        Regabus
+                                    {% elseif externalTariff is externalTariffLikeBus %}
+                                        LikeBus
+									{% endif %}
+								</td>
+								<td>
+									{{ externalTariff.ident }}
+								</td>
+								<td>
+									<input type="text" class="form-control" name="externalTariffs[{{ externalTariff.id }}][en]" value="{{ externalTariff.name.string(englishLanguage) }}">
+								</td>
+								<td>
+									<input type="text" class="form-control" name="externalTariffs[{{ externalTariff.id }}][cs]" value="{{ externalTariff.name.string(czechLanguage) }}">
+								</td>
+								<td>
+									<input type="text" class="form-control" name="externalTariffs[{{ externalTariff.id }}][ru]" value="{{ externalTariff.name.string(russianLanguage) }}">
+								</td>
+                                <td>
+                                    <input type="text" class="form-control" name="externalTariffs[{{ externalTariff.id }}][bg]" value="{{ externalTariff.name.string(bulgarianLanguage) }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="externalTariffs[{{ externalTariff.id }}][uk]" value="{{ externalTariff.name.string(ukrainianLanguage) }}">
+                                </td>
+								<td>
+									<button class="btn btn-default" type="button" data-action="editTariffConditions" data-url="{{ path("backend_ajax_external_tariff_conditions", { tariff: externalTariff.id }) }}" data-toggle="tooltip" title="Upravit podmínky tarifu"><i class="fa fa-file-text-o"></i></button>
+								</td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+
+					<table class="table table-striped">
+						<thead>
+						<tr>
+							<th>Dopravce</th>
+							<th>Linka</th>
+							<th>English</th>
+							<th>Čeština</th>
+							<th>Ruština</th>
+                            <th>Bulharsky</th>
+                            <th>Ukrajinsky</th>
+							<th></th>
+						</tr>
+						</thead>
+						<tbody>
+						{% for tariff in tariffs %}
+							<tr>
+								<td>
+									{{ tariff.carrier.name }}
+								</td>
+								<td>
+									{{ tariff.line.code }}
+								</td>
+								<td>
+									<input type="text" class="form-control" name="tariffs[{{ tariff.id }}][en]" value="{{ tariff.name.string(englishLanguage) }}">
+								</td>
+								<td>
+									<input type="text" class="form-control" name="tariffs[{{ tariff.id }}][cs]" value="{{ tariff.name.string(czechLanguage) }}">
+								</td>
+								<td>
+									<input type="text" class="form-control" name="tariffs[{{ tariff.id }}][ru]" value="{{ tariff.name.string(russianLanguage) }}">
+								</td>
+                                <td>
+                                    <input type="text" class="form-control" name="tariffs[{{ tariff.id }}][bg]" value="{{ tariff.name.string(bulgarianLanguage) }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="tariffs[{{ tariff.id }}][uk]" value="{{ tariff.name.string(ukrainianLanguage) }}">
+                                </td>
+								<td>
+									<button class="btn btn-default" type="button" data-action="editTariffConditions" data-url="{{ path("backend_ajax_tariff_conditions", { tariff: tariff.id }) }}" data-toggle="tooltip" title="Upravit podmínky tarifu"><i class="fa fa-file-text-o"></i></button>
+								</td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<button type="submit" class="btn btn-success">Uložit</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+{% endblock %}

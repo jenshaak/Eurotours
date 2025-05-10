@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>EuroTours</title>
+	<link href="{{ asset('vendor/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+	<link href="{{ asset('vendor/bootstrap-select/dist/css/bootstrap-select.min.css') }}" rel="stylesheet">
+	<link href="{{ asset('vendor/bootstrap3-dialog/dist/css/bootstrap-dialog.min.css') }}" rel="stylesheet">
+	<link href="{{ asset('vendor/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+	<link href="{{ asset('vendor/bootstrap-popover-x/css/bootstrap-popover-x.min.css') }}" rel="stylesheet">
+	<link href="{{ asset('vendor/jasny-bootstrap/dist/css/jasny-bootstrap.min.css') }}" rel="stylesheet">
+	<link href="{{ asset('vendor/bootstrap-toggle/css/bootstrap-toggle.min.css') }}" rel="stylesheet">
+	<link href="{{ asset('vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css') }}" rel="stylesheet">
+	<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+	{% stylesheets '@AppBundle/Resources/public/backend/backend.css' output='compiled-css/backend.css'%}
+	<link href="{{ asset_url }}" rel="stylesheet">
+	{% endstylesheets %}
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+</head>
+<body data-page="{{ app.request.attributes.get('_route') }}">
+<script>
+	var registerWidgets = [];
+	var registerWidget = function (name, id) {
+		var scripts = document.getElementsByTagName("script");
+		for (var i = 0; i < scripts.length; i++) {
+			if (scripts[i].getAttribute("data-widget") == id) {
+				registerWidgets.push({ name: name, id: id, node: scripts[i].parentNode });
+			}
+		}
+		if (typeof refreshWidgets == 'function') refreshWidgets();
+	}
+</script>
+
+{% block menu %}
+{{ widget("backend.menu") }}
+{% endblock %}
+
+{% block content %}{% endblock %}
+
+<script src="{{ asset('vendor/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ asset('vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('vendor/bootstrap-select/dist/js/bootstrap-select.min.js') }}"></script>
+<script src="{{ asset('vendor/bootstrap3-dialog/dist/js/bootstrap-dialog.min.js') }}"></script>
+<script src="{{ asset('vendor/bootstrap-popover-x/js/bootstrap-popover-x.min.js') }}"></script>
+<script src="{{ asset('vendor/jasny-bootstrap/dist/js/jasny-bootstrap.min.js') }}"></script>
+<script src="{{ asset('vendor/bootstrap-confirmation2/bootstrap-confirmation.min.js') }}"></script>
+<script src="{{ asset('vendor/bootstrap-toggle/js/bootstrap-toggle.min.js') }}"></script>
+<script src="{{ asset('vendor/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
+<script src="{{ asset('vendor/bootstrap-datepicker/dist/locales/bootstrap-datepicker.cs.min.js') }}"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+{% javascripts
+'@WidgetBundle/Resources/public/init.js'
+'@AppBundle/Resources/public/backend/services/*.js'
+'@AppBundle/Resources/public/backend/widgets/*.js'
+'@AppBundle/Resources/public/backend/pages/*.js'
+output='compiled-js/backend.js' %}
+<script src="{{ asset_url }}"></script>
+{% endjavascripts %}
+<div class="loading" style="display:none">Loading&#8230;</div>
+</body>
+</html>

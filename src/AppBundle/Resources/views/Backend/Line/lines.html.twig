@@ -1,0 +1,30 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% import "@App/Backend/Macro/line.html.twig" as lineMacro %}
+
+{% block content %}
+
+	<div class="container">
+		<div class="row">
+			{% for carrier in carriers %}
+				<div class="col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							{{ carrier.name }} ({{ carrier.code }})
+							<a href="{{ path("backend_line_create", { carrier: carrier.id }) }}" class="btn btn-xs btn-success pull-right"><i class="fa fa-plus"></i> Vytvořit novou linku</a>
+						</div>
+						<div class="panel-body">
+							<table class="table table-striped table-hover">
+								<tbody>
+								{% for line in carrier.lines %}
+									{{ lineMacro.lineTr(line) }}
+								{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+	<div class="container">
+		<form action="{{ path("backend_ticket_generator") }}" method="post">
+			<div class="row">
+				<div class="col-md-6">
+					<h3 style="margin-bottom: 30px">Generátor jízdenek</h3>
+				</div>
+				<div class="col-md-6">
+					<button type="submit" class="btn btn-success pull-right" style="margin-top: 15px;">Vygenerovat jízdenku</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">Cesta tam</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="thereFrom">Odkud</label>
+										<input id="thereFrom" type="text" class="form-control" name="thereFrom" placeholder="Odkud" value="">
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="thereDateDeparture">Odjezd</label>
+												<input id="thereDateDeparture" type="text" class="form-control datepicker" name="thereDateDeparture" placeholder="" value="">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="thereTimeDeparture">Odjezd - čas</label>
+												<input id="thereTimeDeparture" type="time" class="form-control" name="thereTimeDeparture" placeholder="" value="">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="thereCarrier">Dopravce</label>
+										<input id="thereCarrier" type="text" class="form-control" name="thereCarrier" placeholder="Dopravce" value="">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="thereTo">Kam</label>
+										<input id="thereTo" type="text" class="form-control" name="thereTo" placeholder="Kam" value="">
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="thereDateArrival">Příjezd</label>
+												<input id="thereDateArrival" type="text" class="form-control datepicker" name="thereDateArrival" placeholder="" value="">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="thereTimeArrival">Příjezd - čas</label>
+												<input id="thereTimeArrival" type="time" class="form-control" name="thereTimeArrival" placeholder="" value="">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="therePrice">Cena</label>
+										<input id="therePrice" type="text" class="form-control" name="therePrice" placeholder="Cena" value="">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							Cesta zpět
+							<div class="checkbox pull-right" style="margin-top: 0">
+								<input type="hidden" name="type" value="oneway">
+								<label><input type="checkbox" value="return" name="type" checked>Včetně zpáteční jízdy</label>
+							</div>
+						</div>
+						<div class="panel-body" id="formReturn">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="backFrom">Odkud</label>
+										<input id="backFrom" type="text" class="form-control" name="backFrom" placeholder="Odkud" value="">
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="backDateDeparture">Odjezd</label>
+												<input id="backDateDeparture" type="text" class="form-control datepicker" name="backDateDeparture" placeholder="" value="">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="backTimeDeparture">Odjezd - čas</label>
+												<input id="backTimeDeparture" type="time" class="form-control" name="backTimeDeparture" placeholder="" value="">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="backCarrier">Dopravce</label>
+										<input id="backCarrier" type="text" class="form-control" name="backCarrier" placeholder="Dopravce" value="">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="backTo">Kam</label>
+										<input id="backTo" type="text" class="form-control" name="backTo" placeholder="Kam" value="">
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="backDateArrival">Příjezd</label>
+												<input id="backDateArrival" type="text" class="form-control datepicker" name="backDateArrival" placeholder="" value="">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="backTimeArrival">Příjezd - čas</label>
+												<input id="backTimeArrival" type="time" class="form-control" name="backTimeArrival" placeholder="" value="">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="backPrice">Cena</label>
+										<input id="backPrice" type="text" class="form-control" name="backPrice" placeholder="Cena" value="">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">Údaje o cestujícím</div>
+						<div class="panel-body">
+							<div class="form-group">
+								<label for="name">Jméno cestujícího</label>
+								<input id="name" type="text" class="form-control" name="name" placeholder="Jméno cestujícího" value="">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+{% endblock %}

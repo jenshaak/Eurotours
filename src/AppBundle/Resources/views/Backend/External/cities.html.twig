@@ -1,0 +1,91 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+			{% for c in countries %}
+				<h3>{{ c.name|language }}</h3>
+				<table class="table table-striped table-hover table-external-cities table-bordered">
+					<thead>
+					<tr>
+						<th>Město</th>
+						<th>East Express</th>
+						<th>Ecolines</th>
+						<th>Flixbus</th>
+						<th>Infobus</th>
+						<th>RegioJet</th>
+						<th>Eurolines</th>
+						<th>Nikolo</th>
+                        <th>Blabla</th>
+						<th>TransTempo</th>
+                        <th>LikeBus</th>
+					</tr>
+					</thead>
+					<tbody>
+					{% for city in c.activeCitiesSortByName %}
+						<tr data-url="{{ path("backend_externals_city_set_external", { city: city.id }) }}">
+							<td>
+								<strong>{{ city.name|language }}</strong>
+							</td>
+							<td data-carrier="east_express">
+								{% if city.externalCity("east_express") %}
+									{{ city.externalCity("east_express").name|language }}
+								{% endif %}
+							</td>
+							<td data-carrier="ecolines">
+								{% if city.externalCity("ecolines") %}
+									{{ city.externalCity("ecolines").name|language }}
+								{% endif %}
+							</td>
+							<td data-carrier="flixbus">
+								{% if city.externalCity("flixbus") %}
+									{{ city.externalCity("flixbus").name|language }}
+								{% endif %}
+							</td>
+							<td data-carrier="infobus">
+								{% if city.externalCity("infobus") %}
+									{{ city.externalCity("infobus").name|language }}
+								{% endif %}
+							</td>
+							<td data-carrier="student_agency">
+								{% if city.externalCity("student_agency") %}
+									{{ city.externalCity("student_agency").name|language }}
+								{% endif %}
+							</td>
+							<td data-carrier="eurolines">
+								{% if city.externalCity("eurolines") %}
+									{{ city.externalCity("eurolines").name|language }}
+								{% endif %}
+							</td>
+							<td data-carrier="nikolo">
+								{% for ec in city.externalCitiesByType("nikolo") %}
+									{{ ec.name|language }}{% if not loop.last %},<br>{% endif %}
+								{% endfor %}
+							</td>
+                            <td data-carrier="blabla">
+                                {% if city.externalCity("blabla") %}
+                                    {{ city.externalCity("blabla").name|language }}
+                                {% endif %}
+                            </td>
+							<td data-carrier="trans_tempo">
+								{% if city.externalCity("trans_tempo") %}
+									{{ city.externalCity("trans_tempo").name|language }}
+								{% endif %}
+							</td>
+                            <td data-carrier="likebus">
+                                {% if city.externalCity("likebus") %}
+                                    {{ city.externalCity("likebus").name|language }}
+                                {% endif %}
+                            </td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			{% endfor %}
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

@@ -1,0 +1,52 @@
+<div class="homebox text-right">
+	<h3>{{ 'homepage.contactBox.title'|trans }}</h3>
+	<p style="font-size: 22px; color: #EC02A6">
+        <a href="tel:+420724132365" style="color: inherit">+420 724 13 23 65</a>
+        <a href="https://msng.link/o/?420724132365=vi" target="_blank">
+            <img src="{{ asset("bundles/app/frontend/viber-logo.png") }}" alt="Call to Viber" style="height: 1.2em; margin-top: -0.1em">
+        </a>
+    </p>
+    <p style="font-size: 22px; color: #EC02A6">
+        <a href="tel:+420720306575" style="color: inherit">+420 720 30 65 75</a>
+        <a href="https://msng.link/o/?420720306575=vi" target="_blank">
+            <img src="{{ asset("bundles/app/frontend/viber-logo.png") }}" alt="Call to Viber" style="height: 1.2em; margin-top: -0.1em">
+        </a>
+    </p>
+
+	<p style="font-size: 19px; margin: 25px 0 25px 0">
+		{{ 'homepage.contactBox.florenc'|trans }},<br>
+		{{ 'homepage.contactBox.address'|trans }}<br>
+		<strong style="color: #EC02A6">{{ 'homepage.contactBox.place'|trans }}</strong>
+	</p>
+
+    <p>
+        e-mail: <a href="mailto:info@eurotours.cz">info@eurotours.cz</a><br>
+        <strong>Skype:</strong> eurotours15
+        <a href="skype:eurotours15?call" target="_blank">
+            <img src="{{ asset("bundles/app/frontend/skypeicon.png") }}" alt="Call to Viber" style="height: 1.2em; margin-top: -0.1em">
+        </a>
+    </p>
+
+    <p>
+        {% if currentLanguage.id == "bg" %}
+            <strong><a href="https://www.facebook.com/eurotours.praga" target="_blank">{{ 'homepage.contactBox.facebook'|trans }}</a></strong>
+        {% elseif currentLanguage.id == "uk" %}
+            <strong><a href="https://www.facebook.com/eurotours.kasa" target="_blank">{{ 'homepage.contactBox.facebook'|trans }}</a></strong>
+        {% else %}
+            <strong><a href="https://www.facebook.com/eurotours.prague" target="_blank">{{ 'homepage.contactBox.facebook'|trans }}</a></strong>
+        {% endif %}
+    </p>
+
+	<div>
+		<img class="img img-responsive img-thumbnail" src="{{ asset("bundles/app/frontend/hala1web.jpg") }}" style="margin-bottom: 0.7rem">
+        <img class="img img-responsive img-thumbnail" src="{{ asset("bundles/app/frontend/hala1web3.jpg") }}" style="margin-bottom: 0.7rem">
+        <img class="img img-responsive img-thumbnail" src="{{ asset("bundles/app/frontend/hala1web4.jpg") }}">
+	</div>
+</div>
+<p style="text-align: right; margin-top: 20px">
+	<small>
+		<a href="{{ path("documents_terms") }}" target="_blank">Obchodní podmínky</a><br>
+		<a href="{{ path("documents_gdpr") }}" target="_blank">Ochrana osobních údajů</a><br>
+		<a href="{{ path("backend_homepage") }}">{{ 'footer.adminLogin'|trans }}</a>
+	</small>
+</p>

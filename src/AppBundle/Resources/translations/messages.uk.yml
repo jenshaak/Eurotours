@@ -1,0 +1,87 @@
+menu.homepage: Знaйти
+menu.bulgaria: Болгарiя
+menu.turkish: Турцiя
+menu.timetables: Рoзклaд
+menu.airtickets: Kвиток
+menu.contact: Kонтакти
+menu.links: Знaйти
+searchForm.find: Знaйти
+searchForm.iWantReturn: 'Хочу звopoтнiй квиток'
+searchForm.onlyOpenReturn: 'Тiльки вiдкрите повернення'
+searchForm.to: Куди
+searchForm.from: Звiдки
+route.selectLine: Вибрати
+route.arrival: Прибуття
+searchForm.dateDeparture: 'Дата  від''їзду'
+route.ofDay: День
+search.totalPrice: 'Загальна вартiсть'
+route.variablePrice: 'цiна коливаэться'
+search.orderTickets: 'Замовити квитки'
+route.way: Дорога
+order.fullName: 'Прiзвище та Iмя'
+order.email: 'Електронна адреса'
+order.phone: Телефон
+order.dob: Дата народження
+order.documentNumber: Номер документа
+order.tariffThere: 'Цiна туди'
+order.tariffBack: 'Цiна назад'
+order.fillPassengerData: 'Заповнiть данi пассажира'
+order.buy: Купити
+order.book: Забронювати
+order.passenger: пассажир
+search.openTicket: 'Квиток з вiдкритою датою'
+email.tickets.subject: 'Eurotours: квиток'
+email.tickets.introduction: 'Доброго дня. Дякуэмо за вашу довiру. Тут ви знайдете квитки, якi ви замовили. Будь - ласка роздрукуйте.'
+order.selectPassengerSeats: 'Виберiть мiсця'
+homepage.searchFormTitle: 'Пошук бiлетiв у всiх напрямках'
+homepage.claim.title: 'Квитки на автобуси всiх эвропейських перевiзникiв'
+homepage.claim.subtitle1: '!'
+homepage.claim.subtitle2: '!'
+homepage.claim.subtitle3: 'Можливiсть оплатити картою, на банківський рахунок або готiвкою'
+homepage.contactBox.title: 'Приходiть до нас або звонiть'
+homepage.contactBox.florenc: 'Автовокзал Флоренц Прага'
+homepage.contactBox.place: 'ЗАЛ 1, КАССА 15 тa 19'
+homepage.contactBox.facebook: 'Facebook page Eurotours'
+footer.adminLogin: 'Логiн администратора'
+order.backToSearch: 'Повернутися до пошуку'
+order.fillName: 'Напишiть будь-ласка своэ iмя'
+order.fillPhone: 'Напишiть будь-ласка свiй номер телефону'
+order.fillPassengerName: 'Напишiть iмя пасажира'
+order.fillPassengerPhone: 'Заповнiть номер телефона пасажира'
+order.fillPassengerDob: Заповніть дату народження пасажира
+order.fillPassengerDocumentNumber: Заповніть номер пасажирського документа
+order.priceThere: 'Цiна (туди)'
+order.priceBack: 'Цiна (звiдти)'
+order.sellerFeeThere: 'податок (туди)'
+order.sellerFeeBack: 'податок (звiдти)'
+order.thanksReservation: 'Дякуэмо Вам за резервацiю'
+order.thanksOrder: 'Дякуэмо Вам за ваше замовлення'
+order.paymentOfOrder: 'Оплата замовлення'
+order.payByCard: 'Оплатити квиток банкiвською картою'
+order.reservationSuccess: 'Ваше замовлення було успiшно вiдправлено. Дякуэмо за бронювання квитка в нашiй компанii. Найближчим часом ми звяжемось з Вами по контактним даним.'
+order.paymentSuccess: 'Оплата пробiгла успiшно. Дякуэмо за резервацiю квитка в нашiй компанii.'
+order.yourOrder: 'Ваше замовлення'
+order.ticketsInEmail: 'Квитки знаходяться в вашiй електроннiй поштi.'
+order.price: Цiна
+order.sellerFee: 'податок'
+order.withSellerFee: 'з податком'
+order.lackOfSeats: 'В вибраному автобусi немаэ достатньоi кiлькостi вiльних мiсць.'
+order.changeOrder: 'Змiнити деталi замовлення'
+order.selectSeats: 'Виберiть мiсце'
+order.selectedSeat: 'Вибране мiсце'
+order.clueSelectedSeat: 'Вибране мiсце'
+homepage.contactBox.address: 'Křižíkova 2110/2b, Praha 8, 186 00'
+order.clueAvailableSeat: 'Вiльне мiсто'
+route.SelectTariff: 'Виберiть тариф та кiлькiсть бiлетiв'
+menu.claim: 'Бiлети на мiжнароднi автобуси онлайн'
+searchForm.switchDates: 'Дата повернення маэ бути пiзнiше нiж дата приiзду'
+searchForm.switchDatesSecond: 'Дата повернення маэ бути пiзнiше нiж дата приiзду'
+searchForm.checkDate: 'Перевiрте дату'
+order.selectRouteTwoWayDescription: 'Будь-ласка виберiть окремий автобус та тип окремих квиткiв. Загальна кiлькiсть пасажирiв в поiздцi, повинна бути одинакова туди й назад.'
+order.selectRouteDescription: 'Будь-ласка виберiть окремий автобус та тип окремих квиткiв.'
+order.fillEmail: 'Будь-ласка введiть свою електронну адресу'
+route.canPayOnline: 'Можливiсть оплати онлайн'
+order.selectRoute: 'Виберiть конкретний автобус i тип тарифу.'
+order.clueNotAvailableSeat: 'недоступне мiсто'
+order.clueOtherPassenger: Спiвподорожуючi
+order.lackOfSeatsCall: 'Ми спровбуэмо знайти Вам вiльне мiсце. Будь-ласка звяжiться з диспетчером по тел. ±420724132365'

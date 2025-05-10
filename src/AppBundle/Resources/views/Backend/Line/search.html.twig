@@ -1,0 +1,61 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+	<div class="container">
+		<div class="row">
+			<form action="" method="get">
+				<div class="col-md-3">
+					<label for="searchFrom">Odkud</label><br>
+					<select id="searchFrom" name="searchFrom" class="selectpicker" data-live-search="true">
+						<option value="">Odkud</option>
+						{% for country in countries %}
+							<optgroup label="{{ country.name|language }}">
+								{% for city in country.cities %}
+									<option data-tokens="{{ city.allLanguagesNames|join(" ") }}" value="{{ city.id }}"{% if routeFilter.fromCity == city %} selected{% endif %}>{{ city.name|language }}</option>
+								{% endfor %}
+							</optgroup>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="col-md-3">
+					<label for="searchTo">Kam</label><br>
+					<select id="searchTo" name="searchTo" class="selectpicker" data-live-search="true">
+						<option value="">Kam</option>
+						{% for country in countries %}
+							<optgroup label="{{ country.name|language }}">
+								{% for city in country.cities %}
+									<option data-tokens="{{ city.allLanguagesNames|join(" ") }}" value="{{ city.id }}"{% if routeFilter.toCity == city %} selected{% endif %}>{{ city.name|language }}</option>
+								{% endfor %}
+							</optgroup>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="col-md-3">
+					<button type="submit" style="margin-top: 25px" class="btn btn-success">Vyhledávat</button>
+				</div>
+			</form>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				{% if routes %}
+					{% for route in routes %}
+						<div class="row">
+							<div class="col-md-12">
+								{{ route.fromCity.name|language }} - {{ route.toCity.name|language }}<br>
+								{{ route.datetimeDeparture|date("H:i") }}
+								-
+								{{ route.datetimeArrival|date("H:i") }} {% if route.scheduleTimeArrival and route.scheduleTimeArrival.departureDayModify %}+{{ route.scheduleTimeArrival.departureDayModify }}{% endif %}
+								{{ route.price }} Kč
+								<br>
+								{% if route.line %}
+								<a href="{{ path("backend_line", { line: route.line.id }) }}">{{ route.line.carrier.name }} ({{ route.line.code }})</a><br><br>
+								{% endif %}
+							</div>
+						</div>
+					{% endfor %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

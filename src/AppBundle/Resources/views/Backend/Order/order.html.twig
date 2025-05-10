@@ -1,0 +1,511 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% macro trRouteTariff(orderPerson, routeTariff, direction) %}
+	{% if routeTariff.route.line %}
+		<tr>
+			<td>{{ routeTariff.route.carrier.name }}{% if routeTariff.route.carrierTitle %} - {{ routeTariff.route.carrierTitle }}{% endif %}</td>
+			<td>
+                {% if routeTariff.route.isOpen %}
+                    <i class="fa fa-exchange"></i>
+				{% elseif direction == "there" %}
+					<i class="fa fa-arrow-right"></i>
+				{% else %}
+					<i class="fa fa-arrow-left"></i>
+				{% endif %}
+				<a href="{{ path("backend_line", { line: routeTariff.route.line.id }) }}" target="_blank">{{ routeTariff.route.line.code }}</a>
+			</td>
+			<td>{{ routeTariff.route.datetimeDeparture|date("j. n. Y H:i") }}</td>
+			<td>{{ routeTariff.route.datetimeArrival|date("j. n. Y H:i") }}</td>
+			<td>
+                {{ orderPerson.name }}
+            </td>
+            <td>{{ orderPerson.phone }}</td>
+			<td>
+                {{ routeTariff.tariff.name|language }}
+                {% if routeTariff.route.isOpen %}(<strong>OPEN</strong>){% endif %}
+            </td>
+		</tr>
+	{% else %}
+		<tr>
+            <td>{{ routeTariff.route.carrier.name }}{% if routeTariff.route.carrierTitle %} - {{ routeTariff.route.carrierTitle }}{% endif %}</td>
+			<td>
+				{% if direction == "there" %}
+					<i class="fa fa-arrow-right"></i>
+				{% else %}
+					<i class="fa fa-arrow-left"></i>
+				{% endif %}
+			</td>
+			<td>{{ routeTariff.route.datetimeDeparture|date("j. n. Y H:i") }}</td>
+			<td>{{ routeTariff.route.datetimeArrival|date("j. n. Y H:i") }}</td>
+			<td>{{ orderPerson.name }}</td>
+            <td>{{ orderPerson.phone }}</td>
+			<td>{{ routeTariff.externalTariff.name|language }}</td>
+		</tr>
+	{% endif %}
+{% endmacro %}
+
+{% block content %}
+
+	<script type="text/javascript">
+		var isSeller = {{ isSeller() ? "true" : "false" }};
+	</script>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-9">
+				<h3 style="margin-bottom: 30px">Detail {% if order.orderType == "reservation" %}rezervace{% else %}objednávky{% endif %} <strong>{{ order.routeThere.simpleFromCityName|language }} <i class="fa fa-arrow-right"></i> {{ order.routeThere.simpleToCityName|language }}</strong>, uživatel <strong>{{ order.name }}</strong></h3>
+			</div>
+			<div class="col-md-3">
+				{% if order.paid %}
+					<h3 style="color: green; text-align: right">ZAPLACENO</h3>
+				{% elseif order.status == "reservation" %}
+					<h3 style="color: blue; text-align: right">REZERVACE{% if order.dateReservationDay %}<br>do {{ order.dateReservationDay|date("j. n. Y") }}{% endif %}</h3>
+				{% elseif order.status == "noSeats" %}
+					<h3 style="color: blue; text-align: right">NENÍ DOSTATEK MÍST</h3>
+				{% endif %}
+				{% if order.cancelled %}
+					<h3 style="color: red; text-align: right">STORNOVÁNO</h3>
+				{% endif %}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				{{ widget("backend.flash") }}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">Údaje</div>
+					<div class="panel-body">
+						<table class="table">
+							<tr>
+								<th>Datum objednávky</th>
+								<td>{{ order.datetimeOrdered|date("j. n. Y H:i") }}</td>
+							</tr>
+							<tr>
+								<th>Jméno a přijmení</th>
+								<td>{{ order.name }}</td>
+							</tr>
+							<tr>
+								<th>E-mail</th>
+								<td>{{ order.email }}</td>
+							</tr>
+							<tr>
+								<th>Telefon</th>
+								<td>{{ order.phone }}</td>
+							</tr>
+						</table>
+
+
+                        <p style="font-size: 1.5em; font-weight: bold; padding: 3px 10px; background-color: #EC02A6; color: white">
+                            {{ "search.totalPrice"|trans }}{% if order.sellerFee is not null %} {{ "order.withSellerFee"|trans }}{% endif %}:
+                            {{ order.priceWithSellerFeeCurrency|priceCurrency }}
+                        </p>
+
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8">
+				<div class="panel panel-default">
+					<div class="panel-heading">Platba</div>
+					<div class="panel-body">
+						<div class="row">
+						{% if order.paid %}
+							<div class="col-md-12">
+								<p>Objednávka zaplacena {% if order.paidBy == "card" %}kartou{% elseif order.paidBy == "wireTransfer" %}převodem{% elseif order.paidBy == "cash" %}hotově{% endif %} {% if order.datetimePaid %}{{ order.datetimePaid|date("j. n. Y H:i") }}{% endif %}</p>
+							</div>
+						{% else %}
+							{% if order.payment %}
+								<div class="col-md-9">
+									<div class="form-group">
+										<label for="paymentUrl">Platební odkaz</label>
+										<input id="paymentUrl" type="text" value="{{ url("order_detail", { order: order.id }) }}" class="form-control" readonly>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<p style="margin-bottom: 5px">
+									{% if order.datetimeSentPayment is null %}
+										E-mail zatím neodeslán
+									{% else %}
+										Odesláno {{ order.datetimeSentPayment|date("j. n. Y") }}
+									{% endif %}
+									</p>
+									<form action="{{ path("backend_order_send_payment_email", { order: order.id }) }}" method="post">
+										<button type="submit" class="btn btn-success btn-block" data-action="sendPaymentEmail"><i class="fa fa-envelope"></i> Poslat e-mailem</button>
+									</form>
+								</div>
+							{% else %}
+								<div class="col-md-6">
+									<a href="{{ path("backend_order_create_payment", { order: order.id }) }}" class="btn btn-success btn-block">Vygenerovat platbu</a>
+								</div>
+							{% endif %}
+						{% endif %}
+						</div>
+						{% if not order.paid %}
+						<br>
+						<div class="row">
+							<div class="col-md-6">
+								<form action="{{ path("backend_order_paid_wire_transfer", { order: order.id }) }}" method="post">
+									<button type="button" class="btn btn-primary btn-block" data-action="paidWireTransfer"><i class="fa fa-exchange"></i> Uhrazeno převodem</button>
+								</form>
+							</div>
+							<div class="col-md-6">
+								<form action="{{ path("backend_order_paid_cash", { order: order.id }) }}" method="post">
+									<button type="button" class="btn btn-primary btn-block" data-action="paidCash"><i class="fa fa-money"></i> Uhrazeno hotově</button>
+								</form>
+							</div>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<form action="{{ path('backend_order_delete', { order: order.id }) }}" method="post">
+							Objednávka
+							{% if not isSeller() %}
+							<button type="button" data-action="deleteOrder" class="btn btn-xs btn-danger pull-right"><i class="fa fa-times"></i> Úplné odstranění objednávky</button>
+							{% endif %}
+						</form>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							{% if not order.cancelled %}
+                                <div class="col-md-3">
+                                    <form action="{{ path("backend_order_cancel", { order: order.id }) }}" method="post">
+                                        <button type="button" class="btn btn-danger" data-action="cancelOrder">Stornovat objednávku</button>
+                                    </form>
+                                </div>
+							{% endif %}
+                            {% if order.orderType == "reservation" and not order.paid %}
+                                <div class="col-md-4">
+                                    <form action="{{ path("backend_set_reservation_date", { order: order.id }) }}" method="post">
+                                        <input type="hidden" name="reservationDate" value="" />
+                                        <button type="button" class="btn btn-info" data-action="setReservationDate" data-reservation-date="{{ order.dateReservationDay|date("Y-m-d") }}"><i class="fa fa-calendar"></i> Nastavit datum expirace rezervace</button>
+                                    </form>
+                                </div>
+                            {% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">Objednané spoje</div>
+					<div class="panel-body">
+						<table class="table table-striped table-hover">
+							<thead>
+							<tr>
+								<th>Dopravce</th>
+								<th>Linka</th>
+								<th>Odjezd</th>
+								<th>Příjezd</th>
+								<th>Cestující</th>
+                                <th>Telefon</th>
+								<th>Tarif</th>
+							</tr>
+							</thead>
+							<tbody>
+							{% for orderPerson in order.orderPersons %}
+								{% if orderPerson.routeTariffThere %}
+									{{ _self.trRouteTariff(orderPerson, orderPerson.routeTariffThere, "there") }}
+								{% endif %}
+							{% endfor %}
+							{% if order.routeBack %}
+								{% for orderPerson in order.orderPersons %}
+									{% if orderPerson.routeTariffBack %}
+										{{ _self.trRouteTariff(orderPerson, orderPerson.routeTariffBack, "back") }}
+									{% endif %}
+								{% endfor %}
+							{% endif %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default" {% if order.ticketsWithoutDuplicities|length > 0 %}style="pointer-events:none; opacity: 0.5"{% endif %}>
+					<div class="panel-heading">
+						Rezervace
+					</div>
+					<div class="panel-body">
+						<table class="table table-striped table-hover">
+							<thead>
+							<tr>
+								<th>Cestující</th>
+								<th>Cesta</th>
+								<th>Dopravce</th>
+								<th>Tarif</th>
+								<th>Sedadlo</th>
+                                <th class="text-right">{{ 'order.sellerFee'|trans }}</th>
+								<th class="text-right">Cena</th>
+							</tr>
+							</thead>
+							<tbody>
+							{% for book in order.books %}
+								<tr>
+									<td>{{ book.orderPersonRouteTariff.orderPerson.name }}</td>
+									<td>
+										{{ book.orderPersonRouteTariff.route.simpleFromCityName|language }} <i class="fa fa-arrow-right"></i> {{ book.orderPersonRouteTariff.route.simpleToCityName|language }}
+									</td>
+									<td>
+										{{ book.orderPersonRouteTariff.route.carrier.name }}
+                                        {% if book.orderPersonRouteTariff.route.carrierTitle %} - {{ book.orderPersonRouteTariff.route.carrierTitle }}{% endif %}
+									</td>
+									<td>
+										{% if book.orderPersonRouteTariff.routeTariff.tariff %}
+											{{ book.orderPersonRouteTariff.routeTariff.tariff.name|language }}
+                                        {% elseif book.orderPersonRouteTariff.routeTariff.externalTariff %}
+                                            {{ book.orderPersonRouteTariff.routeTariff.externalTariff.name|language }}
+										{% endif %}
+									</td>
+									<td>
+										{% if book is bookInternal and book.orderPersonRouteTariff.route.schedule != null and not book.orderPersonRouteTariff.route.line.isSeatsWithoutNumbers(book.orderPersonRouteTariff.route.schedule.direction) %}
+											{{ book.seatNumber }}
+										{% endif %}
+									</td>
+                                    <td class="text-right">
+                                        {% if book.orderPersonRouteTariff.sellerFee is not null %}
+                                            + {{ book.orderPersonRouteTariff.sellerFeeCurrency|priceCurrency(true, book.currency) }}
+                                        {% endif %}
+                                    </td>
+									<td class="text-right">
+										{% if book.priceCurrency.price %}
+											<span class="bookPriceEditable" data-url="{{ path('backend_ajax_book_price', { order: order.id, book: book.id }) }}" data-pk="{{ book.id }}">
+												{{ book.priceCurrency|priceCurrency(false, book.currency) }}
+											</span>
+											{{ book.priceCurrency|currency }}
+										{% endif %}
+									</td>
+								</tr>
+							{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default" {% if order.ticketsWithoutDuplicities|length == 0 %}style="pointer-events:none; opacity: 0.5"{% endif %}>
+					<div class="panel-heading">
+                        Jízdenky
+                        {% if order.ticketsWithoutDuplicities|length > 0 %}
+                            <form action="{{ path('backend_export_order_tickets_pdf', { order: order.id }) }}" method="post" style="display: inline">
+                                <input type="hidden" name="withPrice" value="0" />
+                                <button type="submit" class="btn btn-xs btn-default pull-right" style="margin-left: 10px"><i class="fa fa-print"></i> Tisknout všechny bez ceny</button>
+                            </form>
+                            <form action="{{ path('backend_export_order_tickets_pdf', { order: order.id }) }}" method="post" style="display: inline">
+                                <button type="submit" class="btn btn-xs btn-default pull-right" style="margin-left: 10px"><i class="fa fa-print"></i> Tisknout všechny</button>
+                            </form>
+                            <form action="{{ path('backend_regenerate_internal_tickets', { order: order.id }) }}" method="post" style="display: inline">
+                                <button type="submit" class="btn btn-xs btn-default pull-right"><i class="fa fa-refresh"></i> Přegenerovat interní jízdenky</button>
+                            </form>
+                        {% endif %}
+                    </div>
+					<div class="panel-body">
+						{% if order.ticketsWithoutDuplicities|length > 0 %}
+						<table class="table table-striped table-hover">
+							<thead>
+							<tr>
+								<th>Cestující</th>
+                                <th>Telefon</th>
+								<th>Cesta</th>
+								<th>Dopravce</th>
+								<th>Tarif</th>
+								<th class="text-right">Cena + {{ 'order.sellerFee'|trans }}</th>
+								<th></th>
+							</tr>
+							</thead>
+							<tbody>
+							{% for ticket in order.ticketsWithoutDuplicities %}
+								<tr{% if ticket.cancelled %} style="opacity: 0.7"{% endif %}>
+									<td>
+										{% if ticket.cancelled %}
+											<i class="fa fa-ban text-danger"></i>
+                                        {% elseif ticket.billed %}
+                                            <i class="fa fa-check text-success"></i>
+										{% else %}
+											<i class="fa fa-user" style="margin-right: 10px"></i>
+										{% endif %}
+										<span class="ticketNameEditable" data-url="{{ path('backend_ajax_ticket_name', { order: order.id, ticket: ticket.id }) }}" data-pk="{{ ticket.id }}">{{ ticket.orderPerson.name }}</span>
+									</td>
+                                    <td>
+                                        <span class="orderPersonPhoneEditable"
+                                              data-url="{{ path('backend_ajax_order_person_phone', { order: order.id, orderPerson: ticket.orderPerson.id }) }}"
+                                              data-pk="{{ ticket.orderPerson.id }}">
+                                            {{ ticket.orderPerson.phone }}
+                                        </span>
+                                    </td>
+									<td>
+										{{ ticket.route.simpleFromCityName|language }} <i class="fa fa-arrow-right"></i> {{ ticket.route.simpleToCityName|language }}
+									</td>
+									<td>
+										{{ ticket.carrier.name }}
+                                        {% if ticket.carrierTitle %} - {{ ticket.carrierTitle }}{% endif %}
+									</td>
+									<td>
+										{% if ticket.routeTariff.tariff %}
+											{{ ticket.routeTariff.tariff.name|language }}
+										{% elseif ticket.routeTariff.externalTariff %}
+											{{ ticket.routeTariff.externalTariff.name|language }}
+										{% endif %}
+									</td>
+									<td class="text-right">
+										{% if ticket is internalTicket %}
+											<span class="ticketPriceEditable" data-url="{{ path('backend_ajax_ticket_price', { order: order.id, ticket: ticket.id }) }}" data-pk="{{ ticket.id }}">
+                                                {{ ticket.priceCurrency|priceCurrency(false, ticket.currency) }}
+                                            </span> {{ ticket.priceCurrency|currency }}
+                                            {% if ticket.sellerFee is not null %}
+                                                <br>+ {{ ticket.sellerFeeCurrency|priceCurrency(true, ticket.currency) }}
+                                            {% endif %}
+										{% endif %}
+									</td>
+									<td style="width: 350px">
+                                        {% if ticket is internalTicket and not ticket.cancelled and not ticket.billed %}
+                                        <form style="float: right; margin-right: 15px" method="POST" action="{{ path("backend_ticket_cancel", { internalTicket: ticket.id, order: order.id }) }}">
+                                            <button type="button" class="btn btn-danger btn-xs" data-action="cancelTicket">Stornovat</button>
+                                        </form>
+                                        {% endif %}
+
+                                        {% if not isEmployee() and not isSeller() and order.userSeller and ticket is internalTicket and not ticket.cancelled and not ticket.sellerPaid %}
+                                            <form method="POST" action="{{ path("backend_internal_ticket_seller_paid", { ticket: ticket.id, order: order.id }) }}">
+                                                <button type="button" class="btn btn-info btn-xs" data-action="sellerPaid">PE</button>
+                                            </form>
+                                        {% endif %}
+
+                                        {% if not isEmployee() and not isSeller() and not ticket.cancelled and not ticket.paidByBank %}
+                                            <form style="float: left; margin-right: 15px" method="POST" action="{{ path(ticket is internalTicket ? "backend_internal_ticket_paid_by_bank" : "backend_external_ticket_paid_by_bank", { ticket: ticket.id, order: order.id }) }}">
+                                                <button type="button" class="btn btn-info btn-xs" data-action="paidByBank">BE</button>
+                                            </form>
+                                        {% endif %}
+
+										{% if not isEmployee() and not isSeller() and not ticket.billed %}
+											<form style="float: right; margin-right: 15px" method="POST" action="{{ ticket is internalTicket ? path("backend_internal_ticket_billed", { internalTicket: ticket.id, order: order.id }) : path("backend_external_ticket_billed", { externalTicket: ticket.id, order: order.id }) }}">
+												<button type="button" class="btn btn-success btn-xs" data-action="billedTicket">ED</button>
+											</form>
+										{% elseif ticket.noteBilled %}
+											<p style="float: right; margin-right: 15px">{{ ticket.noteBilled }}</p>
+										{% endif %}
+                                        {% if ticket is internalTicket %}
+                                            <a style="float: right; margin-right: 15px" target="_blank" href="{{ ticket.file }}" class="btn btn-primary btn-xs">Stáhnout interní jízdenku</a>
+                                        {% endif %}
+                                        {% if ticket is externalTicket %}
+                                            <div>
+                                                <a style="float: right; margin-right: 15px" target="_blank" href="{{ ticket.file }}" class="btn btn-primary btn-xs">Stáhnout externí jízdenku</a>
+                                                {% if ticket.alternativeInternalTicket %}
+                                                    <a style="float: right; margin-right: 15px; display: block; margin-top: 6px" target="_blank" href="{{ ticket.alternativeInternalTicket.file }}" class="btn btn-primary btn-xs">Stáhnout interní jízdenku</a>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    </td>
+								</tr>
+							{% endfor %}
+							</tbody>
+						</table>
+						{% else %}
+							<p>Nejsou vygenerovány žádné jízdenky.</p>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <form action="{{ path('backend_order_activity_note', { order: order.id }) }}" method="post">
+                            Aktivity
+                            <button type="button" data-action="createActivityNote" class="btn btn-xs btn-success pull-right"><i class="fa fa-plus"></i> Přidat poznámku</button>
+                        </form>
+                    </div>
+                    <div class="panel-body">
+                        {% if activities|length > 0 %}
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th style="width: 130px"></th>
+                                    <th style="width: 130px">Datum</th>
+                                    <th style="width: 150px">Uživatel</th>
+                                    <th style="width: 150px">Aktivita</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for activity in activities %}
+                                    {{ widget("backend.activity", { activity: activity }) }}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p>Objednávka nemá žádné aktivity.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div data-modal-body="billedTicket" style="display: none">
+            <div>
+                <p>Opravdu chcete tuto jízdenku zaúčtovat?</p>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <textarea name="ticket-billed-note" class="form-control" rows="5" placeholder="Můžete vložit poznámku"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div data-modal-body="createActivityNote" style="display: none">
+            <div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <textarea name="activity-note" class="form-control" rows="5" placeholder="Vaše poznámka k objednávce"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div data-modal-body="sellerPaid" style="display: none">
+            <div>
+                <p>Opravdu chcete tuto jízdenku označit jako uhrazenou dopravcem?</p>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <textarea name="seller-paid-note" class="form-control" rows="5" placeholder="Můžete vložit poznámku"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div data-modal-body="paidByBank" style="display: none">
+            <div>
+                <p>Opravdu chcete tuto jízdenku označit jako uhrazenou bankou?</p>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <textarea name="paid-by-bank-note" class="form-control" rows="5" placeholder="Můžete vložit poznámku"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: none;" data-modal-body="reservationDate">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="reservationCalendar"></div>
+                </div>
+            </div>
+        </div>
+	</div>
+{% endblock %}

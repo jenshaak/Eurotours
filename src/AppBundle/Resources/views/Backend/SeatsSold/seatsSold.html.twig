@@ -1,0 +1,101 @@
+{% extends "AppBundle:Backend/Layout:Skeleton.html.twig" %}
+
+{% block content %}
+	<div class="container">
+		{% if isSuperAdmin() %}
+		<div class="row">
+			<div class="col-md-12">
+				<form action="" method="get">
+					<div class="row" style="margin-bottom: 20px">
+						<div class="col-md-3">
+							<label for="carrier">Zvolte dopravce</label><br>
+							<select id="carrier" name="carrier" class="selectpicker" data-live-search="true" data-width="100%" data-action="selectCarrier">
+								<option value="">Zvolte dopravce</option>
+								{% for c in carriers %}
+									<option value="{{ c.id }}"{% if carrier == c %} selected{% endif %}>{{ c.name }}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		{% endif %}
+		<div class="row">
+			<div class="col-md-9">
+				<table class="table table-seats-sold">
+					<thead>
+					<tr>
+						<th></th>
+						<th>Linka</th>
+						<th>Odkud</th>
+						<th>Kam</th>
+						<th>Odjezd</th>
+						<th>Příjezd</th>
+                        <th></th>
+					</tr>
+					</thead>
+					<tbody>
+					{% for seatsSoldLine in seatsSoldLines %}
+						<tr class="seats-sold-schedule">
+							<td>{{ seatsSoldLine.dateDay|date("N")|dayInWeek }}, {{ seatsSoldLine.dateDay|date("j. n. Y") }}</td>
+							<td>{{ seatsSoldLine.line.code }}</td>
+							<td>{{ seatsSoldLine.fromCity.name|language }}</td>
+							<td>{{ seatsSoldLine.toCity.name|language }}</td>
+							<td>{{ seatsSoldLine.fromTime }}</td>
+							<td>{{ seatsSoldLine.toTime }}</td>
+                            <td></td>
+						</tr>
+						{% for ticket in seatsSoldLine.tickets %}
+							<tr {% if ticket.cancelled %}style="color: silver"{% endif %}>
+								<td colspan="1" style="padding-left: 30px">
+									{% if ticket.cancelled %}
+										<i class="fa fa-ban text-danger" style="margin-right: 10px"></i>
+									{% else %}
+										<i class="fa fa-user" style="margin-right: 10px"></i>
+									{% endif %}
+									{{ ticket.orderPerson.name }}
+								</td>
+								<td><span style="opacity: 0.5; font-size: 0.8em">seat</span> {{ ticket.number }}</td>
+								<td>{{ ticket.routeTariff.route.fromCity.name|language }}</td>
+								<td>{{ ticket.routeTariff.route.toCity.name|language }}</td>
+								<td>{{ ticket.routeTariff.route.datetimeDeparture|date("H:i") }}</td>
+								<td>{{ ticket.routeTariff.route.datetimeArrival|date("H:i") }}</td>
+                                <td>
+                                    {% if isSuperAdmin() %}
+                                        <a href="{{ path("backend_order", { order: ticket.order.id }) }}" target="_blank"><i class="fa fa-angle-double-right"></i></a>
+                                    {% endif %}
+                                </td>
+							</tr>
+						{% endfor %}
+                        {% for book in seatsSoldLine.books %}
+                            <tr {% if book.cancelled %}style="color: silver"{% endif %}>
+                                <td colspan="1" style="padding-left: 30px">
+                                    {% if book.cancelled %}
+                                        <i class="fa fa-ban text-danger" style="margin-right: 10px"></i>
+                                    {% elseif isCarrier() %}
+                                        <i class="fa fa-user" style="margin-right: 10px"></i>
+                                    {% else %}
+                                        <span style="color: rgba(255,0,0,0.71); margin-right: 10px">R</span>
+                                    {% endif %}
+                                    {{ book.orderPersonRouteTariff.orderPerson.name }}
+                                </td>
+                                <td><span style="opacity: 0.5; font-size: 0.8em">seat</span> {{ book.seatNumber }}</td>
+                                <td>{{ book.orderPersonRouteTariff.route.fromCity.name|language }}</td>
+                                <td>{{ book.orderPersonRouteTariff.route.toCity.name|language }}</td>
+                                <td>{{ book.orderPersonRouteTariff.route.datetimeDeparture|date("H:i") }}</td>
+                                <td>{{ book.orderPersonRouteTariff.route.datetimeArrival|date("H:i") }}</td>
+                                <td>
+                                    {% if isSuperAdmin() %}
+                                        <a href="{{ path("backend_order", { order: book.order.id }) }}" target="_blank"><i class="fa fa-angle-double-right"></i</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}

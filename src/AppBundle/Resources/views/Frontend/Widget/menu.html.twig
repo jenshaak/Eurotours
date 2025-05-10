@@ -1,0 +1,7 @@
+<ul class="nav navbar-nav">
+    <li{% if active == "search" %} class="active"{% endif %}><a href="/">{{ "menu.homepage"|trans }}</a></li>
+    <li{% if active == "contact" %} class="active"{% endif %}><a href="{{ path("contact") }}">{{ "menu.contact"|trans }}</a></li>
+    <li{% if active == "bulharsko" %} class="active"{% endif %}><a href="{{ path("seo_bulharsko") }}">{{ "menu.bulgaria"|trans }}</a></li>
+    <li{% if active == "timetables" %} class="active"{% endif %}><a href="{{ path("seo_timetables_list") }}">{{ "menu.timetables"|trans }}</a></li>
+    <li><a href="http://letenky.kralovna.cz/booking/index.jsp?idProdejce=868" target="_blank">{{ "menu.airtickets"|trans }}</a></li>
+</ul>

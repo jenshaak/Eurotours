@@ -1,0 +1,39 @@
+# This file is a "template" of what your parameters.yml file should look like
+# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
+# http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+parameters:
+    database_host: 127.0.0.1
+    database_port: ~
+    database_name: symfony
+    database_user: root
+    database_password: ~
+    # You should uncomment this if you want to use pdo_sqlite
+    #database_path: '%kernel.root_dir%/../var/data/data.sqlite'
+
+    mailer_transport: sendmail
+    mailer_host: null
+    mailer_user: adam@motvicka.cz
+    mailer_password: nepotrebuju
+    mailer_port: 465
+    mailer_encryption: ssl
+
+    # A secret key that's used to generate certain security-related tokens
+    secret: ThisTokenIsNotSoSecretChangeIt
+
+    web_folder: '%kernel.root_dir%/../web/'
+    upload_folder: '%web_folder%uploads/'
+    upload_folder_url: /uploads/
+
+    webpay_private_key_file: '%kernel.root_dir%/Resources/webpay/EurotoursPrivate.pem'
+    webpay_public_key_file: '%kernel.root_dir%/Resources/webpay/EurotoursPublic.pem'
+    webpay_private_key_password: florenc
+    webpay_merchant_number: 2000301041
+    webpay_url: "https://3dsecure.gpwebpay.com/pgw/order.do"
+
+    email_sender: 'info@eurotours.cz'
+    domain: "http://new.eurotours.cz"
+    jms_job_queue.statistics: true
+
+    redis_dsn: "redis://localhost"
+    selenium_url: 'http://localhost:4444/wd/hub'
+    gotenberg_url: http://localhost:3000

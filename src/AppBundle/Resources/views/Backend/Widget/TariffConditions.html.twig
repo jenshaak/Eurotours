@@ -1,0 +1,63 @@
+<div>
+	<form action="{{ path("backend_ajax_tariff_conditions_save", { tariff: tariff.id }) }}" method="post">
+	<ul class="nav nav-tabs" role="tablist">
+		<li role="presentation" class="active"><a href="#tariffConditionsCS" aria-controls="tariffConditionsCS" role="tab" data-toggle="tab">Česky</a></li>
+		<li role="presentation"><a href="#tariffConditionsEN" aria-controls="tariffConditionsEN" role="tab" data-toggle="tab">Anglicky</a></li>
+		<li role="presentation"><a href="#tariffConditionsRU" aria-controls="tariffConditionsRU" role="tab" data-toggle="tab">Rusky</a></li>
+        <li role="presentation"><a href="#tariffConditionsBG" aria-controls="tariffConditionsBG" role="tab" data-toggle="tab">Bulharsky</a></li>
+        <li role="presentation"><a href="#tariffConditionsUK" aria-controls="tariffConditionsUK" role="tab" data-toggle="tab">Ukrajinsky</a></li>
+	</ul>
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane active" id="tariffConditionsCS">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="tariffConditions_cs">Česky:</label>
+						<textarea name="tariffConditions[cs]" class="form-control" rows="5" id="tariffConditions_cs">{{ tariff.conditions|languageCS }}</textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div role="tabpanel" class="tab-pane" id="tariffConditionsEN">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="tariffConditions_en">Anglicky:</label>
+						<textarea name="tariffConditions[en]" class="form-control" rows="5" id="tariffConditions_en">{{ tariff.conditions|languageEN }}</textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div role="tabpanel" class="tab-pane" id="tariffConditionsRU">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="tariffConditions_ru">Rusky:</label>
+						<textarea name="tariffConditions[ru]" class="form-control" rows="5" id="tariffConditions_ru">{{ tariff.conditions|languageRU }}</textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+        <div role="tabpanel" class="tab-pane" id="tariffConditionsBG">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="tariffConditions_bg">Bulharsky:</label>
+                        <textarea name="tariffConditions[bg]" class="form-control" rows="5" id="tariffConditions_bg">{{ tariff.conditions|languageBG }}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="tariffConditionsUK">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="tariffConditions_ru">Ukrajinsky:</label>
+                        <textarea name="tariffConditions[uk]" class="form-control" rows="5" id="tariffConditions_uk">{{ tariff.conditions|languageUK }}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+	</form>
+</div>

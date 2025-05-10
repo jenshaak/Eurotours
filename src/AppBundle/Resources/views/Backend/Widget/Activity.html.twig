@@ -1,0 +1,30 @@
+<tr>
+    <td><small>{{ activity.datetimeCreated|timeAgo }}</small></td>
+    <td>{{ activity.datetimeCreated|date("j. n. Y H:i") }}</td>
+    <td>
+        {% if activity.user %}
+            {% if activity.user.name %}
+                {{ activity.user.name }}
+            {% elseif activity.user.username %}
+                {{ activity.user.username }}
+            {% endif %}
+        {% endif %}
+    </td>
+    <td>
+        {% if activity.type == "Note" %}Poznámka
+        {% elseif activity.type == "InternalTicketGenerated" %}Vygenerována interní jízdenka
+        {% elseif activity.type == "OrderPaid" %}Objednávka zaplacena
+        {% elseif activity.type == "OrderCreated" %}Objednávka vytvořena
+        {% elseif activity.type == "DatetimeReservationChanged" %}Změna délky rezervace
+        {% elseif activity.type == "PaymentCreated" %}Vytvořena platba
+        {% elseif activity.type == "PaymentSendEmail" %}Odeslán e-mail s platbou
+        {% elseif activity.type == "NeedManualTicket" %}Nutné vytvořit jízdenku
+        {% elseif activity.type == "ExpiredBook" %}Expirace rezervace
+        {% elseif activity.type == "TicketCancel" %}Storno jízdenky
+        {% elseif activity.type == "OrderCancel" %}Storno objednávky
+        {% elseif activity.type == "TicketBilled" %}Jízdenka vyúčtována
+        {% elseif activity.type == "TicketBilledCancel" %}Zrušení vyúčtování jízdenky
+        {% endif %}
+    </td>
+    <td>{{ activity.contentText }}</td>
+</tr>

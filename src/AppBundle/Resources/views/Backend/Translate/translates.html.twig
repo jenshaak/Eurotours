@@ -1,0 +1,78 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+
+    {% macro convert(left, right, buyPrice, sellPrice) %}
+        <div class="row">
+            <div class="col-md-2">
+                <p style="margin-top: 5px">Nákup</p>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control text-right" value="1" placeholder="1" readonly>
+                        <div class="input-group-addon">{{ left }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <span style="line-height: 30px">=</span>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control text-right" placeholder="{{ right }}" value="{{ buyPrice }}" name="{{ right }}-{{ left }}">
+                        <div class="input-group-addon">{{ right }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <p style="margin-top: 5px">Prodej</p>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control text-right" value="1" placeholder="1" readonly>
+                        <div class="input-group-addon">{{ left }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <span style="line-height: 30px">=</span>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control text-right" placeholder="{{ right }}" value="{{ sellPrice }}" name="{{ left }}-{{ right }}">
+                        <div class="input-group-addon">{{ right }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <hr>
+            </div>
+        </div>
+    {% endmacro %}
+
+	<div class="container">
+		<form action="" method="post">
+			<div class="row" style="margin-bottom: 20px">
+				<div class="col-md-6">
+                    {{ _self.convert("EUR", "CZK", CZK_EUR, EUR_CZK) }}
+                    {{ _self.convert("PLN", "CZK", CZK_PLN, PLN_CZK) }}
+                    {{ _self.convert("UAH", "CZK", CZK_UAH, UAH_CZK) }}
+					<div class="row">
+						<div class="col-md-10">
+							<button type="submit" class="btn btn-success btn-block">Uložit</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+{% endblock %}

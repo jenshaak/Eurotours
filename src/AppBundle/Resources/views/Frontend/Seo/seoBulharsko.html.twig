@@ -1,0 +1,58 @@
+{% extends "AppBundle:Frontend/Layout:Skeleton.html.twig" %}
+
+{% block container %}
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				{{ widget("frontend.languageCurrencySwitcher") }}
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid" id="home-header">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-3 col-md-6">
+					<div id="home-search">
+						<h2 class="text-center">Vyhledej jízdenky po celé Evropě</h2>
+						{{ widget("frontend.searchForm", { type: "home" }) }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container" style="margin-top: 30px">
+		<div class="row">
+			<div class="col-md-8">
+				<div class="row">
+					<div class="col-md-12">
+						<h2>Autobusy do Bulharska</h2>
+						<div class="seo-content">
+							<p>
+								Nabízíme autobusové jízdenky do Bulharska od většiny evropských dopravců.
+							</p>
+						</div>
+						<div class="homebox">
+							<h3>{{ 'homepage.claim.title'|trans }}</h3>
+							<p style="font-size: 19px">{{ 'homepage.claim.subtitle1'|trans }} <span style="margin: 0 18px; text-align: center">|</span> {{ 'homepage.claim.subtitle2'|trans }} <span style="margin: 0 18px; text-align: center">|</span> {{ 'homepage.claim.subtitle3'|trans }}</p>
+						</div>
+						<h3 style="margin: 40px 0 20px 0;">Ukázka možných nabízených spojů Praha - Sofie</h3>
+						<div class="only-seo">
+							{% for route in routes %}
+								{{ widget("frontend.route", { route: route }) }}
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+                {{ widget("frontend.contactBox") }}
+			</div>
+		</div>
+		<br><br>
+	</div>
+
+
+{% endblock %}

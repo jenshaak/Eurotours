@@ -1,0 +1,18 @@
+{% macro days(schedule, days) %}
+	<span>
+	{% if days.all %}
+		Každý den
+	{% else %}
+		{% for range in days.ranges %}
+			{% if range.from.day.year %}
+				{{ range.from.day }}.{{ range.from.month }}.{{ range.from.year }}-{{ range.to.day }}.{{ range.to.month }}.{{ range.from.year }},
+			{% else %}
+				{{ range.from.day }}.{{ range.from.month }}-{{ range.to.day }}.{{ range.to.month }},
+			{% endif %}
+		{% endfor %}
+	{% for day in days.days %}
+		{{ day.day }}.{{ day.month }},
+	{% endfor %}
+	{% endif %}
+	</span>
+{% endmacro %}

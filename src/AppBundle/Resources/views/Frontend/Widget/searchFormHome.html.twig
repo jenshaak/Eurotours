@@ -1,0 +1,64 @@
+<form action="{{ path("routes_search_create") }}" method="post">
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-offset-1 col-md-5">
+					<label for="searchFrom">{{ "searchForm.from"|trans }}</label><br>
+					<select id="searchFrom" name="searchFrom" class="selectpicker" data-live-search="true" data-live-search-normalize="true" data-live-search-style="startsWith" data-width="100%" required>
+						<option value="">{{ "searchForm.from"|trans }}</option>
+						{% for country in countries %}
+							<optgroup label="{{ country.name|language }}">
+								{% for city in country.activeCities %}
+									<option data-tokens="{{ city.allLanguagesNames|join(" ") }} {{ city.nextVariations }}" value="{{ city.id }}"{% if routeFilter.fromCity == city or (routeFilter.fromCity is null and fromCity == city)%} selected{% endif %}>{{ city.name|language }}</option>
+								{% endfor %}
+							</optgroup>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="col-md-5">
+					<label for="searchDay">{{ "searchForm.dateDeparture"|trans }}</label><br>
+					<input type="text" class="form-control" value="{% if routeFilter.dateDay %}{{ routeFilter.dateDay|dateFormat }}{% else %}{{ "now"|dateFormat }}{% endif %}" name="searchDay" id="searchDay" style="width: 100%" required>
+				</div>
+			</div>
+
+			<div class="row" style="margin-top: 20px; min-height: 85px">
+				<div class="col-md-offset-1 col-md-5">
+					<label for="searchTo">{{ "searchForm.to"|trans }}</label><br>
+					<select id="searchTo" name="searchTo" class="selectpicker" data-live-search="true" data-live-search-normalize="true" data-live-search-style="startsWith" data-width="100%" required>
+						<option value="">{{ "searchForm.to"|trans }}</option>
+						{% for country in countries %}
+							<optgroup label="{{ country.name|language }}">
+								{% for city in country.activeCities %}
+									<option data-tokens="{{ city.allLanguagesNames|join(" ") }} {{ city.nextVariations }}" value="{{ city.id }}"{% if routeFilter.toCity == city %} selected{% endif %}>{{ city.name|language }}</option>
+								{% endfor %}
+							</optgroup>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="col-md-5">
+					<input type="hidden" name="type" value="one-way">
+					<label>
+						<input type="checkbox" name="type" value="return"{% if routeFilter.type == "return" or routeFilter.type == "return-open" %} checked{% endif %}>
+						{{ "searchForm.iWantReturn"|trans }}
+					</label><br>
+					<input type="text" class="form-control" value="{% if routeFilter.dateBack %}{{ routeFilter.dateBack|dateFormat }}{% else %}{{ "now"|dateFormat }}{% endif %}" name="searchBack" id="searchBack" style="width: 100%; {% if routeFilter.type != "return" and routeFilter.type != "return-open" %} display:none{% endif %}">
+					<label id="onlyOpen" style="{% if routeFilter.type != "return" and routeFilter.type != "return-open" %}display:none{% endif %}">
+						<input type="checkbox" name="onlyOpen" value="1"{% if routeFilter.type == "return-open" %} checked{% endif %} >
+						{{ "searchForm.onlyOpenReturn"|trans }}
+					</label><br>
+				</div>
+			</div>
+
+			<div class="row" style="margin-top: 20px;">
+
+				<div class="col-md-offset-3 col-md-6">
+					<button type="submit" class="btn btn-success btn-block btn-lg"><i class="fa fa-search"></i> {{ "searchForm.find"|trans }}</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+</form>

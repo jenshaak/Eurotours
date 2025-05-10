@@ -1,0 +1,28 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+	<div class="container">
+		<form action="{{ path("backend_payment_generator") }}" method="post">
+			<div class="row">
+				<div class="col-md-6">
+					<h3 style="margin-bottom: 30px">Vygenerovaná platba na částku {{ payment.priceCurrency|priceCurrency(true, payment.currency) }}</h3>
+				</div>
+			</div>
+            {% if payment.email %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="alert alert-success" role="alert">Odkaz k platbě odeslán na e-mail {{ payment.email }}.</div>
+                </div>
+            </div>
+            {% endif %}
+			<div class="row">
+				<div class="col-md-8">
+					<div class="form-group">
+						<label for="paymentUrl">Platební odkaz</label>
+						<input id="paymentUrl" type="text" value="{{ url("payment_dummy", { payment: payment.id }) }}" class="form-control" readonly>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+{% endblock %}

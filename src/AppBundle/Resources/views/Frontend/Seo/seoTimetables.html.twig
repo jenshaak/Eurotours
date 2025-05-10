@@ -1,0 +1,59 @@
+{% extends "AppBundle:Frontend/Layout:Skeleton.html.twig" %}
+
+{% block container %}
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				{{ widget("frontend.languageCurrencySwitcher") }}
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid" id="home-header">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-3 col-md-6">
+					<div id="home-search">
+						<h2 class="text-center">Vyhledej jízdenky po celé Evropě</h2>
+						{{ widget("frontend.searchForm", { type: "home" }) }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container" style="margin-top: 30px">
+		<div class="row">
+			<div class="col-md-8">
+				<div class="row">
+					<div class="col-md-12">
+						<h2>Autobusem z {{ fromCity.name|language }} do {{ toCity.name|language }}</h2>
+						<div class="seo-content">
+							<p>
+								Nabízíme autobusové jízdenky do {{ toCity.name|language }} od většiny evropských dopravců.
+								Cena za autobusovou jízdenku z {{ fromCity.name|language }} do {{ toCity.name|language }} začíná na <strong>{{ price|priceCurrency }}</strong>.
+							</p>
+						</div>
+						<div class="homebox">
+							<h3>{{ 'homepage.claim.title'|trans }}</h3>
+							<p style="font-size: 19px">{{ 'homepage.claim.subtitle1'|trans }} <span style="margin: 0 18px; text-align: center">|</span> {{ 'homepage.claim.subtitle2'|trans }} <span style="margin: 0 18px; text-align: center">|</span> {{ 'homepage.claim.subtitle3'|trans }}</p>
+						</div>
+						<h3 style="margin: 40px 0 20px 0;">Ukázka možných nabízených spojů {{ fromCity.name|language }} - {{ toCity.name|language }}</h3>
+						<div class="only-seo">
+							{% for route in routes %}
+								{{ widget("frontend.route", { route: route }) }}
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+                {{ widget("frontend.contactBox") }}
+			</div>
+		</div>
+		<br><br>
+	</div>
+
+
+{% endblock %}

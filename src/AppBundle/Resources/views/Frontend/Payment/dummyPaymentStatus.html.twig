@@ -1,0 +1,30 @@
+{% extends "AppBundle:Frontend/Layout:Skeleton.html.twig" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-3">
+            <div id="left-search">
+                {{ widget("frontend.searchForm") }}
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-7">
+                    <h2>{{ "order.thanksOrder"|trans }}</h2>
+                    {% if payment.paid %}
+                        <p>Platba úspěšně provedena. Budeme vás kontaktovat.</p>
+                    {% elseif paymentExpired %}
+                        <p>Platební odkaz expiroval. Kontaktujte nás prosím.</p>
+                    {% else %}
+                        <p>Platba nebyla úspěšná. Kontaktujte nás, prosím.</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p style="font-size: 1.5em; font-weight: bold; padding: 3px 10px; background-color: #EC02A6; color: white; margin: 15px 0 25px 0">{{ "search.totalPrice"|trans }}: {{ payment.price }} Kč</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

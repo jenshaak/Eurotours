@@ -1,0 +1,29 @@
+<p style="font-size: 20px">
+    <strong>Volná sedadla po změně ({{ seatsChange.newAvailableSeats|length }}):</strong><br>
+    {% for seat in seatsChange.newAvailableSeats %}
+        {{ seat }}{% if not loop.last %},{% endif %}
+    {% endfor %}
+</p>
+
+<p>
+    <strong>Změna provedena:</strong> {{ datetimeChange|date("j. n. Y H:i") }}<br>
+	<strong>Dopravce</strong>: {{ seatsChange.schedule.line.carrier.name }}<br>
+	<strong>Linka</strong>: {{ seatsChange.schedule.line.code }}<br>
+	<strong>Odjezd</strong>: {{ seatsChange.schedule.firstScheduleLineStation.lineStation.city.name|language }} {{ seatsChange.schedule.firstScheduleLineStation.time.departureTime }}<br>
+	<strong>Den</strong>: {{ seatsChange.dateDay|date("j. n. Y") }}
+</p>
+
+<p>
+	<strong>Původní volná sedadla ({{ seatsChange.oldAvailableSeats|length }}):</strong><br>
+	{% for seat in seatsChange.oldAvailableSeats %}
+		{{ seat }}{% if not loop.last %},{% endif %}
+	{% endfor %}
+</p>
+
+<p>
+	<strong>Volná sedadla po změně ({{ seatsChange.newAvailableSeats|length }}):</strong><br>
+	{% for seat in seatsChange.newAvailableSeats %}
+		{{ seat }}{% if not loop.last %},{% endif %}
+	{% endfor %}
+</p>
+

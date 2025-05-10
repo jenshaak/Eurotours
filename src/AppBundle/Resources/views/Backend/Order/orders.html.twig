@@ -1,0 +1,544 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+	<div class="container-fluid container-orders">
+		<!--<div class="row" style="margin-bottom: 15px">
+			<div class="col-md-2 col-md-offset-10">
+				<a href="{{ path("backend_create_order") }}" class="btn btn-success btn-block"><i class="fa fa-plus"></i> Vytvořit objednávku</a>
+			</div>
+		</div>-->
+		<form action="" method="get">
+			<input type="hidden" name="orderBy" value="{{ orderFilter.orderBy }}">
+			<input type="hidden" name="orderByDirection" value="{{ orderFilter.orderByDirection }}">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="filterSearch">Vyhledávání</label>
+                        <input type="text" class="form-control" name="filterSearch" id="filterSearch" value="{{ orderFilter.fulltextSearch }}">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label for="carrier">Dopravce</label><br>
+                    <select id="carrier" name="filterCarrier" class="selectpicker" data-live-search="true" data-width="100%">
+                        <option value="">Všechny dopravce</option>
+                        {% for c in carriers %}
+                            <option value="{{ c.id }}"{% if orderFilter.carrier == c %} selected{% endif %}>{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="colorType">Filtrace podle barev</label><br>
+                    <select id="colorType" name="filterColorType" class="selectpicker" data-width="100%">
+                        <option value="">Všechny objednávky</option>
+                        <option value="paid-card" data-content="<span class='label' style='background-color: #fcb8d3; color: #333'>Zaplacené kartou</span>"{% if orderFilter.colorType == "paid-card" %} selected{% endif %}></option>
+                        <option value="web-paid-wire-cash" data-content="<span class='label' style='background-color: #fca071; color: #333'>Web, zaplacené převodem / cash</span>"{% if orderFilter.colorType == "web-paid-wire-cash" %} selected{% endif %}></option>
+                        <option value="web-reservation" data-content="<span class='label' style='background-color: #dff0d8; color: #333'>Web, rezervace</span>"{% if orderFilter.colorType == "web-reservation" %} selected{% endif %}></option>
+                        <option value="internal-paid" data-content="<span class='label' style='background-color: #fcf8e3; color: #333'>Interní, zaplacené</span>"{% if orderFilter.colorType == "internal-paid" %} selected{% endif %}></option>¨
+                        <option value="internal-reservation" data-content="<span class='label' style='background-color: white; color: #333'>Interní, rezervace</span>"{% if orderFilter.colorType == "internal-reservation" %} selected{% endif %}></option>
+                    </select>
+                </div>
+                <div class="col-md-1 col-md-offset-2" style="text-align: right">
+                    <a href="{{ path("backend_orders_export", app.request.query.all) }}" class="btn btn-info" style="margin-top: 25px" target="_blank"><i class="fa fa-save"></i></a>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success btn-block" style="margin-top: 25px;">Filtrovat</button>
+                </div>
+            </div>
+			<div class="row" style="margin-bottom: 20px">
+                <div class="col-md-2">
+                    <label for="seller">Prodejce: Objednáno</label><br>
+                    <select id="seller" name="filterSeller" class="selectpicker" data-live-search="true" data-width="100%">
+                        <option value="">Všechny objednávky</option>
+                        {% for s in sellers %}
+                            <option value="{{ s.id }}"{% if orderFilter.userSeller == s %} selected{% endif %}>{{ s.username }}{% if s.name %} - {{ s.name }}{% endif %}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="seller">Prodejce: Uhrazeno</label><br>
+                    <select id="cashier" name="filterCashier" class="selectpicker" data-live-search="true" data-width="100%">
+                        <option value="">Všechny objednávky</option>
+                        {% for s in sellers %}
+                            <option value="{{ s.id }}"{% if orderFilter.userCashier == s %} selected{% endif %}>{{ s.username }}{% if s.name %} - {{ s.name }}{% endif %}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="sellerPaid">Prodejci: Přijaté</label><br>
+                    <select id="sellerPaid" name="filterSellerPaid" class="selectpicker" data-width="100%">
+                        <option value="">Všechny objednávky</option>
+                        <option value="1"{% if orderFilter.sellerPaid is same as (true) %} selected{% endif %}>Pouze přijaté</option>
+                        <option value="0"{% if orderFilter.sellerPaid is same as (false) %} selected{% endif %}>Pouze nepřijaté</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="userCancelled">Prodejci: Stornované</label><br>
+                    <select id="userCancelled" name="filterUserCancelled" class="selectpicker" data-width="100%">
+                        <option value="">Všechny objednávky</option>
+                        {% for s in sellers %}
+                            <option value="{{ s.id }}"{% if orderFilter.userCancelled == s %} selected{% endif %}>{{ s.username }}{% if s.name %} - {{ s.name }}{% endif %}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="billed">Dopravci: Vyúčtované</label><br>
+                    <select id="billed" name="filterBilled" class="selectpicker" data-width="100%">
+                        <option value="">Všechny objednávky</option>
+                        <option value="1"{% if orderFilter.billed is same as (true) %} selected{% endif %}>Pouze vyúčtované</option>
+                        <option value="0"{% if orderFilter.billed is same as (false) %} selected{% endif %}>Pouze nevyúčtované</option>
+                    </select>
+                </div>
+			</div>
+            <div class="row" style="margin-bottom: 20px">
+                <div class="col-md-2">
+                    <label for="monthBilled">Měsíc vyúčtování</label><br>
+                    <select id="monthBilled" name="filterMonthBilled" class="selectpicker" data-width="100%">
+                        <option value="">Kdykoliv</option>
+                        {% for year in datesForFilter %}
+                            <optgroup label="{{ year.year }}">
+                                {% for month in year.months %}
+                                    <option value="{{ year.year }}-{{ month.month }}"{% if orderFilter.monthBilled and orderFilter.monthBilled.format("Y") ~ orderFilter.monthBilled.format("m") == year.year ~ month.month %} selected{% endif %}>{{ month.monthText }} {{ year.year }}</option>
+                                {% endfor %}
+                            </optgroup>
+                        {% endfor%}
+                    </select>
+                </div>
+	            <div class="col-md-2">
+		            <label for="monthDeparture">Měsíc odjezdu</label><br>
+		            <select id="monthDeparture" name="filterMonthDeparture" class="selectpicker" data-width="100%">
+			            <option value="">Kdykoliv</option>
+			            {% for year in datesForFilterWithFuture %}
+			            <optgroup label="{{ year.year }}">
+				            {% for month in year.months %}
+					            <option value="{{ year.year }}-{{ month.month }}"{% if orderFilter.monthDeparture and orderFilter.monthDeparture.format("Y") ~ "-" ~ orderFilter.monthDeparture.format("m") == year.year ~ '-' ~ month.month %} selected{% endif %}>{{ month.monthText }} {{ year.year }}</option>
+				            {% endfor %}
+			            </optgroup>
+			            {% endfor %}
+		            </select>
+	            </div>
+	            <div class="col-md-2">
+		            <label for="monthOrder">Měsíc objednávky</label><br>
+		            <select id="monthOrder" name="filterMonthOrder" class="selectpicker" data-width="100%">
+			            <option value="">Kdykoliv</option>
+			            {% for year in datesForFilter %}
+				            <optgroup label="{{ year.year }}">
+					            {% for month in year.months %}
+						            <option value="{{ year.year }}-{{ month.month }}"{% if orderFilter.monthOrder and orderFilter.monthOrder.format("Y") ~ "-" ~ orderFilter.monthOrder.format("m") == year.year ~ '-' ~ month.month %} selected{% endif %}>{{ month.monthText }} {{ year.year }}</option>
+					            {% endfor %}
+				            </optgroup>
+			            {% endfor%}
+		            </select>
+	            </div>
+                <div class="col-md-2">
+                    <label for="monthPaid">Měsíc zaplacení</label><br>
+                    <select id="monthPaid" name="filterMonthPaid" class="selectpicker" data-width="100%">
+                        <option value="">Kdykoliv</option>
+                        {% for year in datesForFilter %}
+                            <optgroup label="{{ year.year }}">
+                                {% for month in year.months %}
+                                    <option value="{{ year.year }}-{{ month.month }}"{% if orderFilter.monthOrder and orderFilter.monthOrder.format("Y") ~ "-" ~ orderFilter.monthOrder.format("m") == year.year ~ '-' ~ month.month %} selected{% endif %}>{{ month.monthText }} {{ year.year }}</option>
+                                {% endfor %}
+                            </optgroup>
+                        {% endfor%}
+                    </select>
+                </div>
+                <div class="col-md-2 checkbox">
+                    <label for="onlyCancelled">
+                    <input type="checkbox" name="onlyCancelled" id="onlyCancelled"{% if orderFilter.onlyCancelled %} checked{% endif %}>
+                        Vybrat pouze stornované
+                    </label>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 20px">
+                <div class="col-md-3">
+                    <label>Datum zaplacení</label><br>
+                    <div class="input-group input-daterange">
+                        <input name="dateRangePaid[from]" type="text" class="form-control" value="{% if orderFilter.dateRangePaid %}{{ orderFilter.dateRangePaid.from|date("d.m.Y") }}{% endif %}">
+                        <div class="input-group-addon">do</div>
+                        <input name="dateRangePaid[to]" type="text" class="form-control" value="{% if orderFilter.dateRangePaid %}{{ orderFilter.dateRangePaid.to|date("d.m.Y") }}{% endif %}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Datum odjezdu</label><br>
+                    <div class="input-group input-daterange">
+                        <input name="dateRangeDeparture[from]" type="text" class="form-control" value="{% if orderFilter.dateRangeDeparture %}{{ orderFilter.dateRangeDeparture.from|date("d.m.Y") }}{% endif %}">
+                        <div class="input-group-addon">do</div>
+                        <input name="dateRangeDeparture[to]" type="text" class="form-control" value="{% if orderFilter.dateRangeDeparture %}{{ orderFilter.dateRangeDeparture.to|date("d.m.Y") }}{% endif %}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Datum vyúčtování</label><br>
+                    <div class="input-group input-daterange">
+                        <input name="dateRangeBilled[from]" type="text" class="form-control" value="{% if orderFilter.dateRangeBilled %}{{ orderFilter.dateRangeBilled.from|date("d.m.Y") }}{% endif %}">
+                        <div class="input-group-addon">do</div>
+                        <input name="dateRangeBilled[to]" type="text" class="form-control" value="{% if orderFilter.dateRangeBilled %}{{ orderFilter.dateRangeBilled.to|date("d.m.Y") }}{% endif %}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Datum objednávky.</label><br>
+                    <div class="input-group input-daterange">
+                        <input name="dateRangeOrder[from]" type="text" class="form-control" value="{% if orderFilter.dateRangeOrder %}{{ orderFilter.dateRangeOrder.from|date("d.m.Y") }}{% endif %}">
+                        <div class="input-group-addon">do</div>
+                        <input name="dateRangeOrder[to]" type="text" class="form-control" value="{% if orderFilter.dateRangeOrder %}{{ orderFilter.dateRangeOrder.to|date("d.m.Y") }}{% endif %}">
+                    </div>
+                </div>
+            </div>
+		</form>
+		<div class="row">
+			<div class="col-md-12">
+				{{ widget("backend.flash") }}
+			</div>
+		</div>
+
+        <div class="bg-success" style="padding: 5px;">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Celkem</h3>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 20px; ">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-2 text-center">
+                            <strong>Měna</strong>
+                        </div>
+                        <div class="col-md-2 text-right">
+                            <strong>Objednáno</strong>
+                        </div>
+                        <div class="col-md-2 text-right">
+                            <strong>Tax</strong>
+                        </div>
+                        <div class="col-md-2 text-right">
+                            <strong>Stornováno</strong>
+                        </div>
+                        <div class="col-md-2 text-right">
+                            <strong>Celkem</strong>
+                        </div>
+                    </div>
+                    {% for currency, value in summarize['ordered'] %}
+                        {% if summarize.cancelled[currency]['priceSum'] is defined %}
+                            {% set cancelledPrice = summarize.cancelled[currency]['priceSum'] %}
+                        {% else %}
+                            {% set cancelledPrice = 0 %}
+                        {% endif %}
+
+                        <div class="row">
+                            <div class="col-md-2 text-center">
+                                {{ currency }}
+                            </div>
+                            <div class="col-md-2 text-right">
+                                {{ value['priceSum']|number_format(2, ',', ' ') }}
+                            </div>
+                            <div class="col-md-2 text-right">
+                                {{ value['sellerFeeSum'] ? value['sellerFeeSum']|number_format(2, ',', ' ') : "" }}
+                            </div>
+                            <div class="col-md-2 text-right">
+                                {{ cancelledPrice|number_format(2, ',', ' ') }}
+                            </div>
+                            <div class="col-md-2 text-right">
+                                <strong>{{ (value['priceSum']+(value['sellerFeeSum'] ?? 0)-(cancelledPrice ?? 0))|number_format(2, ',', ' ') }}</strong>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+			<div class="col-md-12">
+				<table class="table table-orders table-condensed">
+					<thead>
+					<tr>
+						<th class="text-right switch-order" data-action="switchOrder" data-order-by="datetimeCreated">
+							{% if orderFilter.orderBy == "datetimeCreated" %}{% if orderFilter.orderByDirection == "DESC" %}&uarr;{% else %}&darr;{% endif %}{% endif %}&nbsp;Objednávka
+						</th>
+						<th>Cesta</th>
+						<th>Dopravce</th>
+						<th class="text-right switch-order" data-action="switchOrder" data-order-by="datetimeDeparture">
+							{% if orderFilter.orderBy == "datetimeDeparture" %}{% if orderFilter.orderByDirection == "DESC" %}&uarr;{% else %}&darr;{% endif %}{% endif %}&nbsp;Odjezd
+						</th>
+						<th>Jméno a příjmení</th>
+						<th>Telefon</th>
+						<th class="text-right">Cena</th>
+                        <th class="text-right">Tax</th>
+						<th class="switch-order" data-action="switchOrder" data-order-by="datetimePaid">
+                            {% if orderFilter.orderBy == "datetimePaid" %}{% if orderFilter.orderByDirection == "DESC" %}&uarr;{% else %}&darr;{% endif %}{% endif %}&nbsp;Platba
+                        </th>
+                        <th>
+                            Vyúčtování
+                        </th>
+                        <th>
+                            Storno
+                        </th>
+                        <th></th>
+					</tr>
+					</thead>
+					<tbody data-link="row" class="rowlink">
+					{% for order in orders %}
+						<tr data-order="{{ order.id }}" style="{% if order.cancelled %}color: rgba(0,0,0,0.25);{% endif %}" class="tr-order tr-order-{{ order.id }} tr-order-head tr-order-pattern {% if order.paid %}tr-order-status-paid {% endif %}{% if order.internal %}tr-order-status-internal {% else %}tr-order-status-external {% endif %}{% if order.paidBy %} tr-order-paid-by-{{ order.paidBy }}{% endif %}">
+							<td class="text-right">
+								<a href="{{ path("backend_order", { order: order.id }) }}">
+									{% if order.datetimeOrdered %}
+										{{ order.datetimeOrdered|date("j.n.Y") }}
+									{% endif %}
+                                    <br><span>{{ order.name }}</span>
+								</a>
+							</td>
+							<td>{{ order.routeThere.simpleFromCityName|language }} <i class="fa fa-arrow-right"></i> {{ order.routeThere.simpleToCityName|language }}</td>
+							<td><div class="carrier-name-container">{{ order.routeThere.carrier.code }} {{ order.routeThere.carrierTitle }}</div></td>
+							<td class="text-right">{{ order.routeThere.datetimeDeparture|date("j.n.Y") }}</td>
+							<td></td>
+							<td>
+                                <div class="phone-container">{% if order.phone != "+420724132365" %}{{ order.phone }}{% endif %}</div>
+                            </td>
+							<td class="text-right">{{ order.priceCurrency|priceCurrency(true, order.priceCurrency.currency)|nonBreakingSpace }}</td>
+                            <td class="text-right">
+                                {% if order.sellerFee is null %}
+                                    -
+                                {% else %}
+                                    {{ order.sellerFeeCurrency|priceCurrency(true, order.sellerFeeCurrency.currency)|nonBreakingSpace }}
+                                {% endif %}
+                            </td>
+							<td>
+                                {% if order.status == "paid" %}
+                                    <span style="color: #005b00">{{ order.datetimePaid|date("j.n. H:i") }} {% if order.paidBy %} ({{ order.paidBy }}){% endif %}{% if order.userCashier %} <span style="color: rgba(0,0,0,0.9); font-weight: 400">{{ order.userCashier.username }}</span>{% endif %}</span>
+                                {% else %}
+                                    <span style="opacity: 0.7">{{ order.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if order.billed %}
+                                    <span style="color: #005b00">{{ order.datetimeBilled|date("j.n. H:i") }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if order.cancelled %}
+                                    <span style="color: #cc1b37">{{ order.datetimeCancelled|date("j.n. H:i") }} {% if order.userCancelled %}<br/><span style="color: rgba(0,0,0,0.9); font-weight: 400">{{ order.userCancelled.username }}</span>{% endif %}</span>
+                                {% endif %}
+                            </td>
+                            <td style="width: 105px">
+	                            {% if isSuperAdmin() and not isEmployee() %}
+	                                {% if order.billed %}
+	                                    <span class="label label-success" data-action="orderBilledCancel" data-url="{{ path("backend_ajax_order_billed_cancel", { order: order.id }) }}">ED</span>
+	                                {% else %}
+	                                    <span class="label label-action label-success" data-action="orderBilled" data-url="{{ path("backend_ajax_order_billed", { order: order.id }) }}">ED</span>
+	                                {% endif %}
+
+	                                {% if order.sellerPaid %}
+	                                    <span class="label label-info" data-action="orderSellerPaidCancel" data-url="{{ path("backend_ajax_order_seller_paid_cancel", { order: order.id }) }}">PE</span>
+	                                {% else %}
+	                                    <span class="label label-action label-info" data-action="orderSellerPaid" data-url="{{ path("backend_ajax_order_seller_paid", { order: order.id }) }}">PE</span>
+	                                {% endif %}
+
+                                    {% if order.paidByBank %}
+                                        <span class="label label-info" data-action="orderPaidByBankCancel" data-url="{{ path("backend_ajax_order_paid_by_bank_cancel", { order: order.id }) }}">BE</span>
+                                    {% else %}
+                                        <span class="label label-action label-info" data-action="orderPaidByBank" data-url="{{ path("backend_ajax_order_paid_by_bank", { order: order.id }) }}">BE</span>
+                                    {% endif %}
+	                            {% endif %}
+                            </td>
+						</tr>
+						{% for person in order.orderPersons %}
+							<tr data-order="{{ order.id }}" style="{% if order.cancelled or (person.internalTicketThere and person.internalTicketThere.cancelled) %}color: rgba(0,0,0,0.25);{% endif %}" class="tr-order tr-order-{{ order.id }} {% if order.paid %}tr-order-status-paid {% endif %}{% if order.internal %}tr-order-status-internal {% else %}tr-order-status-external {% endif %}{% if order.paidBy %} tr-order-paid-by-{{ order.paidBy }}{% endif %}">
+								<td colspan="4"></td>
+								<td>
+									<a href="{{ path("backend_order", { order: order.id }) }}">{{ person.name }}</a>
+								</td>
+                                <td><div class="phone-container">{{ person.phone }}</div></td>
+								<td class="text-right">
+									{% if person.internalTicketThere %}
+										{{ person.internalTicketThere.priceCurrency|priceCurrency(true, order.priceCurrency.currency)|nonBreakingSpace }}
+									{% endif %}
+								</td>
+								<td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+								<td style="width: 105px">
+									{% if isSuperAdmin() and not isEmployee() %}
+										{% if person.internalTicketThere %}
+											{% if person.internalTicketThere.billed %}
+												<span class="label label-success" data-action="ticketBilledCancel" data-url="{{ path("backend_ajax_ticket_billed_cancel", { order: order.id, ticket: person.internalTicketThere.id }) }}">ED</span>
+											{% else %}
+												<span class="label label-action label-success" data-action="ticketBilled" data-url="{{ path("backend_ajax_ticket_billed", { order: order.id, ticket: person.internalTicketThere.id }) }}">ED</span>
+											{% endif %}
+
+											{% if person.internalTicketThere.sellerPaid %}
+												<span class="label label-info" data-action="ticketSellerPaidCancel" data-url="{{ path("backend_ajax_ticket_seller_paid_cancel", { order: order.id, ticket: person.internalTicketThere.id }) }}">PE</span>
+											{% else %}
+												<span class="label label-action label-info" data-action="ticketSellerPaid" data-url="{{ path("backend_ajax_ticket_seller_paid", { order: order.id, ticket: person.internalTicketThere.id }) }}">PE</span>
+											{% endif %}
+
+                                            {% if person.internalTicketThere.paidByBank %}
+                                                <span class="label label-info" data-action="ticketPaidByBankCancel" data-url="{{ path(person.internalTicketThere is internalTicket ? "backend_ajax_internal_ticket_paid_by_bank_cancel" : "backend_ajax_external_ticket_paid_by_bank_cancel", { order: order.id, ticket: person.internalTicketThere.id }) }}">BE</span>
+                                            {% else %}
+                                                <span class="label label-action label-info" data-action="ticketPaidByBank" data-url="{{ path(person.internalTicketThere is internalTicket ? "backend_ajax_internal_ticket_paid_by_bank" : "backend_ajax_external_ticket_paid_by_bank", { order: order.id, ticket: person.internalTicketThere.id }) }}">BE</span>
+                                            {% endif %}
+										{% endif %}
+									{% endif %}
+								</td>
+							</tr>
+						{% endfor %}
+						{% if order.routeBack and order.routeThere.carrier != order.routeBack.carrier %}
+							<tr data-order="{{ order.id }}" style="font-weight: bold; {% if order.cancelled %}color: silver; {% endif %}" class="tr-order tr-order-pattern tr-order-{{ order.id }} {% if order.paid %}tr-order-status-paid {% endif %}{% if order.internal %}tr-order-status-internal {% else %}tr-order-status-external {% endif %}{% if order.paidBy %} tr-order-paid-by-{{ order.paidBy }}{% endif %}">
+								<td></td>
+								<td>{{ order.routeBack.simpleFromCityName|language }} <i class="fa fa-arrow-right"></i> {{ order.routeBack.simpleToCityName|language }}</td>
+                                <td><div class="carrier-name-container">{{ order.routeBack.carrier.code }} {{ order.routeBack.carrierTitle }}</div></td>
+								<td class="text-right">{{ order.routeBack.datetimeDeparture|date("j.n.Y") }}</td>
+								<td colspan="8"></td>
+							</tr>
+							{% for person in order.orderPersons %}
+							<tr data-order="{{ order.id }}" style="{% if order.cancelled or (person.internalTicketBack and person.internalTicketBack.cancelled) %}color: rgba(0,0,0,0.25);{% endif %}" class="tr-order tr-order-{{ order.id }} {% if order.paid %}tr-order-status-paid {% endif %}{% if order.internal %}tr-order-status-internal {% else %}tr-order-status-external {% endif %}{% if order.paidBy %} tr-order-paid-by-{{ order.paidBy }}{% endif %}">
+								<td colspan="4"></td>
+								<td>
+									<a href="{{ path("backend_order", { order: order.id }) }}">{{ person.name }}</a>
+								</td>
+                                <td><div class="phone-container">{{ person.phone }}</div></td>
+								<td class="text-right">
+									{% if person.internalTicketBack %}
+										{{ person.internalTicketBack.priceCurrency|priceCurrency(true, order.priceCurrency.currency)|nonBreakingSpace }}
+									{% endif %}
+								</td>
+								<td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+								<td style="width: 70px">
+									{% if isSuperAdmin() and not isEmployee() %}
+										{% if person.internalTicketBack %}
+											{% if person.internalTicketBack.billed %}
+												<span class="label label-success" data-action="ticketBilledCancel" data-url="{{ path("backend_ajax_ticket_billed_cancel", { order: order.id, ticket: person.internalTicketBack.id }) }}">ED</span>
+											{% else %}
+												<span class="label label-action label-success" data-action="ticketBilled" data-url="{{ path("backend_ajax_ticket_billed", { order: order.id, ticket: person.internalTicketBack.id }) }}">ED</span>
+											{% endif %}
+
+											{% if person.internalTicketBack.sellerPaid %}
+												<span class="label label-info" data-action="ticketSellerPaidCancel" data-url="{{ path("backend_ajax_ticket_seller_paid_cancel", { order: order.id, ticket: person.internalTicketBack.id }) }}">PE</span>
+											{% else %}
+												<span class="label label-action label-info" data-action="ticketSellerPaid" data-url="{{ path("backend_ajax_ticket_seller_paid", { order: order.id, ticket: person.internalTicketBack.id }) }}">PE</span>
+											{% endif %}
+										{% endif %}
+									{% endif %}
+								</td>
+							</tr>
+							{% endfor %}
+						{% endif %}
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+        {% if nextPageUrl != null %}
+        <div class="row">
+            <div class="col-md-12" style="margin: 30px 0">
+                <button type="button" class="btn btn-primary" data-action="nextPage" data-url="{{ nextPageUrl }}">Další objednávky</button>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div data-modal-body="billedOrder" style="display: none">
+        <div>
+	        <div class="row" style="margin-bottom: 15px">
+		        <div class="col-md-6">
+			        <label for="billedTicketMonth">Měsíc vyúčtování</label><br>
+			        <select id="billedTicketMonth" name="billedTicketMonth" data-width="100%">
+				        {% for year in datesForFilter %}
+					        <optgroup label="{{ year.year }}">
+						        {% for month in year.months %}
+							        <option value="{{ year.year }}-{{ month.month }}" {% if year.year ~ month.month == monthBefore.year ~ monthBefore.month %} selected{% endif %}>{{ month.monthText }} {{ year.year }}</option>
+						        {% endfor %}
+					        </optgroup>
+				        {% endfor%}
+			        </select>
+		        </div>
+	        </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <textarea name="order-billed-note" class="form-control" rows="5" placeholder="Můžete vložit poznámku"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div data-modal-body="sellerPaidOrder" style="display: none">
+        <div>
+            <p>Opravdu chcete tuto objednávku označit jako uhrazenou dopravcem?</p>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <textarea name="order-seller-paid-note" class="form-control" rows="5" placeholder="Můžete vložit poznámku"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div data-modal-body="paidByBankOrder" style="display: none">
+        <div>
+            <p>Opravdu chcete tuto objednávku označit jako uhrazenou bankou?</p>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <textarea name="order-paid-by-bank-note" class="form-control" rows="5" placeholder="Můžete vložit poznámku"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+	<div data-modal-body="billedTicket" style="display: none">
+		<div>
+			<div class="row" style="margin-bottom: 15px">
+				<div class="col-md-6">
+					<label for="billedTicketMonth">Měsíc vyúčtování</label><br>
+					<select id="billedTicketMonth" name="billedTicketMonth" data-width="100%">
+						{% for year in datesForFilter %}
+							<optgroup label="{{ year.year }}">
+								{% for month in year.months %}
+									<option value="{{ year.year }}-{{ month.month }}" {% if year.year ~ month.month == monthBefore.year ~ monthBefore.month %} selected{% endif %}>{{ month.monthText }} {{ year.year }}</option>
+								{% endfor %}
+							</optgroup>
+						{% endfor%}
+					</select>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+						<textarea name="ticket-billed-note" class="form-control" rows="5" placeholder="Můžete vložit poznámku"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div data-modal-body="sellerPaidTicket" style="display: none">
+		<div>
+			<p>Opravdu chcete tuto jízdenku označit jako uhrazenou dopravcem?</p>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+						<textarea name="ticket-seller-paid-note" class="form-control" rows="5" placeholder="Můžete vložit poznámku"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <div data-modal-body="paidByBankTicket" style="display: none">
+        <div>
+            <p>Opravdu chcete tuto jízdenku označit jako uhrazenou bankou?</p>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <textarea name="ticket-paid-by-bank-note" class="form-control" rows="5" placeholder="Můžete vložit poznámku"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

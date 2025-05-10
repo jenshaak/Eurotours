@@ -1,0 +1,11 @@
+backend:
+    resource: '@AppBundle/Controller/Backend/'
+    type: annotation
+
+frontend:
+    resource: '@AppBundle/Controller/Frontend/'
+    type: annotation
+
+lexik_translation_edition:
+    resource: "@LexikTranslationBundle/Resources/config/routing.yml"
+    prefix:   /backend/lexik

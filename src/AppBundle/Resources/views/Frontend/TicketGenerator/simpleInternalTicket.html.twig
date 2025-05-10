@@ -1,0 +1,251 @@
+{% macro header(type, ident) %}
+    <div class="header">
+        <div>EUROTOURS s.r.o.</div>
+        <div>+420 724 132 365 &nbsp; &nbsp; &nbsp; &nbsp; info@eurotours.cz</div>
+        <div>{{ type }} coupon {{ ident }}</div>
+    </div>
+{% endmacro %}
+
+{% macro ticketJourney(ticket, reverse) %}
+    <table>
+        <tr>
+            <th>Jméno (Name):</th>
+            <td>{{ ticket.name }}</td>
+        </tr>
+        <tr>
+            <th>Odjezd (From):</th>
+            <td>
+                {{ ticket.from }}<br>
+                {{ ticket.datetimeDeparture|date("j. n. Y, H:i") }}
+            </td>
+        </tr>
+        <tr>
+            <th>Příjezd (To):</th>
+            <td>
+                {{ ticket.to }}<br>
+                {{ route.datetimeArrival|date("j. n. Y, H:i") }}
+            </td>
+        </tr>
+        <tr>
+            <th>Dopravce (Company):</th>
+            <td>{{ ticket.carrier }}</td>
+        </tr>
+        <tr>
+            <th>Cena (Price):</th>
+            <td>{{ ticket.priceCurrency|priceCurrency(true, ticket.currency) }}</td>
+        </tr>
+    </table>
+    <p>Cestující je povinen se dostavit k autobusu 20 minut před odjezdem. (Passenger must come at the bus 20 minutes before departure.)</p>
+{% endmacro %}
+
+{% macro ticketAuditor(ticket, small) %}
+    <table>
+        <tr>
+            <th>Jméno (Name):</th>
+            <td colspan="2">{{ ticket.name }}</td>
+        </tr>
+        <tr>
+            <th>Dopravce (Company):</th>
+            <td colspan="2">
+                {{ ticket.carrier }}
+            </td>
+        </tr>
+        <tr>
+            <th>Odjezd (From):</th>
+            <td>
+                {{ ticket.from }}
+                {% if small %}
+                    - ({{ ticket.datetimeDeparture|date("j. n. Y, H:i") }})
+                {% else %}
+                    <br>{{ ticket.datetimeDeparture|date("j. n. Y, H:i") }}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Příjezd (To):</th>
+            <td colspan="2">
+                {{ ticket.to }}
+                {% if small %}
+                    - ({{ ticket.datetimeArrival|date("j. n. Y, H:i") }})
+                {% else %}
+                    <br>{{ ticket.datetimeArrival|date("j. n. Y, H:i") }}
+                {% endif %}
+            </td>
+        </tr>
+
+
+        {% if ticket.backTicket %}
+            <tr>
+                <th>Dopravce (Company):</th>
+                <td colspan="2">
+                    {{ ticket.backTicket.carrier.name }}
+                </td>
+            </tr>
+            <tr>
+                <th>Odjezd (From):</th>
+                <td>
+                    {{ ticket.from }}
+                    {% if small %}
+                        - ({{ ticket.backTicket.datetimeDeparture|date("j. n. Y, H:i") }})
+                    {% else %}
+                        <br>{{ ticket.backTicket.datetimeDeparture|date("j. n. Y, H:i") }}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Příjezd (To):</th>
+                <td colspan="2">
+                    {{ ticket.to }}
+                    {% if small %}
+                        - ({{ ticket.backTicket.datetimeArrival|date("j. n. Y, H:i") }})
+                    {% else %}
+                        <br>{{ ticket.backTicket.datetimeArrival|date("j. n. Y, H:i") }}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endif %}
+
+        <tr>
+            <th>Cena (Price):</th>
+            <td colspan="2">{{ ticket.priceCurrency|priceCurrency(true, ticket.currency) }}</td>
+        </tr>
+    </table>
+    <p style="text-align: right; float: right; font-size: 15px; margin-top: 6px">www.eurotours.cz</p>
+    <p style="text-align: left; float: left">Cestující je povinen se dostavit k autobusu 20 minut před odjezdem.<br>(Passenger must come at the bus 20 minutes before departure.)</p>
+{% endmacro %}
+
+{% import _self as ticketGenerator %}
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="utf-8">
+    <style type="text/css">
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        /* blocks */
+        .block {
+            width: 100%;
+            margin-bottom: 55px;
+        }
+
+        .block:nth-child(1) {
+            height: 248px;
+        }
+
+        .block:nth-child(2) {
+            height: 208px;
+        }
+
+        .block:nth-child(3) {
+            height: 208px;
+        }
+
+        .block:nth-child(4) {
+            height: 158px;
+            margin-bottom: 0;
+        }
+
+
+        /* header */
+        .header {
+            overflow: hidden;
+        }
+
+        .header > div {
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            float: left;
+        }
+
+        .header > div:nth-child(1) {
+            width: 30%;
+            text-align: left;
+            font-size: 22px;
+        }
+
+        .header > div:nth-child(2) {
+            width: 40%;
+            font-size: 10px;
+        }
+
+        .header > div:nth-child(3) {
+            width: 30%;
+            font-size: 14px;
+            background-color: #e6e6e6;
+        }
+
+        /* table */
+        table {
+            font-size: 10px;
+            border-spacing: 0;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        table tr th, table tr td {
+            padding: 2px 5px;
+        }
+
+        table tr th {
+            text-align: right;
+            width: 20%;
+            font-weight: normal;
+        }
+
+        table tr td:nth-child(1) {
+            text-align: left;
+            width: 40%;
+        }
+
+        table tr td:nth-child(2) {
+            text-align: left;
+            width: 40%;
+        }
+
+        table tr:nth-child(odd) {
+            background-color: #e6e6e6;
+        }
+
+        p {
+            text-align: left;
+            font-size: 8px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="block">
+    {{ ticketGenerator.header("Journey", ticket.ident) }}
+    {{ ticketGenerator.ticketAuditor(ticket, false) }}
+</div>
+
+{% if ticket.backTicket %}
+    <div class="block">
+        {{ ticketGenerator.header("Journey", ticket.ident) }}
+        {{ ticketGenerator.ticketAuditor(ticket, false) }}
+    </div>
+{% endif %}
+
+<div class="block">
+    {{ ticketGenerator.header("Customer", ticket.ident) }}
+    {{ ticketGenerator.ticketAuditor(ticket, false) }}
+</div>
+
+{% if ticket.backTicket is null %}
+    <div class="block">
+        {{ ticketGenerator.header("Auditor", ticket.ident) }}
+        {{ ticketGenerator.ticketAuditor(ticket, false) }}
+    </div>
+{% endif %}
+
+<div class="block">
+    {{ ticketGenerator.header("Auditor", ticket.ident) }}
+    {{ ticketGenerator.ticketAuditor(ticket, true) }}
+</div>
+
+</body>
+</html>

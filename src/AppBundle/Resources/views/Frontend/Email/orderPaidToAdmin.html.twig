@@ -1,0 +1,3 @@
+<p>Objednávka uhrazena kreditní kartou.</p>
+
+<p><a style="border: 1px solid #777777; padding: 6px; background-color: #9ede94" href="{{ url("backend_order", { order: order.id }) }}">Zobrazit detail {% if order.orderType == "order" %}objednávky{% else %}rezervace{% endif %}</a></p>

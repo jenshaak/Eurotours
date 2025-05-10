@@ -1,0 +1,483 @@
+div.line-header {
+	position: fixed;
+	background-color: #777777;
+	height: 60px;
+	width: 100%;
+	z-index: 1000;
+	margin: 0;
+}
+
+div.line-header p {
+	margin-top: 14px;
+	font-size: 22px;
+}
+
+div.line-header button {
+	margin-top: 12px;
+}
+
+div.container-line-header {
+	padding: 0;
+}
+
+div.container-line {
+	margin-top: 80px;
+}
+
+
+div.container-tariff-header {
+	padding: 0;
+}
+
+div.container-tariff {
+	margin-top: 80px;
+}
+
+span.editScheduleTime {
+	cursor: pointer;
+	width: 130px;
+	height: 50px;
+	display: block;
+	text-align: center;
+	line-height: 40px;
+}
+
+span.editScheduleTime:hover {
+	background-color: #cacaca;
+}
+
+span.editScheduleTime small {
+	display: block;
+	margin-top: -20px;
+	opacity: 0.8
+}
+
+span.editDays {
+	cursor: pointer;
+	width: 130px;
+	min-height: 50px;
+	display: block;
+	text-align: center;
+	line-height: 40px;
+}
+
+span.editDays:hover {
+	background-color: #cacaca;
+}
+
+a.td-a {
+	display: block;
+	width: 100%;
+	height: 100%;
+	color: inherit;
+}
+
+a.td-a:hover {
+	text-decoration: inherit;
+}
+
+td .weight-buttons {
+	display: none;
+}
+
+td:hover .weight-buttons {
+	display: block;
+}
+
+table.table-external-cities tr {
+	cursor: pointer;
+}
+
+table.seats-plan {
+	border-collapse: separate;
+}
+
+table.seats-plan > tr {
+
+}
+
+table.seats-plan > tbody > tr > td:not(.control) {
+	width: 30px;
+	height: 30px;
+	border: 1px solid white;
+	cursor: pointer;
+	text-align: center;
+}
+
+table.seats-plan > tbody > tr > td:not(.control):hover {
+	border: 1px solid black;
+}
+
+table.seats-plan > tbody > tr > td.seat-empty {
+	background-color: white;
+}
+
+table.seats-plan > tbody > tr > td.seat {
+	background-color: silver;
+}
+
+table.seats-plan > tbody > tr > td.seat-available {
+	background-color: green;
+}
+
+table.seats-plan > tbody > tr > td.seat-ticket {
+	background-color: red;
+}
+
+table.seats-plan > tbody > tr > td.seat-booked {
+	background-color: #ff50c0;
+}
+
+table.seats-plan > tbody > tr > td.control button {
+	margin-left: 20px;
+}
+
+table.seats-plan > tbody > tr > td > span {
+	font-size: 0.8em;
+	color: white;
+}
+
+/* Absolute Center Spinner */
+.loading {
+	position: fixed;
+	z-index: 1999;
+	height: 2em;
+	width: 2em;
+	overflow: show;
+	margin: auto;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+
+/* Transparent Overlay */
+.loading:before {
+	content: '';
+	display: block;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* :not(:required) hides these rules from IE9 and below */
+.loading:not(:required) {
+	/* hide "loading..." text */
+	font: 0 / 0 a;
+	color: transparent;
+	text-shadow: none;
+	background-color: transparent;
+	border: 0;
+}
+
+.loading:not(:required):after {
+	content: '';
+	display: block;
+	font-size: 10px;
+	width: 1em;
+	height: 1em;
+	margin-top: -0.5em;
+	-webkit-animation: spinner 1500ms infinite linear;
+	-moz-animation: spinner 1500ms infinite linear;
+	-ms-animation: spinner 1500ms infinite linear;
+	-o-animation: spinner 1500ms infinite linear;
+	animation: spinner 1500ms infinite linear;
+	border-radius: 0.5em;
+	-webkit-box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.5) -1.5em 0 0 0, rgba(0, 0, 0, 0.5) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
+	box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) -1.5em 0 0 0, rgba(0, 0, 0, 0.75) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
+}
+
+@-webkit-keyframes spinner {
+	0% {
+		-webkit-transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-ms-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+
+	100% {
+		-webkit-transform: rotate(360deg);
+		-moz-transform: rotate(360deg);
+		-ms-transform: rotate(360deg);
+		-o-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+
+@-moz-keyframes spinner {
+	0% {
+		-webkit-transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-ms-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+
+	100% {
+		-webkit-transform: rotate(360deg);
+		-moz-transform: rotate(360deg);
+		-ms-transform: rotate(360deg);
+		-o-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+
+@-o-keyframes spinner {
+	0% {
+		-webkit-transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-ms-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+
+	100% {
+		-webkit-transform: rotate(360deg);
+		-moz-transform: rotate(360deg);
+		-ms-transform: rotate(360deg);
+		-o-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes spinner {
+	0% {
+		-webkit-transform: rotate(0deg);
+		-moz-transform: rotate(0deg);
+		-ms-transform: rotate(0deg);
+		-o-transform: rotate(0deg);
+		transform: rotate(0deg);
+	}
+
+	100% {
+		-webkit-transform: rotate(360deg);
+		-moz-transform: rotate(360deg);
+		-ms-transform: rotate(360deg);
+		-o-transform: rotate(360deg);
+		transform: rotate(360deg);
+	}
+}
+
+table.table-seats-sold > thead > tr  {
+	border-bottom: 2px solid #444;
+}
+
+table.table-seats-sold tr.seats-sold-schedule  {
+	background-color: #ddd;
+}
+
+.datepicker > div { display: inherit; }
+
+table.table-orders {
+	font-size: 0.9em;
+}
+
+table.table.table-orders > tbody > tr > td, table.table.table-orders > thead > tr > td {
+}
+
+table.table-orders > thead > tr > th {
+	border-bottom: 1px solid black;
+}
+
+table.table-orders > tbody > tr {
+	opacity: 0.8;
+}
+
+table.table-orders > tbody > tr.tr-order-head > td {
+	border-top: 1px solid black;
+	font-weight: bold;
+}
+
+table.table-orders > tbody > tr.tr-order-pattern > td {
+	background-color: #fcb8d3;
+	background-image: url("https://www.transparenttextures.com/patterns/az-subtle.png");
+	/* This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+}
+
+table.table-orders > tbody > tr.current {
+	opacity: 1;
+}
+
+table.table-orders > tbody > tr.tr-order-status-internal > td {
+	background-color: white;
+}
+
+table.table-orders > tbody > tr.tr-order-status-internal.tr-order-status-paid > td {
+	background-color: #fcf8e3 !important;
+}
+
+table.table-orders > tbody > tr.tr-order-status-internal.tr-order-paid-by-card > td {
+	background-color: #fcb8d3 !important;
+}
+
+table.table-orders > tbody > tr.tr-order-status-external > td {
+	background-color: #dff0d8;
+}
+
+table.table-orders > tbody > tr.tr-order-status-external.tr-order-paid-by-card > td {
+	background-color: #fcb8d3 !important;
+}
+
+table.table-orders > tbody > tr.tr-order-status-external.tr-order-paid-by-cash > td {
+	background-color: #fca071 !important;
+}
+
+table.table-orders > tbody > tr.tr-order-status-external.tr-order-paid-by-wireTransfer > td {
+	background-color: #fca071 !important;
+}
+
+
+table.table-orders > tbody > tr > td > span.label-action {
+	opacity: 0;
+	transition: opacity 100ms;
+}
+
+table.table-orders > tbody > tr:hover > td > span.label-action {
+	opacity: 0.5;
+}
+
+table.table-orders > tbody > tr:hover > td > span.label-action:hover {
+	opacity: 1;
+}
+
+.switch-order {
+	cursor: pointer;
+}
+
+.table-tariff-container {
+
+}
+
+div.table-tariff-container div.table-tariff-top {
+	display: flex;
+	position: sticky;
+	position: -webkit-sticky;
+	top: 60px;
+	z-index: 20;
+}
+
+div.table-tariff-container div.table-tariff-top div {
+	padding: 10px;
+	width: 100px;
+	min-width: 100px;
+	height: 90px;
+	overflow: hidden;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	border-left: none;
+	background-color: white;
+	font-weight: bold;
+}
+
+div.table-tariff-container div.table-tariff-top div:first-child {
+	border: none;
+	border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+div.table-tariff-container div.table-tariff-left div {
+	position: sticky;
+	left: 0;
+	padding: 10px;
+	width: 100px;
+	min-width: 100px;
+	height: 90px;
+	overflow: hidden;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	border-bottom: none;
+	background-color: white;
+	z-index: 10;
+}
+
+div.table-tariff-container div.table-tariff-left div:last-child {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+div.table-tariff-content {
+	position: absolute;
+	top: 90px;
+	left: 115px;
+}
+
+div.table-tariff-content-row {
+	display: flex;
+}
+
+div.table-tariff-content-row div.table-tariff-content-col {
+	border: 1px solid rgba(0, 0, 0, 0.05);
+	padding: 4px;
+	width: 100px;
+	height: 90px;
+}
+
+div.table-tariff-content-row div.table-tariff-content-col {
+	position: relative;
+}
+div.table-tariff-content-row div.table-tariff-content-col:hover::after,
+div.table-tariff-content-row div.table-tariff-content-col:hover::after {
+	content: "";
+	position: absolute;
+	left: -100vw;
+	top: -100vh;
+	max-height: calc(100vh + 90px);
+	height: 10000px;
+	width: 10000px;
+	max-width: calc(100vw + 100px);
+	z-index: -1;
+	border-right: 100px solid #efefef;
+	border-bottom: 90px solid #efefef;
+}
+
+div.table-tariff-content-row div.table-tariff-content-col input:read-only {
+	opacity: 0.5;
+}
+
+div.table-tariff-content input.fare-price {
+	background-color: #c1edca;
+}
+
+div.table-tariff-content input.fare-not-available {
+	background-color: #edcbc9;
+	opacity: 0.5;
+}
+
+div.table-tariff-content input.fare-variable {
+	background-color: #bdc1ed;
+}
+
+table > tbody > tr > td > div.carrier-name-container {
+	max-width: 80px;
+	overflow: hidden;
+	white-space: nowrap;
+	font-size: 10px;
+	margin-top: 2px;
+}
+
+table > tbody > tr > td > div.phone-container {
+	max-width: 100px;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.container-orders {
+	max-width: 1300px;
+}
+
+.mb-100 {
+	margin-bottom: 100px;
+}
+
+.ml-10 {
+	margin-left: 10px;
+}
+
+.pd-5 {
+	padding: 5px;
+}
+
+.pd-2 {
+	padding: 10px;
+}
+

@@ -1,0 +1,102 @@
+{% extends "AppBundle:Frontend/Layout:Skeleton.html.twig" %}
+
+{% block container %}
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				{{ widget("frontend.languageCurrencySwitcher") }}
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid" id="home-header">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-3 col-md-6">
+					<div id="home-search">
+						<h2 class="text-center">{{ 'homepage.searchFormTitle'|trans }}</h2>
+						{{ widget("frontend.searchForm", { type: "home" }) }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container" style="margin-top: 30px">
+		<div class="row">
+			<div class="col-md-8">
+				<div class="row">
+					<div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>Kontaktní formulář <small>napište nám</small></h4>
+                            </div>
+                            <div class="panel-body">
+                                <form action="" method="post">
+                                    <input type="hidden" name="prvni" value="druhy">
+                                    <input type="hidden" name="druhy" value="prvni">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="email">Váš e-mail</label>
+                                                <input id="email" type="email" class="form-control" name="email" placeholder="@" value="" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="phone">Vaše telefonní číslo</label>
+                                                <input id="phone" type="text" class="form-control" name="phone" value="" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="message">Vaše zpráva</label>
+                                        <textarea name="message" class="form-control" rows="12" id="message" required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-success">Odeslat dotaz</button>
+                                </form>
+                            </div>
+                        </div>
+					</div>
+				</div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2>Centrální kancelář</h2>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p style="font-size: 19px"><strong>Křižíkova 332/1, Praha 8, 186 00</strong></p>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <p style="font-size: 19px">(naproti ÚAN Praha Florenc)</p>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom: 1rem">
+                            <div class="col-md-12">
+                                <img class="img img-responsive img-thumbnail" src="{{ asset("bundles/app/frontend/office2.jpg") }}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img class="img img-responsive img-thumbnail" src="{{ asset("bundles/app/frontend/office1.jpg") }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			<script type="text/javascript">
+				setTimeout(function () {
+					document.getElementsByName("prvni")[0].value = "prvni";
+					document.getElementsByName("druhy")[0].value = "druhy";
+				}, 20000);
+			</script>
+			<div class="col-md-4">
+                {{ widget("frontend.contactBox") }}
+			</div>
+		</div>
+		<br><br>
+	</div>
+
+
+{% endblock %}

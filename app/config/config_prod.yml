@@ -1,0 +1,36 @@
+imports:
+    - { resource: config.yml }
+
+#doctrine:
+#    orm:
+#        metadata_cache_driver: apc
+#        result_cache_driver: apc
+#        query_cache_driver: apc
+
+monolog:
+    handlers:
+        main:
+            type:         fingers_crossed
+            action_level: error
+            handler:      nested
+        nested:
+            type:  stream
+            path:  "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+        console:
+            type:  console
+        mail:
+            type: fingers_crossed
+            action_level: critical
+            handler:      deduplicated
+        deduplicated:
+            type:    deduplication
+            handler: swift
+        swift:
+            type:       swift_mailer
+            from_email: 'adam@motvicka.cz'
+            to_email:   'adam@motvicka.cz'
+            subject:    'Error Eurotours : %%message%%'
+            level:      debug
+            formatter:  monolog.formatter.html
+            content_type: text/html

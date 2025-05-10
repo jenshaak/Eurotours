@@ -1,0 +1,104 @@
+<div>
+	<form action="{{ path("backend_ajax_schedule_note_save", { schedule: schedule.id, line: schedule.line.id }) }}">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<strong>Privátní</strong> poznámka spoje
+					</div>
+					<div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="privateNote_cs">Česky:</label>
+                                    <textarea name="privateNote[cs]" class="form-control" rows="2" id="privateNote_cs">{{ schedule.privateNote|languageCS }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="privateNote_en">Anglicky:</label>
+                                    <textarea name="privateNote[en]" class="form-control" rows="2" id="privateNote_en">{{ schedule.privateNote|languageEN }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="privateNote_ru">Rusky:</label>
+                                    <textarea name="privateNote[ru]" class="form-control" rows="2" id="privateNote_ru">{{ schedule.privateNote|languageRU }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="privateNote_bg">Bulharsky:</label>
+                                    <textarea name="privateNote[bg]" class="form-control" rows="2" id="privateNote_bg">{{ schedule.privateNote|languageBG }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="privateNote_uk">Ukrajinsky:</label>
+                                    <textarea name="privateNote[uk]" class="form-control" rows="2" id="privateNote_uk">{{ schedule.privateNote|languageUK }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<strong>Veřejná</strong> poznámka spoje
+					</div>
+					<div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="publicNote_cs">Česky:</label>
+                                    <textarea name="publicNote[cs]" class="form-control" rows="2" id="publicNote_cs">{{ schedule.publicNote|languageCS }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="publicNote_en">Anglicky:</label>
+                                    <textarea name="publicNote[en]" class="form-control" rows="2" id="publicNote_en">{{ schedule.publicNote|languageEN }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="publicNote_ru">Rusky:</label>
+                                    <textarea name="publicNote[ru]" class="form-control" rows="2" id="publicNote_ru">{{ schedule.publicNote|languageRU }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="publicNote_bg">Bulharsky:</label>
+                                    <textarea name="publicNote[bg]" class="form-control" rows="2" id="publicNote_bg">{{ schedule.publicNote|languageBG }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="publicNote_uk">Ukrajinsky:</label>
+                                    <textarea name="publicNote[uk]" class="form-control" rows="2" id="publicNote_uk">{{ schedule.publicNote|languageUK }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,139 @@
+{% extends "AppBundle:Frontend/Layout:Skeleton.html.twig" %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-md-3">
+			<div id="left-search" class="left-search-order">
+				{{ widget("frontend.searchForm") }}
+			</div>
+		</div>
+		{% if order.cancelled %}
+			<div class="col-md-9">
+				<div class="row">
+					<div class="col-md-7">
+						<h2>Rezervace vypršela</h2>
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<p class="alert alert-info">
+							Litujeme, ale vaše rezervace vypršela. Pomocí formuláře vlevo si prosím najděte jiný spoj.
+							<br>Případně nás kontaktujte na telefonu <strong>+420 724 132 365</strong>,
+							nebo napište na <a href="mailto:info@eurotours.cz">info@eurotours.cz</a>.
+						</p>
+					</div>
+				</div>
+			</div>
+		{% else %}
+			<div class="col-md-9">
+				<div class="row">
+					<div class="col-md-7">
+						{% if order.status == "reservation" %}<h2>{{ 'order.thanksReservation'|trans }}</h2>
+						{% elseif order.status == "order" %}<h2>{{ 'order.thanksOrder'|trans }}</h2>
+						{% elseif order.status == "waitingPay" %}<h2>{{ 'order.paymentOfOrder'|trans }}</h2>
+						{% elseif order.status == "expired" %}<h2>{{ 'order.yourOrder'|trans }}</h2>
+						{% elseif order.status == "paid" %}<h2>{{ 'order.yourOrder'|trans }}</h2>
+						{% endif %}
+					</div>
+					<div class="col-md-5">
+						{% if payment and not payment.paid %}
+							<a href="{{ path('order_payment', { order: order.id }) }}" class="btn btn-lg btn-block btn-success" style="margin-top: 10px"><i class="fa fa-credit-card"></i> {{ 'order.payByCard'|trans }}</a>
+						{% endif %}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						{% if order.status == "reservation" %}
+							<p class="alert alert-success">{{ 'order.reservationSuccess'|trans }}</p>
+						{% elseif order.status == "paid" %}
+							<p class="alert alert-success">{{ 'order.paymentSuccess'|trans }} <strong>{{ 'order.ticketsInEmail'|trans }}</strong></p>
+						{% endif %}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<p style="font-size: 1.5em; font-weight: bold; padding: 3px 10px; background-color: #EC02A6; color: white; margin: 15px 0 25px 0">
+                            {{ "search.totalPrice"|trans }}: {{ order.priceCurrency|priceCurrency(true, order.priceCurrency.currency) }}
+
+                            {% if order.sellerFee is not null %}
+                                ( {{ "order.withSellerFee"|trans }} {{ order.priceWithSellerFeeCurrency|priceCurrency(true, order.priceWithSellerFeeCurrency.currency) }})
+                            {% endif %}
+                        </p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-7">
+						<div class="row order-there">
+							<div class="col-md-5">
+								<div class="time">{{ order.routeThere.datetimeDeparture|date("j. n. Y H:i") }}</div>
+								<div class="city">{{ order.routeThere.simpleFromCityName|language }}</div>
+								{% if order.routeThere.fromStation %}
+									<div class="station">{{ order.routeThere.fromStation.name|language }}</div>
+								{% elseif order.routeThere.fromExternalStation %}
+									<div class="station">{{ order.routeThere.fromExternalStation.name|language }}</div>
+								{% else %}
+									<div class="station">&nbsp;</div>
+								{% endif %}
+							</div>
+							<div class="col-md-1">
+								<div class="arrow"><i class="fa fa-arrow-right"></i></div>
+							</div>
+							<div class="col-md-6">
+								<div class="time">{{ order.routeThere.datetimeArrival|date("j. n. Y H:i") }}</div>
+								<div class="city">{{ order.routeThere.simpleToCityName|language }}</div>
+								{% if order.routeThere.toStation %}
+									<div class="station">{{ order.routeThere.toStation.name|language }}</div>
+								{% elseif order.routeThere.toExternalStation %}
+									<div class="station">{{ order.routeThere.toExternalStation.name|language }}</div>
+								{% else %}
+									<div class="station">&nbsp;</div>
+								{% endif %}
+							</div>
+						</div>
+						{% if order.routeBack %}
+							<div class="row order-there">
+								<div class="col-md-5">
+									<div class="time">{{ order.routeBack.datetimeDeparture|date("j. n. Y H:i") }}</div>
+									<div class="city">{{ order.routeBack.simpleFromCityName|language }}</div>
+									{% if order.routeBack.fromStation %}
+										<div class="station">{{ order.routeBack.fromStation.name|language }}</div>
+									{% elseif order.routeBack.fromExternalStation %}
+										<div class="station">{{ order.routeBack.fromExternalStation.name|language }}</div>
+									{% else %}
+										<div class="station">&nbsp;</div>
+									{% endif %}
+								</div>
+								<div class="col-md-1">
+									<div class="arrow"><i class="fa fa-arrow-right"></i></div>
+								</div>
+								<div class="col-md-6">
+									<div class="time">{{ order.routeBack.datetimeArrival|date("j. n. Y H:i") }}</div>
+									<div class="city">{{ order.routeBack.simpleToCityName|language }}</div>
+									{% if order.routeBack.toStation %}
+										<div class="station">{{ order.routeBack.toStation.name|language }}</div>
+									{% elseif order.routeBack.toExternalStation %}
+										<div class="station">{{ order.routeBack.toExternalStation.name|language }}</div>
+									{% else %}
+										<div class="station">&nbsp;</div>
+									{% endif %}
+								</div>
+							</div>
+						{% endif %}
+					</div>
+					<div class="col-md-5">
+						<ul class="list-group">
+							{% for orderPerson in order.orderPersons %}
+								<li class="list-group-item">
+									<h4>{{ orderPerson.name }}</h4>
+									<p><strong>{{ "order.phone"|trans }}:</strong> {{ orderPerson.phone }}</p>
+									<p><strong>{{ 'order.price'|trans }}:</strong> {{ orderPerson.routeTariffThere.priceCurrencyIncludeSurcharge|priceCurrency(true, orderPerson.routeTariffThere.priceCurrency.currency) }}</p>
+								</li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+	</div>
+{% endblock %}

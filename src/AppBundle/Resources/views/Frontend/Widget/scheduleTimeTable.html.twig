@@ -1,0 +1,23 @@
+<div>
+	<table class="table">
+		<thead>
+		<tr>
+			<th>Zastávka</th>
+			<th>Přijezd</th>
+			<th>Odjezd</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for lineStation in schedule.line.activeLineStations("there") %}
+			{% set scheduleLineStation = schedule.getScheduleLineStationsForLineStation(lineStation) %}
+			{% if scheduleLineStation %}
+			<tr{% if fromLineStation is not null and toLineStation is not null and not (fromLineStation.weight <= lineStation.weight and toLineStation.weight >= lineStation.weight) %} style="color: #777"{% endif %}>
+				<td><strong>{{ lineStation.city.name|language }}</strong><br>{{ lineStation.station.name|language }}</td>
+				<td>{{ scheduleLineStation.time.arrivalTime }}{% if scheduleLineStation.time.arrivalDayModify > 0 %} +{{ scheduleLineStation.time.arrivalDayModify }}{% endif %}</td>
+				<td>{{ scheduleLineStation.time.departureTime }}{% if scheduleLineStation.time.departureDayModify > 0 %} +{{ scheduleLineStation.time.departureDayModify }}{% endif %}</td>
+			</tr>
+			{% endif %}
+		{% endfor %}
+		</tbody>
+	</table>
+</div>

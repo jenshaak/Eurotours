@@ -1,0 +1,31 @@
+{% macro lineTr(line) %}
+	<tr>
+		<td style="width: 25%">
+			<a href="{{ path("backend_line", { line: line.id }) }}" class="td-a">
+			{% if line.firstLineStation %}
+				<strong>{{ line.firstLineStation.city.name|language }}</strong>
+			{% else %}
+				&nbsp;
+			{% endif %}
+			</a>
+		</td>
+		<td style="width: 25%">
+			<a href="{{ path("backend_line", { line: line.id }) }}" class="td-a">
+			{% if line.lastLineStation %}
+				<strong>{{ line.lastLineStation.city.name|language }}</strong>
+			{% else %}
+				&nbsp;
+			{% endif %}
+			</a>
+		</td>
+		<td style="width: 20%">
+			<a href="{{ path("backend_line", { line: line.id }) }}" class="td-a">
+				{{ line.code }}
+			</a>
+		</td>
+		<td class="text-right">
+			<input type="checkbox" data-toggle="toggle" data-line="{{ line.id }}" data-action="toggleLineVisible" data-on="On" data-off="Off" data-size="mini"{% if not line.hidden %} checked{% endif %}>
+			<input type="checkbox" data-toggle="toggle" data-line="{{ line.id }}" data-action="toggleLinePayOnline" data-on="<i class='fa fa-credit-card'></i>" data-off="<i class='fa fa-credit-card'></i>" data-size="mini"{% if line.payOnline %} checked{% endif %}>
+		</td>
+	</tr>
+{% endmacro %}

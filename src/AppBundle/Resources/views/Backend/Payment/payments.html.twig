@@ -1,0 +1,45 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Vytvořeno</th>
+                        <th>Částka</th>
+                        <th>E-mail</th>
+                        <th>Poznámka</th>
+                        <th>Uhrazeno</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for payment in payments %}
+                        <tr>
+                            <td>
+                                {{ payment.datetimeCreated|date("j.n.Y H:i") }}
+                            </td>
+                            <td>
+                                {{ payment.priceCurrency|priceCurrency(true, payment.currency) }}
+                            </td>
+                            <td>
+                                {{ payment.email }}
+                            </td>
+                            <td>
+                                {{ payment.note }}
+                            </td>
+                            <td>
+                                {% if payment.datetimePaid != null %}
+                                    {{ payment.datetimeCreated|date("j.n.Y H:i") }}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

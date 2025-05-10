@@ -1,0 +1,56 @@
+{% extends "AppBundle:Backend/Layout:Skeleton.html.twig" %}
+
+{% block content %}
+	<div class="container">
+		<form action="" method="get">
+			<div class="row">
+				{% if isSuperAdmin() %}
+					<div class="col-md-3">
+						<label for="carrier">Zvolte dopravce</label><br>
+						<select id="carrier" name="carrier" class="selectpicker" data-live-search="true" data-width="100%" data-action="selectCarrier">
+							<option value="">Zvolte dopravce</option>
+							{% for c in carriers %}
+								<option value="{{ c.id }}"{% if carrier == c %} selected{% endif %}>{{ c.name }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				{% endif %}
+				<div class="col-md-2">
+					<label for="filterDay">Datum</label><br>
+					<input type="text" class="form-control" value="{% if dateDay %}{{ dateDay|date("d.m.Y") }}{% endif %}" name="filterDay" id="filterDay" style="width: 100%">
+				</div>
+				<div class="col-md-2">
+					<button type="submit" class="btn btn-success btn-block" style="margin-top: 25px"><i class="fa fa-refresh"></i> Obnovit</button>
+				</div>
+			</div>
+		</form>
+
+		{% if carrier %}
+		<div class="row" style="margin-top: 40px">
+			<div class="col-md-12">
+				<table class="table table-bordered table-hover">
+					<thead>
+					<tr>
+						<th>Linka</th>
+						<th>Vyjíždí z</th>
+						<th>Konečná stanice</th>
+						<th>Míst</th>
+						<th>Koupených</th>
+                        {% if not isCarrier() %}<th>Rezervovaných</th>{% endif %}
+						<th></th>
+					</tr>
+					</thead>
+					<tbody>
+					{% for schedule in schedules %}
+						{{ widget("backend.scheduleSeatsSettings", { schedule: schedule, dateDay: dateDay }) }}
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{% else %}
+			<div class="alert alert-success" style="margin-top: 20px">Zvolte prosím konkrétního dopravce.</div>
+		{% endif %}
+
+	</div>
+{% endblock %}

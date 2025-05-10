@@ -1,0 +1,14 @@
+<h2>Prodejce {{ user.name }} stornoval jízdenky objednávky {{ order.ident }}</h2>
+<p>
+	<strong>Prodejce</strong>: {{ user.name }}<br>
+	<strong>Objednávka</strong>: <a href="{{ url("backend_order", { order: order.id }) }}">{{ order.name }} z {{ order.datetimeOrdered|date("j.n.Y") }}</a><br>
+	<strong>E-mail objednávky</strong>: {{ user.email }}
+</p>
+
+<h3>Zrušené jízdenky</h3>
+{% for ticket in tickets %}
+<p>
+	<strong>{{ ticket.orderPerson.name }}</strong><br>
+	{{ ticket.orderPerson.phone }}
+</p>
+{% endfor %}

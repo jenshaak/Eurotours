@@ -1,0 +1,11 @@
+{% for day in days %}
+	<p>
+		<strong>{{ day.dateDay|date("j. n. Y") }}</strong>, {{ day.dateDay|date("N")|dayInWeek }}<br>
+		{% if day.seatsPlan %}
+			{{ day.seatsPlan.countOfAvailableSeats }} {% if day.seatsPlan.countOfAvailableSeats == 1 %}sedadlo{% elseif day.seatsPlan.countOfAvailableSeats < 5 %}sedadla{% else %}sedadel{% endif %}<br>
+		{% endif %}
+		{% for internalTicket in day.internalTickets %}
+			<a target="_blank" href="{{ path("backend_order", { order: internalTicket.order.id }) }}">{{ internalTicket.orderPerson.name }}</a> ({{ internalTicket.number }})<br>
+		{% endfor %}
+	</p>
+{% endfor %}

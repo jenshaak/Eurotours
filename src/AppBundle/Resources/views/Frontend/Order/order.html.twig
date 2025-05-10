@@ -1,0 +1,428 @@
+
+{% extends "AppBundle:Frontend/Layout:Skeleton.html.twig" %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-md-3">
+			<div id="left-search" class="left-search-order">
+				{{ widget("frontend.searchForm") }}
+			</div>
+		</div>
+		<div class="col-md-9">
+			<form action="" method="post" data-action='orderForm' data-action-reservation="{{ path("order_reservation", { order: order.id }) }}" data-action-buy="{{ path("order_buy", { order: order.id }) }}">
+				<div class="row">
+					<div class="col-md-3">
+						<div style="margin-bottom: 20px">
+							<a href="{{ path("routes_search", { search: order.search.id }) }}" class="btn btn-warning"><i class="fa fa-angle-double-left"></i> {{ 'order.backToSearch'|trans }}</a>
+						</div>
+					</div>
+					<div class="col-md-8 col-md-offset-1">
+						<p id="totalPrice" style="font-size: 1.5em; font-weight: bold; padding: 3px 10px; background-color: #EC02A6; color: white">
+                            {{ "search.totalPrice"|trans }}: <span>{{ order.priceCurrency|priceCurrency }}{% if order.maxPrice %} - {{ order.maxPriceCurrency|priceCurrency }}{% endif %}</span>
+                        </p>
+
+                        <p id="priceWithSellerFee" style="font-size: 1.5em; font-weight: bold; padding: 3px 10px; background-color: black; color: white">
+                            {{ "search.totalPrice"|trans }} {{ "order.withSellerFee"|trans }} <span class="totalPricePlaceholder"></span> {{ order.priceCurrency|currency }}{% if order.maxPrice %} <span class="maxTotalPricePlaceholder"></span> {{ order.priceCurrency|currency }}{% endif %}
+                        </p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3 col-xs-6">
+						<div class="form-group">
+							<label for="name">{{ "order.fullName"|trans }}</label>
+							<input type="text" class="form-control" id="name" name="name" placeholder="{{ "order.fullName"|trans }}" value="{{ order.name ? order.name : "" }}">
+							<span class="help-block" style="display: none">{{ 'order.fillName'|trans }}</span>
+						</div>
+						<div class="form-group">
+							<label for="email">{{ "order.email"|trans }}</label>
+							<input type="email" class="form-control" id="email" name="email" placeholder="@" value="{{ order.email ? order.email : "" }}">
+							<span class="help-block" style="display: none">{{ 'order.fillEmail'|trans }}</span>
+						</div>
+						<div class="form-group">
+							<label for="phone">{{ "order.phone"|trans }}</label>
+							<div class="input-group phone-input-group">
+								<input type="text" class="form-control" id="phoneprefix" name="phonePrefix" placeholder="" value="+420">
+								<input type="text" class="form-control" id="phone" name="phone" placeholder="{{ "order.phone"|trans }}" value="{{ order.phone ? order.phone : "" }}">
+							</div>
+							<span class="help-block" style="display: none">{{ 'order.fillPhone'|trans }}</span>
+						</div>
+					</div>
+					<div class="col-md-7 col-md-offset-1 col-xs-6 order-routes-detail">
+						<div class="row order-there">
+							<div class="col-md-5">
+								<div class="time">{{ order.routeThere.datetimeDeparture|date("j. n. Y H:i") }}</div>
+								<div class="city">{{ order.routeThere.fromCity.name|language }}</div>
+								{% if order.routeThere.fromStation %}
+									<div class="station">{{ order.routeThere.fromStation.name|language }}</div>
+								{% elseif order.routeThere.fromExternalStation %}
+									<div class="station">{{ order.routeThere.fromExternalStation.name|language }}</div>
+								{% else %}
+									<div class="station">&nbsp;</div>
+								{% endif %}
+							</div>
+							<div class="col-md-1">
+								<div class="arrow"><i class="fa fa-arrow-right"></i></div>
+							</div>
+							<div class="col-md-6">
+								<div class="time">{{ order.routeThere.datetimeArrival|date("j. n. Y H:i") }}</div>
+								<div class="city">{{ order.routeThere.simpleToCityName|language }}</div>
+								{% if order.routeThere.toStation %}
+									<div class="station">{{ order.routeThere.toStation.name|language }}</div>
+								{% elseif order.routeThere.toExternalStation %}
+									<div class="station">{{ order.routeThere.toExternalStation.name|language }}</div>
+								{% else %}
+									<div class="station">&nbsp;</div>
+								{% endif %}
+							</div>
+						</div>
+						{% if order.routeThere.isOpen %}
+							<div class="row order-there">
+								<div class="col-md-5">
+									<div class="time">{{ "search.openTicket"|trans }}</div>
+									<div class="city">{{ order.routeThere.simpleToCityName|language }}</div>
+									{% if order.routeThere.toStation %}
+										<div class="station">{{ order.routeThere.toStation.name|language }}</div>
+									{% elseif order.routeThere.toExternalStation %}
+										<div class="station">{{ order.routeThere.toExternalStation.name|language }}</div>
+									{% else %}
+										<div class="station">&nbsp;</div>
+									{% endif %}
+								</div>
+								<div class="col-md-1">
+									<div class="arrow"><i class="fa fa-arrow-right"></i></div>
+								</div>
+								<div class="col-md-6">
+									<div class="time">&nbsp;</div>
+									<div class="city">{{ order.routeThere.simpleFromCityName|language }}</div>
+									{% if order.routeThere.fromStation %}
+										<div class="station">{{ order.routeThere.fromStation.name|language }}</div>
+									{% elseif order.routeThere.fromExternalStation %}
+										<div class="station">{{ order.routeThere.fromExternalStation.name|language }}</div>
+									{% else %}
+										<div class="station">&nbsp;</div>
+									{% endif %}
+								</div>
+							</div>
+						{% endif %}
+						{% if order.routeBack %}
+						<div class="row order-there">
+							<div class="col-md-5">
+								<div class="time">{{ order.routeBack.datetimeDeparture|date("j. n. Y H:i") }}</div>
+								<div class="city">{{ order.routeBack.simpleFromCityName|language }}</div>
+								{% if order.routeBack.fromStation %}
+									<div class="station">{{ order.routeBack.fromStation.name|language }}</div>
+								{% elseif order.routeBack.fromExternalStation %}
+									<div class="station">{{ order.routeBack.fromExternalStation.name|language }}</div>
+								{% else %}
+									<div class="station">&nbsp;</div>
+								{% endif %}
+							</div>
+							<div class="col-md-1">
+								<div class="arrow"><i class="fa fa-arrow-right"></i></div>
+							</div>
+							<div class="col-md-6">
+								<div class="time">{{ order.routeBack.datetimeArrival|date("j. n. Y H:i") }}</div>
+								<div class="city">{{ order.routeBack.simpleToCityName|language }}</div>
+								{% if order.routeBack.toStation %}
+									<div class="station">{{ order.routeBack.toStation.name|language }}</div>
+								{% elseif order.routeBack.toExternalStation %}
+									<div class="station">{{ order.routeBack.toExternalStation.name|language }}</div>
+								{% else %}
+									<div class="station">&nbsp;</div>
+								{% endif %}
+							</div>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+				{% if freeSeatNotAvailable and isAdmin() %}
+					<div class="row"><hr></div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="alert-danger alert" style="margin: 0">
+								K vyřízení objednávky není dostatek volných míst !
+							</div>
+						</div>
+					</div>
+				{% endif %}
+				<div class="row"><hr></div>
+				<div class="row">
+					<div class="col-md-12">
+						{% for orderPerson in order.orderPersons %}
+						<div class="row">
+							<div class="col-md-12">
+								<h4 style="color: #EC02A6">{{ loop.index }}. {{ "order.passenger"|trans }}</h4>
+							</div>
+						</div>
+						<div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="persons_name_{{ orderPerson.id }}">{{ "order.fullName"|trans }}</label>
+                                            <input type="text" class="form-control" id="persons_name_{{ orderPerson.id }}" name="persons[{{ orderPerson.id }}][name]" placeholder="{{ "order.fullName"|trans }}" value="{{ orderPerson.name ? orderPerson.name : "" }}">
+                                            <span class="help-block" style="display: none">{{ 'order.fillPassengerName'|trans }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="persons_phone_{{ orderPerson.id }}">
+                                                {{ "order.phone"|trans }}
+                                                {% if isAdmin and loop.first %}
+                                                    <div class="copy-phones-button" data-action="copyPhones">
+                                                        <i class="fa fa-angle-double-down"></i>
+                                                    </div>
+                                                {% endif %}
+                                            </label>
+                                            <div class="input-group phone-input-group">
+                                                <input type="text" class="form-control form-control-phone-prefix" id="persons_phoneprefix_{{ orderPerson.id }}" name="persons[{{ orderPerson.id }}][phonePrefix]" placeholder="" value="+420">
+                                                <input type="text" class="form-control form-control-phone" id="persons_phone_{{ orderPerson.id }}" name="persons[{{ orderPerson.id }}][phone]" placeholder="{{ "order.phone"|trans }}" value="{{ orderPerson.phone ? orderPerson.phone : "" }}">
+                                            </div>
+                                            <span class="help-block" style="display: none">{{ 'order.fillPassengerPhone'|trans }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    {% if (routeThereExternalObject and routeThereExternalObject.dateOfBirthRequired) or (routeBackExternalObject and routeBackExternalObject.dateOfBirthRequired) %}
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="persons_dateBirth_{{ orderPerson.id }}">{{ "order.dob"|trans }}</label>
+                                                <input type="text" class="form-control" value="{% if orderPerson.dateBirth %}{{ orderPerson.dateBirth|dateFormat }}{% else %}{{ "now"|dateFormat }}{% endif %}" name="persons[{{ orderPerson.id }}][dateBirth]" id="persons_dateBirth_{{ orderPerson.id }}" style="width: 100%" required>
+                                                <span class="help-block" style="display: none">{{ 'order.fillPassengerDob'|trans }}</span>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if (routeThereExternalObject and routeThereExternalObject.documentNumberRequired) or (routeBackExternalObject and routeBackExternalObject.documentNumberRequired) %}
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="persons_documentNumber_{{ orderPerson.id }}">{{ "order.documentNumber"|trans }}</label>
+                                                <input type="text" class="form-control" id="persons_documentNumber_{{ orderPerson.id }}" name="persons[{{ orderPerson.id }}][documentNumber]" placeholder="{{ "order.documentNumber"|trans }}" value="{{ orderPerson.documentNumber ? orderPerson.documentNumber : "" }}">
+                                                <span class="help-block" style="display: none">{{ 'order.fillPassengerDocumentNumber'|trans }}</span>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="tariff">
+                                        {{ "order.tariffThere"|trans }}
+                                        {% if isAdmin() %}
+                                            <span style="color: #800000">
+                                                [{{ orderPerson.routeThere.carrier.name }}]
+                                                {% if orderPerson.routeThere.carrierTitle %} - {{ orderPerson.routeThere.carrierTitle }}{% endif %}
+                                            </span>
+                                        {% endif %}
+                                    </label>
+									{% if orderPerson.routeTariffThere.tariff %}
+										<input type="text" class="form-control" id="tariff" value="{{ orderPerson.routeTariffThere.tariff.name|language }}" readonly>
+									{% elseif orderPerson.routeTariffThere.externalTariff %}
+										<input type="text" class="form-control" id="tariff" value="{{ orderPerson.routeTariffThere.externalTariff.name|language }}" readonly>
+									{% endif %}
+								</div>
+							</div>
+							{% if orderPerson.routeTariffBack %}
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="tariff">
+                                        {{ "order.tariffBack"|trans }}
+                                        {% if isAdmin() %}
+                                            <span style="color: #800000">
+                                                [{{ orderPerson.routeBack.carrier.name }}]
+                                                {% if orderPerson.routeBack.carrierTitle %} - {{ orderPerson.routeBack.carrierTitle }}{% endif %}
+                                            </span>
+                                        {% endif %}
+                                    </label>
+									{% if orderPerson.routeTariffBack.tariff %}
+										<input type="text" class="form-control" id="tariff" value="{{ orderPerson.routeTariffBack.tariff.name|language }}" readonly>
+									{% elseif orderPerson.routeTariffBack.externalTariff %}
+										<input type="text" class="form-control" id="tariff" value="{{ orderPerson.routeTariffBack.externalTariff.name|language }}" readonly>
+									{% endif %}
+								</div>
+							</div>
+							{% endif %}
+						</div>
+						{% if isAdmin() or isSeller() %}
+							<div class="row div-admin-change-price" style="display: none">
+								<div class="col-md-offset-6 col-md-3">
+									<div class="form-group">
+										<label for="persons_priceThere_{{ orderPerson.id }}">{{ 'order.priceThere'|trans }}</label>
+										<div class="input-group">
+											<input type="text" class="form-control text-right" id="persons_priceThere_{{ orderPerson.id }}" name="persons[{{ orderPerson.id }}][priceThere]" value="{{ orderPerson.routeTariffThere.priceIncludeSurcharge }}">
+											<div class="input-group-addon">{{ orderPerson.routeTariffThere.priceCurrencyIncludeSurcharge|currency }}</div>
+										</div>
+									</div>
+								</div>
+								{% if orderPerson.routeTariffBack %}
+									<div class="col-md-3">
+										<div class="form-group">
+											<label for="persons_priceBack_{{ orderPerson.id }}">{{ 'order.priceBack'|trans }}</label>
+											<div class="input-group">
+												<input type="text" class="form-control text-right" id="persons_priceBack_{{ orderPerson.id }}" name="persons[{{ orderPerson.id }}][priceBack]" value="{{ orderPerson.routeTariffBack.priceIncludeSurcharge }}">
+												<div class="input-group-addon">{{ orderPerson.routeTariffBack.priceCurrencyIncludeSurcharge|currency }}</div>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+							</div>
+                            <div class="row div-admin-seller-fee" style="display: none">
+                                <div class="col-md-offset-6 col-md-3">
+                                    <div class="form-group">
+                                        <label for="persons_sellerFeeThere_{{ orderPerson.id }}">{{ 'order.sellerFeeThere'|trans }}</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control text-right" id="persons_sellerFeeThere_{{ orderPerson.id }}" name="persons[{{ orderPerson.id }}][sellerFeeThere]" value="0">
+                                            <div class="input-group-addon">{{ orderPerson.routeTariffThere.priceCurrencyIncludeSurcharge|currency }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if orderPerson.routeTariffBack %}
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="persons_sellerFeeBack_{{ orderPerson.id }}">{{ 'order.sellerFeeBack'|trans }}</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control text-right" id="persons_sellerFeeBack_{{ orderPerson.id }}" name="persons[{{ orderPerson.id }}][sellerFeeBack]" value="0">
+                                                <div class="input-group-addon">{{ orderPerson.routeTariffBack.priceCurrencyIncludeSurcharge|currency }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+						{% endif %}
+						{% endfor %}
+						{% if not isAdmin() %}
+						<div class="checkbox form-group" style="margin-top: 15px">
+							<label>
+								<input type="checkbox" value="1" name="termsAndConditions">{{ 'order.termsAndConditionsCheck'|trans|replace({ "[1-": "<a target=\"_black\" href=\"/documents/gdpr\">" })|replace({ "[2-": "<a target=\"_black\" href=\"/documents/terms-and-conditions\">" })|replace({ "]": "</a>" })|raw }}
+								<span class="help-block" style="display: none">{{ 'order.termsAndConditionsError'|trans }}</span>
+							</label>
+						</div>
+						{% endif %}
+						{% if isSuperAdmin() %}
+							<input type="hidden" name="reservationDate">
+							<hr>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									Administrátor
+								</div>
+								<div class="panel-body">
+									<div class="row">
+										<div class="col-md-5">
+											<div class="checkbox">
+												<input type="hidden" name="adminFree" value="0">
+												<label><input type="checkbox" value="1" name="adminFree"{% if not adminFreePossible %} disabled{% endif %}>Objednat bez uhrazení</label>
+											</div>
+										</div>
+										<div class="col-md-5">
+											<div class="checkbox">
+												<input type="hidden" name="adminNoSeat" value="0">
+												<label><input type="checkbox" value="1" name="adminNoSeat"{% if not adminNoSeatPossible %} disabled{% endif %}>Objednat bez odebrání rezervovaných míst</label>
+											</div>
+										</div>
+										<div class="col-md-5">
+											<div class="checkbox">
+												<input type="hidden" name="adminChangePrice" value="0">
+												<label><input type="checkbox" value="1" name="adminChangePrice"{% if not adminFreePossible %} disabled{% endif %}>Změnit cenu</label>
+											</div>
+										</div>
+                                        <div class="col-md-5">
+                                            <div class="checkbox">
+                                                <input type="hidden" name="sellerFee" value="0">
+                                                <label><input type="checkbox" value="1" name="sellerFee">Přidat tax</label>
+                                            </div>
+                                        </div>
+										<div class="col-md-5">
+											<div class="checkbox">
+												<input type="hidden" name="adminFillEurotoursData" value="0">
+												<label><input type="checkbox" value="1" name="adminFillEurotoursData">Vyplnit údaje Eurotours</label>
+											</div>
+										</div>
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-md-5">
+											<label for="ticketCurrency">Měna na jízdence</label>
+											<select id="ticketCurrency" name="ticketCurrency" class="selectpicker">
+												<option value="CZK"{% if order.ticketCurrency == "CZK" %} selected{% endif %}>CZK</option>
+												<option value="EUR"{% if order.ticketCurrency == "EUR" %} selected{% endif %}>EUR</option>
+												<option value="PLN"{% if order.ticketCurrency == "PLN" %} selected{% endif %}>PLN</option>
+												<option value="UAH"{% if order.ticketCurrency == "UAH" %} selected{% endif %}>UAH</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+                        {% elseif isSeller() %}
+                            <input type="hidden" name="reservationDate">
+                            <hr>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    Prodejce
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-md-5">
+                                            <div class="checkbox">
+                                                <input type="hidden" name="adminFree" value="0">
+                                                <label><input type="checkbox" value="1" name="adminFree"{% if not adminFreePossible %} disabled{% endif %}>Objednat bez uhrazení</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="checkbox">
+                                                <input type="hidden" name="adminChangePrice" value="0">
+                                                <label><input type="checkbox" value="1" name="adminChangePrice"{% if not adminFreePossible %} disabled{% endif %}>Změnit cenu</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="checkbox">
+                                                <input type="hidden" name="sellerFee" value="0">
+                                                <label><input type="checkbox" value="1" name="sellerFee">Přidat tax</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+					</div>
+				</div>
+			</form>
+
+            <div class="row order-buttons">
+                <div class="col-xs-12">
+	                {% if canReservationOrder %}
+                        <button type="button" data-action="reservation" class="btn btn-success btn-lg"><i class="fa fa-check"></i> {{ "order.book"|trans }}</button>
+	                {% endif %}
+                    {% if canBuyOrder or isAdmin %}
+                        <button type="button" data-action="buy" class="btn btn-success btn-lg"><i class="fa fa-credit-card"></i> {{ "order.buy"|trans }}</button>
+                    {% endif %}
+                </div>
+            </div>
+            <br><br><br><br><br><br><br>
+		</div>
+	</div>
+
+	<div id="search-bar" class="search-bar-order">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3 col-md-offset-3">
+					<p>{{ "order.fillPassengerData"|trans }}</p>
+				</div>
+				<div class="col-md-6">
+					{% if canBuyOrder or isAdmin %}
+						<button type="button" data-action="buy" style="margin-top: 10px; margin-left: 20px" class="btn btn-success pull-right btn-lg"><i class="fa fa-credit-card"></i> {{ "order.buy"|trans }}</button>
+					{% endif %}
+					{% if canReservationOrder %}
+						<button type="button" data-action="reservation" style="margin-top: 10px" class="btn btn-success pull-right btn-lg"><i class="fa fa-check"></i> {{ "order.book"|trans }}</button>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div style="display: none;" data-modal-body="reservationDate">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="reservationCalendar"></div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

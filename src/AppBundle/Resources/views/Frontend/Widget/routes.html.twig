@@ -1,0 +1,12 @@
+<div id="routes-{{ direction }}">
+	{% if direction == "there" %}
+		<input type="hidden" name="routeThere" value="" data-input="route">
+		<h3 style="margin-top: 0">{{ "route.way"|trans }} <strong>{{ routeFilter.fromCity.name|language }} - {{ routeFilter.toCity.name|language }}</strong> {{ "route.ofDay"|trans }} <strong>{{ routeFilter.dateDay|date("j. n. Y") }}</strong></h3>
+	{% elseif direction == "back" %}
+		<input type="hidden" name="routeBack" value="" data-input="route">
+		<h3>{{ "route.way"|trans }} <strong>{{ routeFilter.toCity.name|language }} - {{ routeFilter.fromCity.name|language }}</strong> {{ "route.ofDay"|trans }} <strong>{{ routeFilter.dateBack|date("j. n. Y") }}</strong></h3>
+	{% endif %}
+	{% for route in routes if route.direction == direction %}
+		{{ widget("frontend.route", { route: route }) }}
+	{% endfor %}
+</div>

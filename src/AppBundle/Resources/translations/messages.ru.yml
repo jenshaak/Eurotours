@@ -1,0 +1,89 @@
+menu.turkish: Турция
+menu.bulgaria: Болгария
+menu.timetables: Расписания
+menu.airtickets: Авиабилеты
+menu.contact: Kонтакты
+menu.links: Найти
+searchForm.find: Найти
+searchForm.iWantReturn: 'Хочу обратный билет'
+searchForm.onlyOpenReturn: 'Только открытое возвращение'
+searchForm.dateDeparture: 'Дата отъезда'
+searchForm.to: Куда
+searchForm.from: Откуда
+searchForm.switchDates: 'Дата отъезда должна быть раньше даты возвращения.'
+searchForm.switchDatesSecond: 'Дата возвращения должна быть позже даты прибытия.'
+searchForm.checkDate: 'Проверьте дату'
+route.selectLine: Выбрать
+route.arrival: прибытие
+route.variablePrice: 'переменная цена'
+route.ofDay: дня
+route.way: Путь
+route.canPayOnline: 'Возможность оплаты онлайн'
+search.totalPrice: 'Общая стоимость'
+search.orderTickets: 'Заказать билеты'
+order.fullName: 'Имя и фамилия'
+order.email: E-mail
+order.phone: Телефон
+order.dob: Дата рождения
+order.documentNumber: Номер документа
+order.tariffThere: 'Цена туда'
+order.tariffBack: 'Цена назад'
+order.fillPassengerData: 'Пополните данные пассажира'
+order.buy: Купить
+order.book: Забронироват
+order.passenger: пассажир
+order.termsAndConditionsCheck: 'Souhlasím s [1-obchodními podmínkami] a se [2-zpracováním osobních údajů].'
+order.termsAndConditionsError: 'Je nutné zaškrtnout souhlas.'
+menu.homepage: Найти
+menu.claim: 'Билеты на международные автобусы онлайн'
+homepage.searchFormTitle: 'Поиск билетов по всей Европе'
+homepage.claim.title: 'Билеты на автобусы всех европейских перевозчиков'
+homepage.claim.subtitle1: '!'
+homepage.claim.subtitle2: '!'
+homepage.claim.subtitle3: 'Возможность оплаты картой, на банковский счет и наличными'
+homepage.contactBox.title: 'Приходите к нам или звоните'
+homepage.contactBox.florenc: 'Автовокзал Флоренц Прага'
+homepage.contactBox.address: 'Křižíkova 2110/2b, Praha 8, 186 00'
+homepage.contactBox.place: 'ЗАЛ 1, КАССА 15 и 19'
+homepage.contactBox.facebook: 'Facebook page Eurotours'
+footer.adminLogin: 'Логин администратора'
+order.selectRoute: 'Выберите конкретный автобус и тип тарифа'
+order.selectRouteTwoWayDescription: 'Пожалуйста, выберите конкретный автобус и выберите тип отдельных билетов. Общее количество пассажиров в поездке должно быть одинаковым туда и обратно.'
+order.selectRouteDescription: 'Пожалуйста, выберите конкретный автобус и выберите тип отдельных билетов.'
+order.backToSearch: 'Вернуться к поиску'
+order.fillName: 'Заполните, пожалуйста, Ваше имя.'
+order.fillEmail: 'Пожалуйста, введите свой адрес электронной почты.'
+order.fillPhone: 'Заполните, пожалуйста, свой номер телефона.'
+order.fillPassengerName: 'Введите имя пассажира.'
+order.fillPassengerPhone: 'Заполните номер телефона пассажира.'
+order.fillPassengerDob: Заполните дату рождения пассажира
+order.fillPassengerDocumentNumber: Заполните номер пассажирского документа
+order.priceThere: 'Цена (туда)'
+order.priceBack: 'Цена (обратнo)'
+order.sellerFeeThere: 'налог (туда)'
+order.sellerFeeBack: 'налог (обратнo)'
+order.thanksReservation: 'Благодарим Вас за бронирование'
+order.thanksOrder: 'Благодарим Вас за Ваш заказ'
+order.paymentOfOrder: 'Оплата заказа'
+order.yourOrder: 'Ваш заказ'
+order.payByCard: 'Оплатить билет кредитной картой'
+order.reservationSuccess: 'Ваш заказ был успешно отправлен. Спасибо за бронирование билета в нашей компании. В ближайшее время мы свяжемся с вами по контактным данным.'
+order.paymentSuccess: 'Оплата была в порядке. Спасибо за бронирование билета в нашей компании.'
+order.ticketsInEmail: 'Билеты есть в вашей электронной почте.'
+order.price: Цена
+order.sellerFee: 'налог'
+order.withSellerFee: 'с налогом'
+order.lackOfSeats: 'В выбранном автобусе неty достаточно свободных мест'
+order.lackOfSeatsCall: 'Мы постараемся предоставить вам свободное место. Пожалуйста, свяжитесь с диспетчером по телефону +420 724 132 365.'
+order.changeOrder: 'Изменить детали заказа'
+order.selectSeats: 'Выберите места'
+order.selectedSeat: 'Выбранное место'
+order.clueSelectedSeat: 'выбранное место'
+order.clueOtherPassenger: spolucestující
+order.clueAvailableSeat: 'свободное место'
+order.clueNotAvailableSeat: 'недоступное место'
+route.SelectTariff: 'Выберите тариф и количество билетов.'
+search.openTicket: 'открытый билет'
+email.tickets.subject: 'Eurotours: Билет'
+email.tickets.introduction: 'Здравствуйте, спасибо за ваше доверие. Здесь вы найдете билеты, которые вы заказали. Пожалуйста, распечатайте билеты.'
+order.selectPassengerSeats: 'Выберите места'

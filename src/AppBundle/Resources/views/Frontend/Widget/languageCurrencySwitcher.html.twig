@@ -1,0 +1,53 @@
+<div class="row" style="margin-bottom: 20px">
+	<div class="col-md-8 col-xs-8">
+		{% if currentLanguage.id == "cs" %}
+			<strong>Česky</strong> |
+		{% else %}
+			<a href="{{ path("language_switch", { language: "cs" }) }}">Česky</a> |
+		{% endif %}
+		{% if currentLanguage.id == "en" %}
+			<strong>English</strong> |
+		{% else %}
+			<a href="{{ path("language_switch", { language: "en" }) }}">English</a> |
+		{% endif %}
+		{% if currentLanguage.id == "ru" %}
+			<strong>Pусский</strong>
+		{% else %}
+			<a href="{{ path("language_switch", { language: "ru" }) }}">Pусский</a> |
+		{% endif %}
+        {% if currentLanguage.id == "bg" %}
+            <strong>Български</strong> |
+        {% else %}
+            <a href="{{ path("language_switch", { language: "bg" }) }}">Български</a> |
+        {% endif %}
+        {% if currentLanguage.id == "uk" %}
+            <strong>Українська</strong> |
+        {% else %}
+            <a href="{{ path("language_switch", { language: "uk" }) }}">Українська</a>
+        {% endif %}
+	</div>
+	<div class="col-md-4 col-xs-4">
+		<div class="pull-right">
+			{% if currentCurrency == "CZK" %}
+				<strong>Kč</strong> |
+			{% else %}
+				<a href="{{ path("currency_switch", { currency: "CZK" }) }}">Kč</a> |
+			{% endif %}
+			{% if currentCurrency == "EUR" %}
+				<strong>&euro;</strong>
+			{% else %}
+				<a href="{{ path("currency_switch", { currency: "EUR" }) }}">&euro;</a>
+			{% endif %}
+            {% if currentCurrency == "PLN" %}
+                | <strong>zł</strong> |
+            {% else %}
+                | <a href="{{ path("currency_switch", { currency: "PLN" }) }}">zł</a> |
+            {% endif %}
+            {% if currentCurrency == "UAH" %}
+                <strong>UAH</strong>
+            {% else %}
+                <a href="{{ path("currency_switch", { currency: "UAH" }) }}">UAH</a>
+            {% endif %}
+		</div>
+	</div>
+</div>

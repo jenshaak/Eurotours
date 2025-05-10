@@ -1,0 +1,169 @@
+<div class="route" data-route="{{ route.id }}" data-order="{{ route.orderInSearch }}" data-direction="{{ route.direction }}"  data-original-price="{{ route.priceCurrencyIncludeSurcharge|priceCurrency(false) }}" data-price="{{ route.priceCurrency|priceCurrency(false) }}" data-currency="{{ route.currency }}" style="{% if not forSeo and route.datetimeDeparture|date("YmdHi") < "now"|date("YmdHi") %}opacity: 0.5{% endif %}">
+	<div class="route-close" style="display: none" data-action="unselectRoute"><div class="route-close-x">&times;</div></div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="open">
+				<div class="panel panel-default {% if (isAdmin or isSeller or isEmployee) %}{% if route.line %}panel-success{% elseif route.carrier.code == 'Inf' %}panel-danger{% else %}panel-warning{% endif %}{% endif %}">
+					{% if not forSeo and (isAdmin or isSeller or isEmployee) %}
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-md-4">
+								{{ route.carrier.name }}{% if route.carrierTitle %} - {{ route.carrierTitle }}{% endif %}{% if route.line %} ({{ route.line.code }}){% endif %}
+							</div>
+                            <div class="col-md-5">
+                                {% if showAvailableSeats %}Zbývá {{ availableSeats }} míst{% endif %}
+                            </div>
+							<div class="col-md-3">
+								{% if route.schedule %}
+									<button type="button" class="btn btn-default btn-xs pull-right" data-action="showRouteTimeTableModal">Zobrazit jízdní řád</button>
+									<div style="display:none" data-modal-body="routeTimeTable">
+									{{ widget("frontend.scheduleTimeTable", { schedule: route.schedule, fromCity: route.fromCity, toCity: route.toCity }) }}
+									</div>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+					{% endif %}
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-4 col-xs-6 route-from">
+								<div class="time">{{ route.datetimeDeparture|date("H:i") }}</div>
+								<div class="city">{{ route.simpleFromCityName|language }}</div>
+								{% if route.fromStation %}
+									<div class="station">{{ route.fromStation.name|language }}</div>
+								{% elseif route.fromExternalStation %}
+									<div class="station">{{ route.fromExternalStation.name|language }}</div>
+								{% elseif route.fromExternalCity %}
+									<div class="station">{{ route.fromExternalCity.name|language }}</div>
+								{% else %}
+									<div class="station">&nbsp;</div>
+								{% endif %}
+							</div>
+							<div class="col-md-5 col-xs-6 route-to">
+								{% if forSeo %}
+									<div class="time">{{ "route.arrival"|trans }} {{ route.datetimeArrival|date("H:i") }} {% if route.modifyDays %}{% if route.modifyDays == 1 %}další den{% else %}o {{ route.modifyDays }} dny později{% endif %}{% endif %}</div>
+								{% else %}
+									<div class="time">{{ "route.arrival"|trans }} {{ route.datetimeArrival|date("H:i") }}{% if route.datetimeArrival|date("Ymd") != route.datetimeDeparture|date("Ymd") %} {{ "route.ofDay"|trans }} {{ route.datetimeArrival|date("j. n. Y") }}{% endif %}</div>
+								{% endif %}
+								<div class="city">{{ route.simpleToCityName|language }}</div>
+								{% if route.toStation %}
+									<div class="station">{{ route.toStation.name|language }}</div>
+								{% elseif route.toExternalStation %}
+									<div class="station">{{ route.toExternalStation.name|language }}</div>
+								{% elseif route.toExternalCity %}
+									<div class="station">{{ route.toExternalCity.name|language }}</div>
+								{% else %}
+									<div class="station">&nbsp;</div>
+								{% endif %}
+							</div>
+							<div class="col-md-3 col-xs-12 route-price">
+								<div class="price"{% if not route.price %} style="display:none"{% endif %}>
+                                    {% if route.maxPrice %}
+                                        {{ route.priceCurrencyIncludeSurcharge|priceCurrency }} - {{ route.maxPriceCurrencyIncludeSurcharge|priceCurrency }}
+                                    {% else %}
+                                        {{ route.priceCurrencyIncludeSurcharge|priceCurrency }}
+                                    {% endif %}
+                                </div>
+								<div class="variable-price"{% if route.price %} style="display:none"{% endif %}>{{ "route.variablePrice"|trans }}</div>
+								{% if route.isDirect is not null and route.isDirect == false %}<div class="non-direct">s přestupem</div>{% endif %}
+								{% if canPayOnline %}<div class="text-right can-pay-online" style="font-weight: bold; padding-top: 10px;"><i class="fa fa-credit-card"></i> {{ "route.canPayOnline"|trans }}</div>{% endif %}
+								{% if not forSeo %}
+									<button type="button" class="btn btn-block btn-success btn-select-route" data-action="selectRoute"><i class="fa fa-check"></i> {{ "route.selectLine"|trans }}</button>
+								{% endif %}
+							</div>
+						</div>
+                        {% if route.line and route.line.publicNote and route.line.publicNote|language %}
+                        <div class="row line-public-note">
+                            <div class="col-md-12">
+                                <p><strong>{{ route.line.publicNote|language }}</strong></p>
+                            </div>
+                        </div>
+                        {% endif %}
+						{% if route.schedule and route.schedule.publicNote and route.schedule.publicNote|language %}
+							<div class="row line-public-note">
+								<div class="col-md-12">
+									<p><strong>{{ route.schedule.publicNote|language }}</strong></p>
+								</div>
+							</div>
+						{% endif %}
+                        {% if route.line and route.line.privateNote and route.line.privateNote|language and isAdmin() %}
+                            <div class="row line-public-note">
+                                <div class="col-md-12">
+                                    <p><strong>{{ route.line.privateNote|language }}</strong></p>
+                                </div>
+                            </div>
+                        {% endif %}
+						{% if route.schedule and route.schedule.privateNote and route.schedule.privateNote|language and isAdmin() %}
+							<div class="row line-public-note">
+								<div class="col-md-12">
+									<p><strong>{{ route.schedule.privateNote|language }}</strong></p>
+								</div>
+							</div>
+						{% endif %}
+						<div class="row tariffs">
+							<div class="col-md-8">
+								<table style="margin-top: 20px">
+									{% for routeTariff in routeTariffs %}
+										<tr data-route-tariff="{{ routeTariff.id }}"
+                                            data-original-price="{{ routeTariff.priceCurrencyIncludeSurcharge|priceCurrency(false)|replace({",":"."}) }}"
+                                            data-price="{{ routeTariff.priceCurrencyIncludeSurcharge|priceCurrency(false)|replace({",":"."}) }}"
+                                            {% if routeTariff.maxPrice %}data-max-price="{{ routeTariff.maxPriceCurrencyIncludeSurcharge|priceCurrency(false)|replace({",":"."}) }}"{% endif %}
+                                            {% if routeTariff.tariff and routeTariff.tariff.percent %}data-percent="{{ routeTariff.tariff.percent }}"{% endif %}
+                                        >
+											<td style="margin-right: 20px">
+												<div class="form-group" style="width: 80px">
+													<div class="input-group input-group-sm">
+														<input type="text" style="text-align: center" data-tariff="{% if routeTariff.tariff %}{{ routeTariff.tariff.id }}{% elseif routeTariff.externalTariff %}{{ routeTariff.externalTariff.id }}{% endif %}" name="routeTariff[{{ route.direction }}][{{ routeTariff.id }}]" class="form-control" placeholder="0">
+														<div class="input-group-addon">ks</div>
+													</div>
+												</div>
+											</td>
+											<td class="tariff-controllers">
+												<i class="fa fa-plus" data-controller="plus"></i>
+												<i class="fa fa-minus" data-controller="minus"></i>
+											</td>
+											<td style="text-align: right; font-weight: bold" class="tariff-price">
+												{% if routeTariff.price %}
+													{{ routeTariff.priceCurrencyIncludeSurcharge|priceCurrency }}
+												{% endif %}
+											</td>
+											{% if routeTariff.tariff %}
+												<td>{{ routeTariff.tariff.name|language }}{% if routeTariff.tariff.conditions|language %} <i class="fa fa-question-circle" style="cursor: pointer" data-toggle="tooltip" data-placement="right" title="{{ routeTariff.tariff.conditions|language }}"></i>{% endif %}</td>
+											{% elseif routeTariff.externalTariff %}
+												<td style="max-width: 270px">{{ routeTariff.externalTariff.name|language }}</td>
+											{% endif %}
+										</tr>
+									{% endfor %}
+								</table>
+							</div>
+							<div class="col-md-4 text-right">
+								<div style="margin: 20px 0 10px 0; font-weight: bold">
+									<i class="fa fa-hand-o-left"></i> {{ 'route.SelectTariff'|trans }}
+								</div>
+								<button type="button" data-action="createOrder" class="btn btn-success pull-right btn-lg">{{ "search.orderTickets"|trans }} <i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="minimize" style="display: none">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-4 route-from">
+								<div class="time">{{ route.datetimeDeparture|date("H:i") }}</div>
+							</div>
+							<div class="col-md-5 route-to">
+								<div class="time">{{ "route.arrival"|trans }} {{ route.datetimeArrival|date("H:i") }}{% if route.datetimeArrival|date("Ymd") != route.datetimeDeparture|date("Ymd") %} dne {{ route.datetimeArrival|date("j. n. Y") }}{% endif %}</div>
+							</div>
+							<div class="col-md-3 route-price">
+								<div class="price"{% if not route.price %} style="display:none"{% endif %}>{{ route.priceCurrencyIncludeSurcharge|priceCurrency }}</div>
+								<div class="variable-price"{% if route.price %} style="display:none"{% endif %}>{{ "route.variablePrice"|trans }}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,207 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+	<div class="container">
+		<form action="" method="post">
+			<div class="row">
+				<div class="col-md-6">
+					<h3 style="margin-bottom: 30px">Vytvořit objednávku</h3>
+				</div>
+				<div class="col-md-6">
+					<button type="submit" class="btn btn-success pull-right" style="margin-top: 15px;">Vytvořit objednávku</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">Cesta tam</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="thereFrom">Odkud</label>
+										<select id="thereFrom" name="thereFrom" class="selectpicker" data-live-search="true" data-live-search-style="startsWith" data-width="100%">
+											<option value="">Odkud</option>
+											{% for country in countries %}
+												<optgroup label="{{ country.name|language }}">
+													{% for city in country.cities %}
+														<option data-tokens="{{ city.allLanguagesNames|join(" ") }} {{ city.nextVariations }}" value="{{ city.id }}">{{ city.name|language }}</option>
+													{% endfor %}
+												</optgroup>
+											{% endfor %}
+										</select>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="thereDateDeparture">Odjezd</label>
+												<input id="thereDateDeparture" type="text" class="form-control datepicker" name="thereDateDeparture" placeholder="" value="">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="thereTimeDeparture">Odjezd - čas</label>
+												<input id="thereTimeDeparture" type="time" class="form-control" name="thereTimeDeparture" placeholder="" value="">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="thereCarrier">Dopravce</label>
+										<select id="thereCarrier" name="thereCarrier" class="selectpicker" data-live-search="true" data-width="100%">
+											<option value="">Dopravce</option>
+											{% for carrier in carriers %}
+													<option value="{{ carrier.id }}">{{ carrier.name }}</option>
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="thereTo">Kam</label>
+										<select id="thereTo" name="thereTo" class="selectpicker" data-live-search="true" data-live-search-style="startsWith" data-width="100%">
+											<option value="">Kam</option>
+											{% for country in countries %}
+												<optgroup label="{{ country.name|language }}">
+													{% for city in country.cities %}
+														<option data-tokens="{{ city.allLanguagesNames|join(" ") }} {{ city.nextVariations }}" value="{{ city.id }}">{{ city.name|language }}</option>
+													{% endfor %}
+												</optgroup>
+											{% endfor %}
+										</select>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="thereDateArrival">Příjezd</label>
+												<input id="thereDateArrival" type="text" class="form-control datepicker" name="thereDateArrival" placeholder="" value="">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="thereTimeArrival">Příjezd - čas</label>
+												<input id="thereTimeArrival" type="time" class="form-control" name="thereTimeArrival" placeholder="" value="">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="therePrice">Cena</label>
+										<input id="therePrice" type="text" class="form-control" name="therePrice" placeholder="Cena" value="">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							Cesta zpět
+							<div class="checkbox pull-right" style="margin-top: 0">
+								<input type="hidden" name="type" value="oneway">
+								<label><input type="checkbox" value="return" name="type" checked>Včetně zpáteční jízdy</label>
+							</div>
+						</div>
+						<div class="panel-body" id="formReturn">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="backFrom">Odkud</label>
+										<select id="backFrom" name="backFrom" class="selectpicker" data-live-search="true" data-live-search-style="startsWith" data-width="100%">
+											<option value="">Odkud</option>
+											{% for country in countries %}
+												<optgroup label="{{ country.name|language }}">
+													{% for city in country.cities %}
+														<option data-tokens="{{ city.allLanguagesNames|join(" ") }} {{ city.nextVariations }}" value="{{ city.id }}">{{ city.name|language }}</option>
+													{% endfor %}
+												</optgroup>
+											{% endfor %}
+										</select>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="backDateDeparture">Odjezd</label>
+												<input id="backDateDeparture" type="text" class="form-control datepicker" name="backDateDeparture" placeholder="" value="">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="backTimeDeparture">Odjezd - čas</label>
+												<input id="backTimeDeparture" type="time" class="form-control" name="backTimeDeparture" placeholder="" value="">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="backCarrier">Dopravce</label>
+										<select id="backCarrier" name="backCarrier" class="selectpicker" data-live-search="true" data-width="100%">
+											<option value="">Dopravce</option>
+											{% for carrier in carriers %}
+												<option value="{{ carrier.id }}">{{ carrier.name }}</option>
+											{% endfor %}
+										</select>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="backTo">Kam</label>
+										<select id="backTo" name="backTo" class="selectpicker" data-live-search="true" data-live-search-style="startsWith" data-width="100%">
+											<option value="">Kam</option>
+											{% for country in countries %}
+												<optgroup label="{{ country.name|language }}">
+													{% for city in country.cities %}
+														<option data-tokens="{{ city.allLanguagesNames|join(" ") }} {{ city.nextVariations }}" value="{{ city.id }}">{{ city.name|language }}</option>
+													{% endfor %}
+												</optgroup>
+											{% endfor %}
+										</select>
+									</div>
+									<div class="row">
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="backDateArrival">Příjezd</label>
+												<input id="backDateArrival" type="text" class="form-control datepicker" name="backDateArrival" placeholder="" value="">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group">
+												<label for="backTimeArrival">Příjezd - čas</label>
+												<input id="backTimeArrival" type="time" class="form-control" name="backTimeArrival" placeholder="" value="">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="backPrice">Cena</label>
+										<input id="backPrice" type="text" class="form-control" name="backPrice" placeholder="Cena" value="">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8">
+					<div class="panel panel-default">
+						<div class="panel-heading">Cestující</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="name">Jméno cestujícího</label>
+										<input id="name" type="text" class="form-control" name="name" placeholder="Jméno cestujícího" value="">
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="phone">Telefon</label>
+										<input id="phone" type="text" class="form-control" name="phone" placeholder="Telefon cestujícího" value="">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+{% endblock %}

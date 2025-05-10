@@ -1,0 +1,75 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+
+	<div class="container">
+
+		<form action="" method="get">
+			<div class="row" style="margin-bottom: 20px">
+				<div class="col-md-3">
+					<label for="city">Zvolte město</label><br>
+					<select id="city" name="city" class="selectpicker" data-live-search="true" data-width="100%" data-action="selectCity">
+						<option value="">Zvolte město</option>
+						{% for country in countries %}
+							<optgroup label="{{ country.name|language }}">
+								{% for c in country.cities %}
+									<option data-tokens="{{ c.allLanguagesNames|join(" ") }}" value="{{ c.id }}"{% if city == c %} selected{% endif %}>{{ c.name|language }}</option>
+								{% endfor %}
+							</optgroup>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="col-md-2 col-md-offset-7">
+					<a href="{{ path("backend_stations_add") }}" class="btn btn-success pull-right" style="margin-top: 25px"><i class="fa fa-plus"></i> Vytvořit novou stanici</a>
+				</div>
+			</div>
+		</form>
+
+		{% if city %}
+		<div class="row">
+			<div class="col-md-12">
+				<div class="alert alert-success">V této tabulce se všechny změny ukládají automaticky po jejich vepsání.</div>
+				<table class="table table-condensed table-striped" data-action="tableStations">
+					<thead>
+					<tr>
+						<th>Česky</th>
+						<th>Anglicky</th>
+						<th>Rusky</th>
+                        <th>Bulharsky</th>
+                        <th>Ukrajinsky</th>
+						<th>Jede zde</th>
+					</tr>
+					</thead>
+					<tbody>
+					{% for station in city.stations %}
+						<tr>
+							<td>
+								<input type="text" class="form-control input-sm" data-station="{{ station.id }}" data-language="cs" value="{{ station.name.string(czechLanguage) }}">
+							</td>
+							<td>
+								<input type="text" class="form-control input-sm" data-station="{{ station.id }}" data-language="en" value="{{ station.name.string(englishLanguage) }}">
+							</td>
+							<td>
+								<input type="text" class="form-control input-sm" data-station="{{ station.id }}" data-language="ru" value="{{ station.name.string(russianLanguage) }}">
+							</td>
+                            <td>
+                                <input type="text" class="form-control input-sm" data-station="{{ station.id }}" data-language="bg" value="{{ station.name.string(bulgarianLanguage) }}">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control input-sm" data-station="{{ station.id }}" data-language="uk" value="{{ station.name.string(ukrainianLanguage) }}">
+                            </td>
+							<td style="width: 20%">
+								{% for line in lines if line.containsStation(station) %}
+									<a class="label label-default" href="{{ path("backend_line", { line: line.id }) }}">{{ line.code }}</a>
+								{% endfor %}
+							</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{% endif %}
+	</div>
+
+{% endblock %}

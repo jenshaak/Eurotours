@@ -1,0 +1,7 @@
+<p>Platba uhrazena kreditní kartou.</p>
+
+<p>Částka: {{ payment.priceCurrency|priceCurrency }}</p>
+<p>E-mail: {{ payment.email }}</p>
+<p>Poznámka: {{ payment.note }}</p>
+
+<p><a style="border: 1px solid #777777; padding: 6px; background-color: #9ede94" href="{{ url("backend_payments") }}">Zobrazit platby</a></p>

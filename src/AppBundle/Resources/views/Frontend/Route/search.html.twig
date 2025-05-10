@@ -1,0 +1,50 @@
+{% extends "AppBundle:Frontend/Layout:Skeleton.html.twig" %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-md-3">
+			{{ widget("frontend.languageCurrencySwitcher") }}
+			<div id="left-search">
+				{{ widget("frontend.searchForm") }}
+			</div>
+		</div>
+		<div class="col-md-9">
+			<div class="progress">
+				<div data-action="loadingBar" class="progress-bar progress-bar-striped progress-bar-pink active" role="progressbar" aria-valuenow="0" aria-valuemin="1" aria-valuemax="10" style="width: 0"></div>
+			</div>
+			<script type="text/javascript">
+				var search = null;
+				{% if search %}
+				search = "{{ search.id }}";
+				{% endif %}
+
+				var routeCombinations = {{ routeCombinations|routeCombinationsJson }};
+			</script>
+
+			<form action="{{ path("order_create", { search: search.id }) }}" method="post" data-action="formCreateOrder">
+				{{ widget("frontend.routes", { direction: "there", routes: routes, routeFilter: routeFilter }) }}
+				{% if routeFilter.type == "return" %}
+					<hr>
+					{{ widget("frontend.routes", { direction: "back", routes: routes, routeFilter: routeFilter }) }}
+				{% endif %}
+				<div>
+					<button type="submit" class="btn btn-success pull-right btn-lg" style="visibility: hidden">{{ "search.orderTickets"|trans }} <i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div id="search-bar">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3">
+					<!--<p>Vyberte konkrétní spoj na cestu tam a zpět</p>-->
+					<p>{{ "search.totalPrice"|trans }}: <span id="totalPrice"></span></p>
+				</div>
+				<div class="col-md-3">
+					<button type="button" data-action="createOrder" style="margin-top: 10px" class="btn btn-success pull-right btn-lg">{{ "search.orderTickets"|trans }} <i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></button>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

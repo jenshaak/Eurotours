@@ -1,0 +1,130 @@
+# Produkcni Docker Compose
+# V produkci se pred spustenim zkopiruje o uroven nize pod aplikaci
+
+version: "3.9"
+
+networks:
+    proxy:        # společná síť pro Traefik a publikované kontejnery
+        driver: bridge
+
+services:
+    traefik:
+        image: traefik:v3.3
+        container_name: traefik
+        restart: always
+        networks:
+            - proxy
+        ports:
+            - "80:80"      # HTTP
+            - "443:443"    # HTTPS
+        command:
+            # =========== Providers ============
+            - "--providers.docker=true"
+            - "--providers.docker.exposedbydefault=false"
+            # =========== Entrypoints ==========
+            - "--entrypoints.web.address=:80"
+            - "--entrypoints.websecure.address=:443"
+            # Přesměrování HTTP → HTTPS (mimo vyjímky, viz gotenberg)
+            - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+            - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+            # =========== ACME (Let's Encrypt) ==
+            - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+            - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+            - "--certificatesresolvers.letsencrypt.acme.email=client.eurotours@manuzen.cz"
+            - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+            # =========== Logování =============
+            - "--log.level=INFO"
+        volumes:
+            - "/var/run/docker.sock:/var/run/docker.sock:ro"
+            - "./data/letsencrypt:/letsencrypt"
+
+    app:
+        build: .
+        container_name: eurotours-app
+        restart: always
+        depends_on:
+            - mysql
+            - redis
+        environment:
+            - SYMFONY_ENV=prod
+        volumes:
+            - ./data/uploads:/var/www/app/web/uploads
+            - ./data/logs:/var/www/app/var/logs
+            - ./data/cache:/var/www/app/var/cache
+            - ./data/tmp:/tmp
+        networks:
+            - proxy
+        expose:              # Traefik přistupuje přes interní síť
+            - "80"
+        labels:
+            - "traefik.enable=true"
+            # ---------- Router ----------
+            - "traefik.http.routers.eurotours.rule=Host(`eurotours.cz`) || Host(`www.eurotours.cz`)"
+            - "traefik.http.routers.eurotours.entrypoints=websecure"
+            - "traefik.http.routers.eurotours.tls=true"
+            - "traefik.http.routers.eurotours.tls.certresolver=letsencrypt"
+            # ---------- Service ----------
+            - "traefik.http.services.eurotours.loadbalancer.server.port=80"
+
+
+    mysql:
+        image: mysql:5.7
+        container_name: eurotours-mysql
+        command: --sql_mode=""
+        restart: always
+        environment:
+            - MYSQL_USER=eurotours
+            - MYSQL_PASSWORD=eurotours
+            - MYSQL_DATABASE=eurotours
+            - MYSQL_RANDOM_ROOT_PASSWORD=yes
+        ports:
+            - "9302:3306"
+        networks:
+            - proxy
+        volumes:
+            - ./data/mysql:/var/lib/mysql
+
+    redis:
+        image: redis:5
+        container_name: eurotours-redis
+        restart: always
+        ports:
+            - "9303:6379"
+        networks:
+            - proxy
+        volumes:
+            - ./data/redis:/data
+
+    selenium:
+        container_name: eurotours-selenium
+        image: selenium/standalone-firefox:3.141.59-zinc
+        restart: always
+        volumes:
+            - /dev/shm:/dev/shm
+
+    gotenberg:
+        container_name: eurotours-gotenberg
+        image: thecodingmachine/gotenberg:6
+        restart: always
+        networks:
+            - proxy
+        expose:
+            - "3000"
+        labels:
+            - "traefik.enable=true"
+            # ---------- Router ----------
+            - "traefik.http.routers.gotenberg-dev.rule=Host(`gotenberg-dev.eurotours.cz`)"
+            - "traefik.http.routers.gotenberg-dev.entrypoints=web"
+            - "traefik.http.routers.gotenberg-dev.tls=false"   # žádné TLS
+            # ---------- Service ----------
+            - "traefik.http.services.gotenberg-dev.loadbalancer.server.port=3000"
+
+    proxy:
+        image: ubuntu/squid
+        container_name: eurotours-proxy
+        ports:
+            - "9305:3128"
+        volumes:
+            - ./app/squid/squid.conf:/etc/squid/squid.conf
+            - ./app/squid/passwords:/etc/squid/passwords
+        restart: always

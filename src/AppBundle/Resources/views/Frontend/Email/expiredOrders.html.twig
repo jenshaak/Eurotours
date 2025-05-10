@@ -1,0 +1,34 @@
+<h2>Expirované rezervace</h2>
+
+<table border="1" style="border-collapse: collapse;">
+	<tbody>
+	{% for order in orders %}
+		<tr>
+			<td style="padding: 2px 5px">{{ order.routeThere.simpleFromCityName|language }} -&gt; {{ order.routeThere.simpleToCityName|language }}</td>
+			<td style="padding: 2px 5px">{{ order.routeThere.carrier.code }}</td>
+			<td style="text-align: right; padding: 2px 5px">{{ order.routeThere.datetimeDeparture|date("j.n.Y") }}</td>
+			<td style="padding: 2px 5px">{{ order.name }}</td>
+			<td style="padding: 2px 5px">{{ order.phone }}</td>
+			<td style="padding: 2px 5px">{{ order.email }}</td>
+			<td style="text-align: right; padding: 2px 5px">{{ order.priceCurrency|priceCurrency(true, order.priceCurrency.currency)|nonBreakingSpace }}</td>
+			<td style="padding: 2px 5px"><a href="{{ url("backend_order", { order: order.id }) }}">zobrazit</a></td>
+		</tr>
+		{% for book in order.books %}
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td style="padding: 2px 5px; font-weight: bold">
+					{{ book.orderPersonRouteTariff.orderPerson.name }}
+				</td>
+				<td style="padding: 2px 5px; font-weight: bold">
+					{{ book.orderPersonRouteTariff.orderPerson.phone }}
+				</td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+		{% endfor %}
+	{% endfor %}
+	</tbody>
+</table>

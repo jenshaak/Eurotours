@@ -1,0 +1,105 @@
+<div class="row">
+	<div class="col-md-12">
+		<form action="{{ path("backend_externals_city_set_external_save", { city: city.id }) }}" method="post">
+			<div class="form-group">
+				<label for="externalCity_east_express">East Express</label>
+				<select name="externalCity[east_express]" id="externalCity_east_express" class="selectpicker form-control" data-live-search="true">
+					<option value="" style="color: silver;">Vyberte město</option>
+					{% for externalCity in externalCities if externalCity is externalCityEastExpress %}
+						<option data-tokens="{{ externalCity.name|language }}" value="{{ externalCity.id }}"{% if externalCity.city == city %} selected{% endif %}>{{ externalCity.name|language }}</option>
+					{% endfor %}
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="externalCity_ecolines">Ecolines</label>
+				<select name="externalCity[ecolines]" id="externalCity_ecolines" class="selectpicker form-control" data-live-search="true">
+					<option value="" style="color: silver;">Vyberte město</option>
+					{% for externalCity in externalCities if externalCity is externalCityEcolines %}
+						<option data-tokens="{{ externalCity.name|language }}" value="{{ externalCity.id }}"{% if externalCity.city == city %} selected{% endif %}>{{ externalCity.name|language }}</option>
+					{% endfor %}
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="externalCity_flixbus">Flixbus</label>
+				<select name="externalCity[flixbus]" id="externalCity_flixbus" class="selectpicker form-control" data-live-search="true">
+					<option value="" style="color: silver;">Vyberte město</option>
+					{% for externalCity in externalCities if externalCity is externalCityFlixbus %}
+						<option data-tokens="{{ externalCity.name|language }}" value="{{ externalCity.id }}"{% if externalCity.city == city %} selected{% endif %}>{{ externalCity.name|language }}</option>
+					{% endfor %}
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="externalCity_infobus">Infobus</label>
+				<select name="externalCity[infobus]" id="externalCity_infobus" class="selectpicker form-control" data-live-search="true">
+					<option value="" style="color: silver;">Vyberte město</option>
+					{% for externalCity in externalCities if externalCity is externalCityInfobus %}
+						<option data-tokens="{{ externalCity.name|language }}" value="{{ externalCity.id }}"{% if externalCity.city == city %} selected{% endif %}>{{ externalCity.name|language }}</option>
+					{% endfor %}
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="externalCity_student_agency">RegioJet</label>
+				<select name="externalCity[student_agency]" id="externalCity_student_agency" class="selectpicker form-control" data-live-search="true">
+					<option value="" style="color: silver;">Vyberte město</option>
+					{% for externalCity in externalCities if externalCity is externalCityStudentAgency %}
+						<option data-tokens="{{ externalCity.name|language }}" value="{{ externalCity.id }}"{% if externalCity.city == city %} selected{% endif %}>{{ externalCity.name|language }}</option>
+					{% endfor %}
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="externalCity_eurolines">Eurolines</label>
+				<select name="externalCity[eurolines]" id="externalCity_eurolines" class="selectpicker form-control" data-live-search="true">
+					<option value="" style="color: silver;">Vyberte město</option>
+					{% for externalCity in externalCities if externalCity is externalCityEurolines %}
+						<option data-tokens="{{ externalCity.name|language }}" value="{{ externalCity.id }}"{% if externalCity.city == city %} selected{% endif %}>{{ externalCity.name|language }}</option>
+					{% endfor %}
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="externalCity_nikolo">Nikolo</label>
+				<select name="externalCity[nikolo][]" id="externalCity_nikolo" class="selectpicker form-control" data-live-search="true" multiple>
+					<option value="" style="color: silver;">Vyberte město</option>
+					{% for externalCity in externalCities if externalCity is externalCityNikoloBusSystem %}
+						<option data-tokens="{{ externalCity.name|language }}" value="{{ externalCity.id }}"{% if externalCity.city == city %} selected{% endif %}>{{ externalCity.name|language }}</option>
+					{% endfor %}
+				</select>
+			</div>
+
+            <div class="form-group">
+                <label for="externalCity_blabla">Blabla</label>
+                <select name="externalCity[blabla]" id="externalCity_blabla" class="selectpicker form-control" data-live-search="true">
+                    <option value="" style="color: silver;">Vyberte město</option>
+                    {% for externalCity in externalCities if externalCity is externalCityBlabla %}
+                        <option data-tokens="{{ externalCity.name|language }}" value="{{ externalCity.id }}"{% if externalCity.city == city %} selected{% endif %}>{{ externalCity.name|language }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+			<div class="form-group">
+				<label for="externalCity_trans_tempo">TransTempo</label>
+				<select name="externalCity[trans_tempo]" id="externalCity_trans_tempo" class="selectpicker form-control" data-live-search="true">
+					<option value="" style="color: silver;">Vyberte město</option>
+					{% for externalCity in externalCities if externalCity is externalCityTransTempo %}
+						<option data-tokens="{{ externalCity.name|language }}" value="{{ externalCity.id }}"{% if externalCity.city == city %} selected{% endif %}>{{ externalCity.name|language }}</option>
+					{% endfor %}
+				</select>
+			</div>
+
+            <div class="form-group">
+                <label for="externalCity_likebus">LikeBus</label>
+                <select name="externalCity[likebus]" id="externalCity_likebus" class="selectpicker form-control" data-live-search="true">
+                    <option value="" style="color: silver;">Vyberte město</option>
+                    {% for externalCity in externalCities if externalCity is externalCityLikeBus %}
+                        <option data-tokens="{{ externalCity.name|language }}" value="{{ externalCity.id }}"{% if externalCity.city == city %} selected{% endif %}>{{ externalCity.name|language }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,124 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				{{ widget("backend.flash") }}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-8">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						Seznam uživatelů
+					</div>
+					<div class="panel-body">
+						<table class="table">
+							<tr>
+								<th>Uživatelské jméno</th>
+								<th>E-mail</th>
+								<th>Práva</th>
+                                <th>Dostupné externí spoje</th>
+								<th></th>
+							</tr>
+							{% for user in users %}
+								<tr>
+									<td><span class="editableUsername" data-url="{{ path("backend_user_edit", { user: user.id }) }}" data-pk="{{ user.id }}">{{ user.username }}</span></td>
+									<td><span class="editableEmail" data-url="{{ path("backend_user_edit", { user: user.id }) }}" data-pk="{{ user.id }}">{{ user.email }}</span></td>
+									<td>
+										{% if "ROLE_SUPER_ADMIN" in user.roles %}
+											Super administrátor
+										{% elseif "ROLE_CARRIER" in user.roles %}
+											Dopravce "{{ user.carrier.name }}"
+                                        {% elseif "ROLE_SELLER" in user.roles %}
+                                            Prodejce "{{ user.name }}"
+                                        {% elseif "ROLE_EMPLOYEE" in user.roles %}
+	                                        Zaměstnanec
+										{% endif %}
+									</td>
+                                    <td>
+                                        {% if 'ROLE_SELLER' in user.roles %}
+                                            <input type="checkbox" data-toggle="toggle" data-url="{{ path("backend_user_edit", { user: user.id }) }}" data-pk="{{ user.id }}" data-action="toggleExternalRoutesAllowed" data-on="On" data-off="Off" data-size="mini"{% if user.hasExternalRoutesAllowed() %} checked {% endif %}>
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+									<td>
+										<form action="{{ path("backend_user_remove", { user: user.id }) }}" method="post" style="display: inline">
+											<button type="submit" class="btn btn-danger btn-xs">Odstranit</button>
+										</form>
+										<button class="btn btn-warning btn-xs" data-action="changePassword" data-url="{{ path("backend_user_change_password", { user: user.id }) }}">Změnit heslo</button>
+									</td>
+								</tr>
+							{% endfor %}
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						Vytvořit uživatele
+					</div>
+					<div class="panel-body">
+						<form action="{{ path('backend_user_create') }}" method="post">
+							<div class="form-group">
+								<label for="username">Uživatelské jméno</label>
+								<input id="username" type="text" class="form-control" name="username" required>
+							</div>
+							<div class="form-group">
+								<label for="email">E-mail</label>
+								<input id="email" type="text" class="form-control" name="email" required>
+							</div>
+							<div class="form-group">
+								<label for="role">Práva</label><br>
+								<select class="selectpicker" name="role" id="role" required>
+									<option value="">Vyberte roli uživatele</option>
+									<option value="ROLE_SUPER_ADMIN">Super administrátor</option>
+									<option value="ROLE_CARRIER">Dopravce</option>
+                                    <option value="ROLE_SELLER">Prodejce</option>
+									<option value="ROLE_EMPLOYEE">Zaměstnanec</option>
+								</select>
+							</div>
+                            <div id="selectSellers" style="display: none">
+                                <div class="form-group">
+                                    <label for="name">Jméno a příjmení</label>
+                                    <input id="name" type="text" class="form-control" name="name" required disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Telefon</label>
+                                    <input id="phone" type="text" class="form-control" name="phone" required disabled>
+                                </div>
+                            </div>
+							<div class="form-group" id="selectCarriers" style="display: none">
+								<label for="carrier">Dopravce</label><br>
+								<select class="selectpicker" name="carrier" id="carrier" data-live-search="true" required>
+									<option value="">Vyberte dopravce</option>
+									{% for carrier in carriers %}
+										<option value="{{ carrier.id }}">{{ carrier.name }}</option>
+									{% endfor %}
+								</select>
+							</div>
+							<button type="submit" class="btn btn-success">Vytvořit nového uživatele</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div style="display: none;" data-modal-body="changePassword">
+			<div class="row">
+				<form action="" method="post">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label for="password">Nové heslo</label>
+							<input id="password" type="password" class="form-control" name="password" required>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+

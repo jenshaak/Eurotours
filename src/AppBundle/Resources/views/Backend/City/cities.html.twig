@@ -1,0 +1,81 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+
+	<div class="container">
+		<form action="" method="get">
+			<div class="row" style="margin-bottom: 20px">
+				<div class="col-md-3">
+					<label for="country">Zvolte zemi</label><br>
+					<select id="country" name="country" class="selectpicker" data-live-search="true" data-width="100%" data-action="selectCountry">
+						<option value="">Zvolte zemi</option>
+						{% for c in countries %}
+							<option value="{{ c.id }}"{% if country == c %} selected{% endif %}>{{ c.name|language }}</option>
+						{% endfor %}
+					</select>
+				</div>
+				<div class="col-md-2 col-md-offset-7">
+					<a href="{{ path("backend_cities_add") }}" class="btn btn-success pull-right" style="margin-top: 25px"><i class="fa fa-plus"></i> Vytvořit nové město</a>
+				</div>
+			</div>
+		</form>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="alert alert-success">V této tabulce se všechny změny ukládají automaticky po jejich vepsání.</div>
+				{% for c in countries if country is null or country == c %}
+					<h3>{{ c.name|language }}</h3>
+					<table class="table table-condensed table-striped" data-action="tableCities">
+						<thead>
+						<tr>
+							<th>Česky</th>
+							<th>Anglicky</th>
+							<th>Rusky</th>
+                            <th>Bulharsky</th>
+                            <th>Ukrajinsky</th>
+							<th>Další varianty</th>
+							<th style="max-width: 200px"></th>
+							<th></th>
+						</tr>
+						</thead>
+						<tbody>
+						{% for city in c.activeCitiesSortByName %}
+							<tr>
+								<td>
+									<input type="text" class="form-control input-sm" data-city="{{ city.id }}" data-language="cs" value="{{ city.name.string(czechLanguage) }}">
+								</td>
+								<td>
+									<input type="text" class="form-control input-sm" data-city="{{ city.id }}" data-language="en" value="{{ city.name.string(englishLanguage) }}">
+								</td>
+								<td>
+									<input type="text" class="form-control input-sm" data-city="{{ city.id }}" data-language="ru" value="{{ city.name.string(russianLanguage) }}">
+								</td>
+                                <td>
+                                    <input type="text" class="form-control input-sm" data-city="{{ city.id }}" data-language="bg" value="{{ city.name.string(bulgarianLanguage) }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control input-sm" data-city="{{ city.id }}" data-language="uk" value="{{ city.name.string(ukrainianLanguage) }}">
+                                </td>
+								<td>
+									<input type="text" class="form-control input-sm" data-city="{{ city.id }}" data-language="nextVariations" value="{{ city.nextVariations }}">
+								</td>
+								<td style="width: 30%">
+									{% for line in lines if line.containsCity(city) %}
+										<a class="label label-default" href="{{ path("backend_line", { line: line.id }) }}">{{ line.code }}</a>
+									{% endfor %}
+								</td>
+								<td>
+									<form method="post" action="{{ path("ajax_backend_city_remove", { city: city.id }) }}">
+										<button type="button" data-action="removeCity" class="btn btn-default btn-xs"><i class="fa fa-remove"></i></button>
+									</form>
+								</td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+					<hr>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

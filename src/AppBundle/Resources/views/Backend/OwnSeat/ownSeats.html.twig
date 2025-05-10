@@ -1,0 +1,49 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<table class="table table-condensed table-striped">
+					<thead>
+					<tr>
+						<th>Linka</th>
+						<th>Spoj</th>
+						<th>Datum</th>
+						<th>Míst k dispozici</th>
+						<th>Míst zablokováno</th>
+						<th>Akce</th>
+					</tr>
+					</thead>
+					<tbody>
+					{% for ownSeatManual in ownSeatsManual %}
+						<tr>
+							<td>
+								{{ ownSeatManual.schedule.line.code }}
+							</td>
+							<td>
+								{{ ownSeatManual.schedule.firstScheduleLineStation.lineStation.city.name|language }} {{ ownSeatManual.schedule.firstScheduleLineStation.time.departureTime }} <i class="fa fa-arrow-right"></i> {{ ownSeatManual.schedule.lastScheduleLineStation.lineStation.city.name|language }} {{ ownSeatManual.schedule.lastScheduleLineStation.time.departureTime }}
+							</td>
+							<td>
+								{{ ownSeatManual.dateDay|date("j. n. Y") }}
+							</td>
+							<td>
+								{{ ownSeatManual.available }}
+							</td>
+							<td>
+
+							</td>
+							<td>
+
+							</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+				<hr>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

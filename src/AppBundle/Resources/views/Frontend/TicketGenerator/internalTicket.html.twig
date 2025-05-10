@@ -1,0 +1,316 @@
+{% macro header(type, ident) %}
+	<div class="header">
+		<div>EUROTOURS s.r.o.</div>
+		<div>+420 724 132 365 &nbsp; &nbsp; &nbsp; &nbsp; info@eurotours.cz</div>
+		<div>{{ type }} coupon {{ ident }}</div>
+	</div>
+{% endmacro %}
+
+{% macro ticketAuditor(internalTicket, routeThere, routeBack, withPrice) %}
+	<table>
+		<tr>
+			<th>Jméno (Name):</th>
+			<td colspan="2">{{ internalTicket.orderPerson.name }}</td>
+		</tr>
+        {% if routeThere %}
+            <tr>
+                <th>Dopravce (Company):</th>
+                <td colspan="2">
+                    {{ routeThere.carrier.name }}
+                </td>
+            </tr>
+            <tr>
+                <th>Odjezd (From):</th>
+                <td colspan="2">
+                    {{ routeThere.simpleFromCityName|languageEN }}, {{ routeThere.fromStationName|languageEN }}
+                    {% if routeThere.fromScheduleLineStation and routeThere.fromScheduleLineStation.platform %}(pl. {{ routeThere.fromScheduleLineStation.platform }}){% endif %}
+                    - ({{ routeThere.datetimeDeparture|date("j. n. Y, H:i") }})
+                    {% if routeThere.schedule %}
+                        {% if not routeThere.schedule.line.isSeatsWithoutNumbers(internalTicket.route.schedule.direction) and internalTicket.orderPerson.internalTicketForRoute(routeThere) and internalTicket.orderPerson.internalTicketForRoute(routeThere).number %}
+                            - [ Sedadlo: {{ internalTicket.orderPerson.internalTicketForRoute(routeThere).number }} ]
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>Příjezd (To):</th>
+                <td colspan="2">
+                    {{ routeThere.simpleToCityName|languageEN }}, {{ routeThere.toStationName|languageEN }}
+                    - ({{ routeThere.datetimeArrival|date("j. n. Y, H:i") }})
+                </td>
+            </tr>
+        {% endif %}
+
+
+		{% if routeBack %}
+			<tr>
+				<th>Dopravce (Company):</th>
+				<td colspan="2">
+					{{ routeBack.carrier.name }}
+				</td>
+			</tr>
+			<tr>
+				<th>Odjezd (From):</th>
+				<td colspan="2">
+					{{ routeBack.simpleFromCityName|languageEN }}, {{ routeBack.fromStationName|languageEN }}
+					{% if routeBack.fromScheduleLineStation and routeBack.fromScheduleLineStation.platform %}(pl. {{ routeBack.fromScheduleLineStation.platform }}){% endif %}
+                    - ({{ routeBack.datetimeDeparture|date("j. n. Y, H:i") }})
+                    {% if routeBack.schedule %}
+                        {% if not routeBack.schedule.line.isSeatsWithoutNumbers(internalTicket.route.schedule.direction) and internalTicket.orderPerson.internalTicketForRoute(routeBack) and internalTicket.orderPerson.internalTicketForRoute(routeBack).number %}
+                            - [ Sedadlo: {{ internalTicket.orderPerson.internalTicketForRoute(routeBack).number }} ]
+                        {% endif %}
+                    {% endif %}
+				</td>
+			</tr>
+			<tr>
+				<th>Příjezd (To):</th>
+				<td colspan="2">
+					{{ routeBack.simpleToCityName|languageEN }}, {{ routeBack.toStationName|languageEN }}
+                    - ({{ routeBack.datetimeArrival|date("j. n. Y, H:i") }})
+				</td>
+			</tr>
+        {% endif %}
+
+        {% if routeThere and routeThere.isOpen %}
+            <tr>
+                <th>Dopravce (Company):</th>
+                <td colspan="2">
+                    {{ routeThere.carrier.name }}
+                </td>
+            </tr>
+            <tr>
+                <th>Odjezd (From):</th>
+                <td>
+                    {{ routeThere.simpleToCityName|languageEN }}, {{ routeThere.toStationName|languageEN }}
+	                {% if routeThere.fromScheduleLineStation.platform %}(pl. {{ routeThere.fromScheduleLineStation.platform }}){% endif %}
+                        - open
+                </td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <th>Příjezd (To):</th>
+                <td colspan="2">
+                    {{ routeThere.simpleFromCityName|languageEN }}, {{ routeThere.fromStationName|languageEN }}
+                    - open
+                </td>
+            </tr>
+        {% endif %}
+
+		<tr>
+			<th>Cena (Price):</th>
+			<td colspan="2">
+                {% if internalTicket.generateWithPrice %}
+                    {{ internalTicket.priceCurrencyIncludeSurcharge|priceCurrency(true, internalTicket.currency) }}
+                    {% if internalTicket.sellerFee is not null %}
+                        + {{ internalTicket.sellerFeeCurrency|priceCurrency(true, internalTicket.currency) }}
+                        {{ 'order.sellerFee'|trans([], null, 'cs') }}
+                        ({{ 'order.sellerFee'|trans([], null, 'en') }})
+                    {% endif %}
+                {% else %}
+                    Dle ceníku (According to the price list)
+                {% endif %}
+            </td>
+		</tr>
+	</table>
+	<p style="text-align: right; float: right; font-size: 15px; margin-top: 6px">www.eurotours.cz</p>
+    <p style="text-align: left; float: left">Cestující je povinen se dostavit k autobusu 20 minut před odjezdem.<br>(Passenger must come at the bus 20 minutes before departure.)</p>
+{% endmacro %}
+
+{% import _self as ticket %}
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+	<meta charset="utf-8">
+	<style type="text/css">
+		body {
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		}
+
+		/* blocks */
+		.block {
+			width: 100%;
+			margin-bottom: 55px;
+		}
+
+		.block:nth-child(1) {
+			height: 248px;
+		}
+
+		.block:nth-child(2) {
+			height: 208px;
+		}
+
+		.block:nth-child(3) {
+			height: 208px;
+		}
+
+		.block:nth-child(4) {
+			height: 158px;
+			margin-bottom: 0;
+		}
+
+
+		/* header */
+		.header {
+			overflow: hidden;
+		}
+
+		.header > div {
+			height: 30px;
+			line-height: 30px;
+			text-align: center;
+			float: left;
+		}
+
+		.header > div:nth-child(1) {
+			width: 30%;
+			text-align: left;
+			font-size: 22px;
+		}
+
+		.header > div:nth-child(2) {
+			width: 40%;
+			font-size: 10px;
+		}
+
+		.header > div:nth-child(3) {
+			width: 30%;
+			font-size: 14px;
+			background-color: #e6e6e6;
+		}
+
+		/* table */
+		table {
+			font-size: 12px;
+			border-spacing: 0;
+			border-collapse: collapse;
+			width: 100%;
+		}
+
+		table tr th, table tr td {
+			padding: 2px 5px;
+		}
+
+		table tr th {
+			text-align: right;
+			width: 12%;
+			font-weight: normal;
+		}
+
+		table tr td:nth-child(1) {
+			text-align: left;
+			width: 40%;
+		}
+
+		table tr td:nth-child(2) {
+			text-align: left;
+			width: 40%;
+		}
+
+		table tr:nth-child(odd) {
+            background-color: #e6e6e6;
+		}
+
+		p {
+			text-align: left;
+			font-size: 8px;
+		}
+
+	</style>
+</head>
+<body>
+
+
+{% if internalTicket.twoWayTicket %}
+    {% if internalTicket.firstWayForInReturnTicketNotTheSameCarrier %}
+        <div class="block">
+            {{ ticket.header("Journey", internalTicket.order.ident) }}
+            {{ ticket.ticketAuditor(internalTicket, internalTicket.order.routeThere, null) }}
+        </div>
+
+        <div class="block">
+            {{ ticket.header("Journey", internalTicket.order.ident) }}
+            {{ ticket.ticketAuditor(internalTicket, internalTicket.order.routeThere, null) }}
+        </div>
+
+        <div class="block">
+            {{ ticket.header("Customer", internalTicket.order.ident) }}
+            {{ ticket.ticketAuditor(internalTicket, internalTicket.order.routeThere, null) }}
+        </div>
+
+        <div class="block">
+            {{ ticket.header("Auditor", internalTicket.order.ident) }}
+            {{ ticket.ticketAuditor(internalTicket, internalTicket.order.routeThere, null) }}
+        </div>
+    {% elseif internalTicket.secondWayForInReturnTicketNotTheSameCarrier %}
+
+        <div class="block">
+            {{ ticket.header("Journey", internalTicket.order.ident) }}
+            {{ ticket.ticketAuditor(internalTicket, null, internalTicket.order.routeBack) }}
+        </div>
+
+        <div class="block">
+            {{ ticket.header("Journey", internalTicket.order.ident) }}
+            {{ ticket.ticketAuditor(internalTicket, null, internalTicket.order.routeBack) }}
+        </div>
+
+        <div class="block">
+            {{ ticket.header("Customer", internalTicket.order.ident) }}
+            {{ ticket.ticketAuditor(internalTicket, null, internalTicket.order.routeBack) }}
+        </div>
+
+        <div class="block">
+            {{ ticket.header("Auditor", internalTicket.order.ident) }}
+            {{ ticket.ticketAuditor(internalTicket, null, internalTicket.order.routeBack) }}
+        </div>
+    {% else %}
+
+        <div class="block">
+            {{ ticket.header("Journey", internalTicket.order.ident) }}
+            {{ ticket.ticketAuditor(internalTicket, internalTicket.order.routeThere, internalTicket.order.routeBack) }}
+        </div>
+
+        <div class="block">
+            {{ ticket.header("Journey", internalTicket.order.ident) }}
+            {{ ticket.ticketAuditor(internalTicket, internalTicket.order.routeThere, internalTicket.order.routeBack) }}
+        </div>
+
+        <div class="block">
+            {{ ticket.header("Customer", internalTicket.order.ident) }}
+            {{ ticket.ticketAuditor(internalTicket, internalTicket.order.routeThere, internalTicket.order.routeBack) }}
+        </div>
+
+        <div class="block">
+            {{ ticket.header("Auditor", internalTicket.order.ident) }}
+            {{ ticket.ticketAuditor(internalTicket, internalTicket.order.routeThere, internalTicket.order.routeBack) }}
+        </div>
+    {% endif %}
+{% endif %}
+
+{% if not internalTicket.twoWayTicket %}
+    <div class="block">
+        {{ ticket.header("Journey", internalTicket.order.ident) }}
+        {{ ticket.ticketAuditor(internalTicket, internalTicket.order.routeThere) }}
+    </div>
+
+    <div class="block">
+        {{ ticket.header("Customer", internalTicket.order.ident) }}
+        {{ ticket.ticketAuditor(internalTicket, internalTicket.order.routeThere) }}
+    </div>
+
+    <div class="block">
+        {{ ticket.header("Auditor", internalTicket.order.ident) }}
+        {{ ticket.ticketAuditor(internalTicket, internalTicket.order.routeThere) }}
+    </div>
+
+    <div class="block">
+        {{ ticket.header("Auditor", internalTicket.order.ident) }}
+        {{ ticket.ticketAuditor(internalTicket, internalTicket.order.routeThere) }}
+    </div>
+{% endif %}
+
+
+
+</body>
+</html>

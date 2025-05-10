@@ -1,0 +1,620 @@
+{% extends "AppBundle:Backend/Layout:Skeleton.html.twig" %}
+
+{% import "@App/Backend/Macro/weekDays.html.twig" as weekDaysMacro %}
+{% import "@App/Backend/Macro/days.html.twig" as daysMacro %}
+
+{% block menu %}
+	<div class="container-fluid container-line-header">
+		<div class="line-header">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-2">
+						<a href="{{ path("backend_lines") }}" class="btn btn-default" style="margin-top: 12px"><i class="fa fa-angle-left"></i><i class="fa fa-angle-left"></i> Seznam linek</a>
+					</div>
+					<div class="col-md-5">
+						<p>Editace spoje <strong>{{ line.code }}</strong> ({{ line.carrier.name }})</p>
+					</div>
+					<div class="col-md-2">
+						<div class="btn-group btn-toggle" style="margin-top: 12px">
+							<a href="{{ path("backend_line", { line: line.id, direction: "there" }) }}" class="btn {% if direction == "there" %}btn-default active{% else %}btn-default{% endif %}">Tam</a>
+							<a href="{{ path("backend_line", { line: line.id, direction: "back" }) }}" class="btn {% if direction == "back" %}btn-default active{% else %}btn-default {% endif %}">Zpět</a>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<button type="submit" class="btn btn-success pull-right" data-action="submitLineForm">Uložit změny</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block content %}
+
+	<form action="" method="post" data-action="lineForm">
+		<button type="submit" style="display: none"></button>
+		<div class="container-fluid container-line">
+
+			<div>
+				<div class="pull-right">
+					<button data-action="addStation" type="button" class="btn btn-default"><i class="fa fa-building"></i> Přidat zastávku</button>
+					<a href="{{ path("backend_line_add_schedule", { line: line.id, direction: direction }) }}" class="btn btn-default"><i class="fa fa-bus"></i> Přidat spoj</a>
+					<div class="dropdown" style="float: right; margin-left: 4px">
+						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							<i class="fa fa-money"></i> Editovat tarif
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+							{% for tariff in tariffs %}
+								<li>
+                                    <a href="{{ path("backend_tariff", { tariff: tariff.id }) }}">
+                                        {% if tariff.percentFromTariff or tariff.temporaryFromTariff %}&rdca;{% endif %}
+                                        {{ tariff.name|language }}
+                                        {% if tariff.temporaryFromTariff %}[nahrazuje {{ tariff.temporaryFromTariff.name|language }}]{% endif %}
+                                        ({% if tariff.currency %}{{ tariff.currency }}{% elseif tariff.percentFromTariff %}{{ tariff.percent }}% z {{ tariff.percentFromTariff.name|language }} {{ tariff.percentFromTariff.currency }}{% endif %})
+                                    </a>
+                                </li>
+							{% endfor %}
+							<li role="separator" class="divider"></li>
+							<li><a href="{{ path("backend_line_add_tariff", { line: line.id, type: "prices" }) }}"><i class="fa fa-plus"></i> Nový tarif (cenová tabulka)</a></li>
+							<li><a href="{{ path("backend_line_add_tariff", { line: line.id, type: "percent" }) }}"><i class="fa fa-plus"></i> Nový tarif (sleva)</a></li>
+						</ul>
+					</div>
+				</div>
+
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#lineStations" aria-controls="lineStations" role="tab" data-toggle="tab">Jízdní řád</a></li>
+					<li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Nastavení linky</a></li>
+					<li role="presentation"><a href="#removeLine" aria-controls="removeLine" role="tab" data-toggle="tab">Odstranění / duplikace linky</a></li>
+				</ul>
+
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="lineStations">
+
+						<div class="row">
+							<div class="col-md-12">
+								<table class="table table-hover table-striped table-condensed" data-line="{{ line.id }}">
+									<tbody>
+									<tr>
+										<td></td>
+										{% for schedule in line.getActiveSchedules(direction) %}
+											<td>
+												<input type="hidden" name="weightSchedule[{{ schedule.id }}]" value="{{ schedule.weight }}">
+												<button type="button" data-action="weightLeft" class="btn btn-default btn-xs" style="margin-left: 40px"><i class="fa fa-arrow-circle-left"></i></button>
+												<button type="button" data-action="weightRight" class="btn btn-default btn-xs"><i class="fa fa-arrow-circle-right"></i></button>
+											</td>
+										{% endfor %}
+									</tr>
+									{% for lineStation in line.getActiveLineStations(direction) %}
+										<tr>
+											<input type="hidden" name="weightLineStation[{{ lineStation.id }}]" value="{{ lineStation.weight }}">
+											<td style="width: 200px">
+												<div class="pull-right weight-buttons">
+													<button type="button" class="btn btn-default btn-xs" data-action="weightUp"><i class="fa fa-toggle-up"></i></button><br>
+													<button type="button" class="btn btn-default btn-xs" data-action="weightDown"><i class="fa fa-toggle-down"></i></button>
+												</div>
+												<div class="pull-right weight-buttons">
+													<button type="button" class="btn btn-default btn-xs" data-action="deleteStation" data-url="{{ path("backend_line_remove_line_station", { line: line.id, lineStation: lineStation.id }) }}"><i class="fa fa-remove"></i></button><br>
+													<button type="button" class="btn btn-default btn-xs" data-action="changeStation" data-line-station="{{ lineStation.id }}"><i class="fa fa-pencil"></i></button>
+												</div>
+												<strong>{{ lineStation.city.name|language }}</strong><br>
+												{{ lineStation.station.name|language }}
+											</td>
+											{% for schedule in line.getActiveSchedules(direction) %}
+												<td>
+													<span data-action="editScheduleTime" class="editScheduleTime" data-schedule="{{ schedule.id }}" data-line-station="{{ lineStation.id }}">
+														{% set scheduleLineStation = schedule.getScheduleLineStationsForLineStation(lineStation) %}
+														<input type="hidden" name="scheduleTime[{{ schedule.id }}][{{ lineStation.id }}][arrivalTime]" data-handler="arrivalTime" value="{% if scheduleLineStation %}{{ scheduleLineStation.time.arrivalTime }}{% endif %}">
+														<input type="hidden" name="scheduleTime[{{ schedule.id }}][{{ lineStation.id }}][arrivalDayModify]" data-handler="arrivalDayModify" value="{% if scheduleLineStation %}{{ scheduleLineStation.time.arrivalDayModify }}{% endif %}">
+														<input type="hidden" name="scheduleTime[{{ schedule.id }}][{{ lineStation.id }}][departureTime]" data-handler="departureTime" value="{% if scheduleLineStation %}{{ scheduleLineStation.time.departureTime }}{% endif %}">
+														<input type="hidden" name="scheduleTime[{{ schedule.id }}][{{ lineStation.id }}][departureDayModify]" data-handler="departureDayModify" value="{% if scheduleLineStation %}{{ scheduleLineStation.time.departureDayModify }}{% endif %}">
+														<input type="hidden" name="scheduleTime[{{ schedule.id }}][{{ lineStation.id }}][platform]" data-handler="platform" value="{% if scheduleLineStation %}{{ scheduleLineStation.platform }}{% endif %}">
+														<span>
+														{% if scheduleLineStation %}
+															{% if scheduleLineStation.time.arrivalTime %}
+																({{ scheduleLineStation.time.arrivalTime }}{% if scheduleLineStation.time.arrivalDayModify %} +{{ scheduleLineStation.time.arrivalDayModify }}{% endif %})
+															{% endif %}
+															{{ scheduleLineStation.time.departureTime }}
+															{% if scheduleLineStation.time.departureDayModify %}
+																+{{ scheduleLineStation.time.departureDayModify }}
+															{% endif %}
+															{% if scheduleLineStation.platform %}
+																<br><small>nást. {{ scheduleLineStation.platform }}</small>
+															{% endif %}
+														{% endif %}
+														</span>
+													</span>
+												</td>
+											{% endfor %}
+										</tr>
+									{% endfor %}
+									<tr>
+										<td></td>
+										{% for schedule in line.getActiveSchedules(direction) %}
+											<td>{{ weekDaysMacro.weekDays(schedule) }}</td>
+										{% endfor %}
+									</tr>
+									<tr>
+										<td>Linka jede</td>
+										{% for schedule in line.getActiveSchedules(direction) %}
+											<td>
+												<input type="hidden" name="includeDays[{{ schedule.id }}]" value="{{ schedule.includeDays.string }}">
+												<span data-action="editIncludeDays" class="editDays">
+													<span>{{ schedule.includeDays.string }}</span>
+												</span>
+											</td>
+										{% endfor %}
+									</tr>
+									<tr>
+										<td>Linka nejede</td>
+										{% for schedule in line.getActiveSchedules(direction) %}
+											<td>
+												<input type="hidden" name="excludeDays[{{ schedule.id }}]" value="{{ schedule.excludeDays.string }}">
+												<span data-action="editExcludeDays" class="editDays">
+													<span>{{ schedule.excludeDays.string }}</span>
+												</span>
+											</td>
+										{% endfor %}
+									</tr>
+									<tr>
+										<td>Tarify</td>
+										{% for schedule in line.getActiveSchedules(direction) %}
+											<td>
+												<input type="hidden" name="tariff[{{ schedule.id }}]" value="">
+												<select name="tariff[{{ schedule.id }}][]" class="selectpicker" data-width="130px" multiple>
+													{% for tariff in tariffs if tariff.temporaryFromTariff is null %}
+														<option value="{{ tariff.id }}"{% if schedule.tariffs.contains(tariff) %} selected{% endif %}>
+                                                            {% if tariff.percentFromTariff or tariff.temporaryFromTariff %}&rdca;{% endif %}
+                                                            {{ tariff.name|language }}
+                                                            {% if tariff.temporaryFromTariff %}[nahrazuje {{ tariff.temporaryFromTariff.name|language }}]{% endif %}
+                                                            ({% if tariff.currency %}{{ tariff.currency }}{% elseif tariff.percentFromTariff %}{{ tariff.percent }}% z {{ tariff.percentFromTariff.name|language }} {{ tariff.percentFromTariff.currency }}{% endif %})
+                                                        </option>
+													{% endfor %}
+												</select>
+											</td>
+										{% endfor %}
+									</tr>
+									<tr>
+										<td>Akce</td>
+										{% for schedule in line.getActiveSchedules(direction) %}
+											<td>
+												<button type="button" data-url="{{ path("backend_line_duplicate_schedule", { line: line.id, schedule: schedule.id }) }}" data-action="duplicateSchedule" class="btn btn-default btn-xs btn-block" style="max-width: 200px;"><i class="fa fa-recycle"></i> Duplikovat spoj</button>
+												<button type="button" data-url="{{ path("backend_line_remove_schedule", { line: line.id, schedule: schedule.id }) }}" data-action="removeSchedule" class="btn btn-default btn-xs btn-block" style="max-width: 200px;"><i class="fa fa-remove"></i> Odstranit spoj</button>
+												<button type="button" data-url="{{ path("backend_ajax_schedule_seats_plan", { line: line.id, schedule: schedule.id }) }}" data-action="seatsPlan" class="btn btn-default btn-xs btn-block" style="max-width: 200px;"><i class="fa fa-users"></i> Nastavit sedadla</button>
+												<button type="button" data-url="{{ path("backend_ajax_schedule_note", { line: line.id, schedule: schedule.id }) }}" data-action="scheduleNote" class="btn btn-default btn-xs btn-block" style="max-width: 200px;"><i class="fa fa-sticky-note-o"></i> Poznámka spoje</button>
+												<label style="font-weight: normal; display: block">
+													<input type="hidden" name="seatsWithoutNumbersSchedule[{{ schedule.id }}]" value="0" />
+													<input type="checkbox" name="seatsWithoutNumbersSchedule[{{ schedule.id }}]" value="1"{% if schedule.seatsWithoutNumbers %} checked{% endif %} /> Netisknout čísla sedadel
+												</label>
+                                                <label style="font-weight: normal; display: block">
+                                                    <input type="hidden" name="payOnlineDisabledSchedule[{{ schedule.id }}]" value="0" />
+                                                    <input type="checkbox" name="payOnlineDisabledSchedule[{{ schedule.id }}]" value="1"{% if schedule.payOnlineDisabled %} checked{% endif %} /> <strong>Zablokovat</strong> online platbu
+                                                </label>
+											</td>
+										{% endfor %}
+									</tr>
+									<tr>
+										<td>Sedadla</td>
+										{% for schedule in line.getActiveSchedules(direction) %}
+											<td>
+												{{ widget("backend.scheduleSeatsOverview", { schedule: schedule }) }}
+											</td>
+										{% endfor %}
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+					</div>
+
+
+					<div role="tabpanel" class="tab-pane" id="settings">
+						<div class="row" style="margin-top: 20px">
+							<div class="col-md-3">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										Základní údaje linky
+									</div>
+									<div class="panel-body">
+										<div class="form-group">
+											<label for="code">Kód linky</label>
+											<input id="code" type="text" class="form-control" name="code" placeholder="Kód linky" value="{{ line.code }}">
+										</div>
+
+										<label for="carrier">Společnost</label><br>
+										<select id="carrier" name="carrier" class="selectpicker" data-live-search="true">
+											{% for carrier in carriers %}
+												<option value="{{ carrier.id }}" {% if line.carrier == carrier %}selected{% endif %}>{{ carrier.name }}</option>
+											{% endfor %}
+										</select>
+
+										<div class="checkbox" style="margin-top: 20px">
+											<input type="hidden" name="openPossible" value="0">
+											<label><input type="checkbox" value="1" name="openPossible"{% if line.openPossible %} checked{% endif %}>Možnost OPEN jízdenky</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										Možnosti nákupu
+									</div>
+									<div class="panel-body">
+										<div class="form-group">
+											<label for="allowOrderHoursThere">Tam: Možnost koupit X hodin předem</label>
+											<div class="input-group" style="width: 100px">
+												<input id="allowOrderHoursThere" type="text" class="form-control" name="allowOrderHoursThere" placeholder="{{ allowOrderHours }}" value="{{ line.allowOrderHoursThere }}" style="width: 50px; text-align: right">
+												<span class="input-group-addon">hod</span>
+											</div>
+										</div>
+
+										<div class="form-group">
+											<label for="allowOrderHoursBack">Zpět: Možnost koupit X hodin předem</label>
+											<div class="input-group" style="width: 100px">
+												<input id="allowOrderHoursBack" type="text" class="form-control" name="allowOrderHoursBack" placeholder="{{ allowOrderHours }}" value="{{ line.allowOrderHoursBack }}" style="width: 50px; text-align: right">
+												<span class="input-group-addon">hod</span>
+											</div>
+										</div>
+
+										<div class="checkbox" style="margin-top: 20px">
+											<input type="hidden" name="seatsWithoutNumbersThere" value="0">
+											<label><input type="checkbox" value="1" name="seatsWithoutNumbersThere"{% if line.seatsWithoutNumbersThere %} checked{% endif %}>Na jízdenky TAM netisknout čísla sedadel</label>
+										</div>
+
+										<div class="checkbox" style="margin-top: 20px">
+											<input type="hidden" name="seatsWithoutNumbersBack" value="0">
+											<label><input type="checkbox" value="1" name="seatsWithoutNumbersBack"{% if line.seatsWithoutNumbersBack %} checked{% endif %}>Na jízdenky ZPĚT netisknout čísla sedadel</label>
+										</div>
+
+										<div class="checkbox" style="margin-top: 20px">
+											<input type="hidden" name="payOnline" value="0">
+											<label><input type="checkbox" value="1" name="payOnline"{% if line.payOnline %} checked{% endif %}>Možnost přímé platby online naší platební bránou</label>
+										</div>
+
+										<div class="checkbox" style="margin-top: 20px">
+											<input type="hidden" name="generateInternalTicket" value="0">
+											<label><input type="checkbox" value="1" name="generateInternalTicket"{% if line.generateInternalTicket %} checked{% endif %}>Generovat naše interní jízdenky</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										Možnosti administrátora
+									</div>
+									<div class="panel-body">
+										<div class="checkbox">
+											<input type="hidden" name="adminFreePossible" value="0">
+											<label><input type="checkbox" value="1" name="adminFreePossible"{% if line.adminFreePossible %} checked{% endif %}>Možnost koupit bez platební brány</label>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										Omezení linky
+									</div>
+									<div class="panel-body">
+										<div class="checkbox">
+											<input type="hidden" name="backWayOnlyAsReturnPayPossible" value="0">
+											<label><input type="checkbox" value="1" name="backWayOnlyAsReturnPayPossible"{% if line.backWayOnlyAsReturnPayPossible %} checked{% endif %}>Cesta ZPĚT lze přímo zaplatit jen jako ZPÁTEČNÍ cesta stejné linky</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <strong>Privátní</strong> poznámka linky
+                                    </div>
+                                    <div class="panel-body">
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li role="presentation" class="active"><a href="#privateNoteCs" aria-controls="privateNoteCs" role="tab" data-toggle="tab">Čeština</a></li>
+                                            <li role="presentation"><a href="#privateNoteEn" aria-controls="privateNoteEn" role="tab" data-toggle="tab">Angličtina</a></li>
+                                            <li role="presentation"><a href="#privateNoteRu" aria-controls="privateNoteRu" role="tab" data-toggle="tab">Ruština</a></li>
+                                            <li role="presentation"><a href="#privateNoteBg" aria-controls="privateNoteBg" role="tab" data-toggle="tab">Bulharsky</a></li>
+                                            <li role="presentation"><a href="#privateNoteUk" aria-controls="privateNoteUk" role="tab" data-toggle="tab">Ukrajinsky</a></li>
+                                        </ul>
+                                        <div class="tab-content" style="padding-top: 10px">
+                                            <div role="tabpanel" class="tab-pane active" id="privateNoteCs">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="privateNote_cs">Česky:</label>
+                                                            <textarea name="privateNote[cs]" class="form-control" rows="2" id="privateNote_cs">{{ line.privateNote|languageCS }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div role="tabpanel" class="tab-pane" id="privateNoteEn">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="privateNote_en">Anglicky:</label>
+                                                            <textarea name="privateNote[en]" class="form-control" rows="2" id="privateNote_en">{{ line.privateNote|languageEN }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div role="tabpanel" class="tab-pane" id="privateNoteRu">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="privateNote_ru">Rusky:</label>
+                                                            <textarea name="privateNote[ru]" class="form-control" rows="2" id="privateNote_ru">{{ line.privateNote|languageRU }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div role="tabpanel" class="tab-pane" id="privateNoteBg">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="privateNote_bg">Bulharsky:</label>
+                                                            <textarea name="privateNote[bg]" class="form-control" rows="2" id="privateNote_bg">{{ line.privateNote|languageBG }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div role="tabpanel" class="tab-pane" id="privateNoteUk">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="privateNote_uk">Ukrajinsky:</label>
+                                                            <textarea name="privateNote[uk]" class="form-control" rows="2" id="privateNote_uk">{{ line.privateNote|languageUK }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <strong>Veřejná</strong> poznámka linky
+                                    </div>
+                                    <div class="panel-body">
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            <li role="presentation" class="active"><a href="#publicNoteCs" aria-controls="noteCS" role="tab" data-toggle="tab">Čeština</a></li>
+                                            <li role="presentation"><a href="#publicNoteEn" aria-controls="noteEN" role="tab" data-toggle="tab">Angličtina</a></li>
+                                            <li role="presentation"><a href="#publicNoteRu" aria-controls="noteRU" role="tab" data-toggle="tab">Ruština</a></li>
+                                            <li role="presentation"><a href="#publicNoteBg" aria-controls="noteBG" role="tab" data-toggle="tab">Bulharsky</a></li>
+                                            <li role="presentation"><a href="#publicNoteUk" aria-controls="noteUK" role="tab" data-toggle="tab">Ukrajinsky</a></li>
+                                        </ul>
+                                        <div class="tab-content" style="padding-top: 10px">
+                                            <div role="tabpanel" class="tab-pane active" id="publicNoteCs">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="publicNote_cs">Česky:</label>
+                                                            <textarea name="publicNote[cs]" class="form-control" rows="2" id="publicNote_cs">{{ line.publicNote|languageCS }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div role="tabpanel" class="tab-pane" id="publicNoteEn">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="publicNote_en">Anglicky:</label>
+                                                            <textarea name="publicNote[en]" class="form-control" rows="2" id="publicNote_en">{{ line.publicNote|languageEN }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div role="tabpanel" class="tab-pane" id="publicNoteRu">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="publicNote_ru">Rusky:</label>
+                                                            <textarea name="publicNote[ru]" class="form-control" rows="2" id="publicNote_ru">{{ line.publicNote|languageRU }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div role="tabpanel" class="tab-pane" id="publicNoteBg">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="publicNote_bg">Bulharsky:</label>
+                                                            <textarea name="publicNote[bg]" class="form-control" rows="2" id="publicNote_bg">{{ line.publicNote|languageBG }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div role="tabpanel" class="tab-pane" id="publicNoteUk">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label for="publicNote_uk">Ukrajinsky:</label>
+                                                            <textarea name="publicNote[uk]" class="form-control" rows="2" id="publicNote_uk">{{ line.publicNote|languageUK }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        Prodejci
+                                    </div>
+                                    <div class="panel-body">
+                                        {% for seller in sellers %}
+                                            <div class="checkbox">
+                                                <input type="hidden" name="sellers[{{ seller.id }}]" value="0">
+                                                <label><input type="checkbox" value="1" name="sellers[{{ seller.id }}]"{% if seller in line.sellers %} checked{% endif %}>{{ seller.name }} <em>({{ seller.email }})</em></label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+	                        <div class="col-md-4">
+		                        <div class="panel panel-default">
+			                        <div class="panel-heading">
+				                        Aktivní pouze v intervalech
+				                        <div style="float: right">
+					                        <input type="checkbox" data-toggle="toggle" data-action="toggleLinePeriod" data-on="On" data-off="Off" data-size="mini"{% if line.linePeriod %} checked{% endif %}>
+				                        </div>
+			                        </div>
+			                        <div class="panel-body">
+				                        <div class="row" data-action="linePeriodSettings">
+					                        <div class="col-md-5">
+						                        <div class="form-group">
+							                        <label for="linePeriodDays">Každý x-tý den</label>
+							                        <div class="input-group" style="width: 100px">
+								                        <input id="linePeriodDays" type="text" class="form-control" name="linePeriodDays" placeholder="X" value="{{ line.linePeriod ? line.linePeriod.days : '' }}" style="width: 50px; text-align: right">
+								                        <span class="input-group-addon">den</span>
+							                        </div>
+						                        </div>
+					                        </div>
+					                        <div class="col-md-7">
+						                        <div class="form-group">
+							                        <label for="linePeriodDateBegin">Počínaje dnem</label>
+							                        <input id="linePeriodDateBegin" type="text" class="form-control datepicker" name="linePeriodDateBegin" placeholder="" value="{{ line.linePeriod ? line.linePeriod.dateBegin|date('j.n.Y') : '' }}">
+						                        </div>
+					                        </div>
+				                        </div>
+			                        </div>
+		                        </div>
+	                        </div>
+                        </div>
+					</div>
+
+					<div role="tabpanel" class="tab-pane" id="removeLine">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="row" style="margin-top: 20px">
+									<div class="col-md-6">
+										<button type="button" class="btn btn-danger" data-action="removeLine">Odstranit linku "{{ line.code }}"</button>
+										<button type="button" class="btn btn-info" data-action="duplicateLine">Duplikovat linku "{{ line.code }}"</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<div style="display: none;" data-modal-body="editScheduleTime">
+		<form action="" method="post">
+			<div class="row">
+				<div class="col-md-3" style="text-align: right">
+					<div style="margin-top: 7px">Příjezd:</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<input type="text" class="form-control" name="arrivalTime" placeholder="XX:XX" style="width: 100px">
+					</div>
+				</div>
+				<div class="col-md-3">
+					<select name="arrivalDayModify" data-width="100px">
+						<option value="0">0</option>
+						<option value="1">+1</option>
+						<option value="2">+2</option>
+						<option value="3">+3</option>
+					</select>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3" style="text-align: right">
+					<div style="margin-top: 7px">Odjezd:</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<input type="text" class="form-control" name="departureTime" placeholder="XX:XX" style="width: 100px">
+					</div>
+				</div>
+				<div class="col-md-3">
+					<select name="departureDayModify" data-width="100px">
+						<option value="0">0</option>
+						<option value="1">+1</option>
+						<option value="2">+2</option>
+						<option value="3">+3</option>
+					</select>
+				</div>
+				<div class="col-md-3">
+					<button type="submit" class="btn btn-success">Změnit</button>
+				</div>
+			</div>
+			<div class="row" style="margin-top: 15px">
+				<div class="col-md-3" style="text-align: right">
+					<div style="margin-top: 7px">Terminál:</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<input type="text" class="form-control" name="platform" placeholder="" style="width: 75px; text-align: center">
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div style="display: none;" data-modal-body="addStation">
+		<div class="row">
+			<form action="{{ path("backend_line_add_station", { line: line.id }) }}" method="post">
+				<div class="col-md-4">
+					<select name="station" data-width="400px" data-live-search="true">
+						{% for city in cities %}
+							{% for station in city.stations %}
+								<option data-tokens="{{ city.allLanguagesNames|join(" ") }}" value="{{ station.id }}">{{ city.name|language }} - {{ station.name|language }}</option>
+							{% endfor %}
+						{% endfor %}
+					</select>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div style="display: none;" data-modal-body="editDays">
+		<div class="row">
+			<div class="col-md-12">
+				<label>
+					<input type="checkbox" name="all" value="1">
+					Bez omezení
+				</label>
+				<input type="text" name="days" class="form-control" style="width: 100%">
+			</div>
+		</div>
+	</div>
+
+	<div style="display: none;" data-modal-body="changeStation">
+		<div class="row">
+			<div class="col-md-12">
+				<form action="{{ path("backend_change_line_station") }}" method="post">
+					<input type="hidden" name="fromLineStation" value="">
+					<input type="hidden" name="direction" value="{{ direction }}">
+					<div class="col-md-4">
+						<select name="toStation" data-width="400px" data-live-search="true">
+							{% for city in cities %}
+								{% for station in city.stations %}
+									<option data-tokens="{{ city.allLanguagesNames|join(" ") }}" value="{{ station.id }}">{{ city.name|language }} - {{ station.name|language }}</option>
+								{% endfor %}
+							{% endfor %}
+						</select>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<form action="{{ path("backend_line_remove", { line: line.id }) }}" method="post" data-action="removeLine"></form>
+	<form action="{{ path("backend_line_duplicate", { line: line.id }) }}" method="post" data-action="duplicateLine"></form>
+	<form action="" method="post" data-action="removeSchedule"><input type="hidden" name="direction" value="{{ direction }}"></form>
+	<form action="" method="post" data-action="duplicateSchedule"><input type="hidden" name="direction" value="{{ direction }}"></form>
+{% endblock %}

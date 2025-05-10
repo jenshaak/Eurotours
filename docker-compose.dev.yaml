@@ -1,0 +1,98 @@
+services:
+    app:
+        build:
+            dockerfile: ./docker/dev.Dockerfile
+            context: .
+        container_name: eurotours-app
+        restart: always
+        depends_on:
+            - mysql
+            - redis
+        ports:
+            - "9301:80"
+        env_file:
+            - .env
+        volumes:
+            - ./:/var/www/app:rw,cached
+            - ./docker/run.sh:/var/www/app/run.sh
+            - ./docker/php.dev.ini:/usr/local/etc/php/conf.d/eurotours-php.ini
+            - ./docker/supervisord.dev.conf:/etc/supervisor/conf.d/supervisord.conf
+            - ./docker/apache.conf:/etc/apache2/sites-available/app.conf
+            - /var/logs
+            - /var/cache
+            - /tmp
+
+    redis:
+        platform: linux/x86_64
+        image: redis:5
+        container_name: eurotours-redis
+        restart: always
+        ports:
+            - 6379:6379
+        volumes:
+            - /data
+
+    selenium:
+        platform: linux/x86_64
+        container_name: eurotours-selenium
+        image: selenium/standalone-firefox:3.141.59-zinc
+        restart: always
+        volumes:
+            - /dev/shm:/dev/shm
+        ports:
+            - 4444:4444
+            - 5900:5900
+
+    gotenberg:
+        platform: linux/x86_64
+        container_name: eurotours-gotenberg
+        image: thecodingmachine/gotenberg:6
+        restart: always
+        ports:
+            - 3000:3000
+
+    mysql:
+        platform: linux/x86_64
+        image: mysql:5.7
+        container_name: eurotours-mysql
+        command: --sql_mode=""
+        restart: always
+        environment:
+            - MYSQL_USER=eurotours
+            - MYSQL_PASSWORD=eurotours
+            - MYSQL_DATABASE=eurotours
+            - MYSQL_RANDOM_ROOT_PASSWORD=yes
+        ports:
+            - "9302:3306"
+        volumes:
+            - mysql-data:/var/lib/mysql:rw
+
+    tool-adminer:
+        image: adminer
+        restart: always
+        environment:
+            ADMINER_DESIGN: mancave
+        ports:
+            - "5400:8080"
+
+    tool-mailpit:
+        image: axllent/mailpit
+        restart: unless-stopped
+        volumes:
+            - mailpit-data:/data
+        ports:
+            - "8025:8025"
+            - "8026:8026"
+            - "1025:1025"
+        environment:
+            MP_MAX_MESSAGES: 5000
+            MP_DATABASE: /data/mailpit.db
+            MP_SMTP_AUTH_ACCEPT_ANY: 1
+            MP_SMTP_AUTH_ALLOW_INSECURE: 1
+            #      MP_UI_AUTH: "admin:admin" # Uncomment this line to enable basic auth for the MailPit UI
+            MP_WEBROOT: "/mailpit/"
+            MP_VERBOSE: true
+
+volumes:
+    mysql-data:
+    mailpit-data:

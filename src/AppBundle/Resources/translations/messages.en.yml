@@ -1,0 +1,89 @@
+menu.homepage: 'Find connection'
+menu.claim: 'International bus tickets online'
+menu.contact: Contacts
+menu.links: Links
+menu.bulgaria: Bulgaria
+menu.turkish: Turkey
+menu.timetables: Timetables
+menu.airtickets: 'Air tickets'
+searchForm.iWantReturn: 'I want a return ticket'
+searchForm.onlyOpenReturn: 'Only "open" tickets'
+searchForm.dateDeparture: 'Date of departure'
+searchForm.to: To
+searchForm.from: From
+searchForm.switchDates: 'Departure date must be before the return date.'
+searchForm.switchDatesSecond: 'Return date must be later than arrival date.'
+searchForm.checkDate: 'Check the date'
+route.selectLine: Choose
+route.arrival: arrival
+route.variablePrice: 'variable price'
+route.ofDay: date
+route.way: Way
+route.canPayOnline: 'Pay online'
+search.totalPrice: 'Total price'
+search.orderTickets: 'Order tickets'
+searchForm.find: Search
+order.fullName: 'Name and Surname'
+order.email: E-mail
+order.phone: Phone
+order.dob: Date of birth
+order.documentNumber: Document number
+order.tariffThere: 'Tariff there'
+order.tariffBack: 'Tariff back'
+order.fillPassengerData: 'Fill the passenger data'
+order.buy: Buy
+order.book: Book
+order.passenger: passenger
+order.termsAndConditionsCheck: 'Souhlasím s [1-obchodními podmínkami] a se [2-zpracováním osobních údajů].'
+order.termsAndConditionsError: 'Je nutné zaškrtnout souhlas.'
+search.openTicket: 'open ticket'
+email.tickets.introduction: 'Hello, thank you for your trust. In this e-mail you will find the tickets you have ordered for the connections listed below. Please print the tickets.'
+homepage.searchFormTitle: 'Search for tickets all across Europe'
+homepage.claim.title: 'Bus tickets of all European carriers'
+homepage.claim.subtitle1: '!'
+homepage.claim.subtitle2: '!'
+homepage.claim.subtitle3: 'Possibility to pay by card, to bank account or cash'
+homepage.contactBox.title: 'Visit us, call us or write us'
+homepage.contactBox.florenc: 'Bus station Prague Florenc'
+homepage.contactBox.address: 'Křižíkova 2110/2b, Praha 8, 186 00'
+homepage.contactBox.place: 'HALL 1, CASH DESK 15 and 19'
+homepage.contactBox.facebook: 'Facebook page Eurotours'
+footer.adminLogin: 'Administrator login'
+order.selectRoute: 'Select a specific bus and fare type'
+order.selectRouteTwoWayDescription: 'Please select the bus and choose the type of individual tickets. The total number of passengers must be the same on the way there and back.'
+order.selectRouteDescription: 'Please select the bus and choose the type of individual tickets.'
+order.backToSearch: 'Back to search'
+order.fillName: 'Please fill in your name.'
+order.fillEmail: 'Please fill in your e-mail.'
+order.fillPhone: 'Please fill in your phone number.'
+order.fillPassengerName: 'Fill in the passenger''s name.'
+order.fillPassengerPhone: 'Fill in the passenger''s phone number.'
+order.fillPassengerDob: Fill in the passenger's date of birth
+order.fillPassengerDocumentNumber: Fill in the passenger's document number
+order.priceThere: 'Price (way there)'
+order.priceBack: 'Price (way back)'
+order.sellerFeeThere: 'Tax (way there)'
+order.sellerFeeBack: 'Tax (way back)'
+order.thanksReservation: 'Thank you for your reservation'
+order.thanksOrder: 'Thank you for your order'
+order.paymentOfOrder: 'Order payment'
+order.yourOrder: 'Your order'
+order.payByCard: 'Pay for the ticket by a credit card'
+order.reservationSuccess: 'Your reservation has been sent successfully. Thank you for booking your ticket through our company. We will contact you in the near future at the given contact details.'
+order.paymentSuccess: 'Payment was successful. Thank you for booking your ticket through our company.'
+order.ticketsInEmail: 'You have the tickets in your email.'
+order.price: Price
+order.sellerFee: 'Tax'
+order.withSellerFee: 'with tax'
+order.lackOfSeats: 'There are not enough free seats in the selected bus.'
+order.lackOfSeatsCall: 'We will try to secure a free seat for you anyway. Please contact the dispatcher at +420 724 132 365.'
+order.changeOrder: 'Change order details'
+order.selectSeats: 'Choose seats'
+order.selectedSeat: 'Chosen seat'
+order.clueSelectedSeat: 'selected seat'
+order.clueOtherPassenger: spolucestující
+order.clueAvailableSeat: 'free seat'
+order.clueNotAvailableSeat: 'unavailable seat'
+route.SelectTariff: 'Select the tariff and the number of tickets.'
+email.tickets.subject: 'Eurotours: Ticket'
+order.selectPassengerSeats: 'Choose seats'

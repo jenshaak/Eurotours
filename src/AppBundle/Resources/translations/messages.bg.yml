@@ -1,0 +1,85 @@
+menu.homepage: Търси
+menu.bulgaria: България
+menu.turkish: Турция
+menu.timetables: Разписания
+menu.airtickets: 'Самолетни билети'
+menu.contact: Контакти
+menu.links: Линкове
+searchForm.find: Търси
+searchForm.iWantReturn: 'Искам и обратен билет'
+searchForm.onlyOpenReturn: 'Само отворени билети'
+searchForm.dateDeparture: 'Дата на тръгване'
+searchForm.to: 'За къде'
+searchForm.from: 'От къде'
+route.selectLine: 'Избери линия'
+route.arrival: пристигане
+route.variablePrice: 'променлива цена'
+route.ofDay: дата
+route.way: Пътуване
+search.totalPrice: 'Обща цена'
+search.orderTickets: 'Поръчай билет'
+order.fullName: 'Име и фамилия'
+order.backToSearch: 'Обратно към търсене'
+order.price: Цена
+order.sellerFee: 'данък'
+order.withSellerFee: 'с данък'
+order.lackOfSeats: 'В иъбрания автобус няма достатъчно свободни места'
+order.ticketsInEmail: 'Билетите са в емайла Ви'
+order.paymentSuccess: 'Плащането протече успешно. Благодарим Ви, че си закупихте билет чрез нашата фирма.'
+order.reservationSuccess: 'Вашата резервация бе изпратена успешно. Благодарим ви, че резервирахте билета си чрез нашата компания. Скоро ще се свържем с вас на посочените данни за контакт.'
+order.payByCard: 'Плащане на билета чрез кредитна карта'
+order.yourOrder: 'Вашата поръчка'
+order.paymentOfOrder: 'Плащане на поръчката'
+order.thanksOrder: 'Благодарим Ви за Вашата поръчка'
+order.thanksReservation: 'Благодарим Ви за Вашата резервация'
+order.priceBack: 'Цена (за връщане)'
+order.priceThere: 'Цена (за отиване)'
+order.sellerFeeBack: 'данък (за връщане)'
+order.sellerFeeThere: 'данък (за отиване)'
+order.fillPassengerPhone: 'Попълнете телефонен номер на пътника'
+order.fillPassengerName: 'Попълнете име на пътника'
+order.fillPassengerDob: Попълнете рождената дата на пътника
+order.fillPassengerDocumentNumber: Попълнете номера на документа на пътника
+order.fillPhone: 'Попълнете Вашия телефонен номер'
+order.fillName: 'Моля, попълнете Вашето име'
+footer.adminLogin: 'Вход за администратор'
+homepage.contactBox.place: 'ЗАЛА 1, КАСА 15 и 19'
+homepage.contactBox.address: 'Křižíkova 2110/2b , Praha 8, 186 00'
+homepage.contactBox.facebook: 'Facebook page Eurotours'
+order.email: E-mail
+order.phone: Телефон
+order.dob: Дата на раждане
+order.documentNumber: Номер на документа
+order.tariffThere: 'Цена за отиване'
+order.tariffBack: 'Цена за връщане'
+order.fillPassengerData: 'Попълнете данните за пътниците'
+order.buy: Купи
+order.book: Резервирай
+order.passenger: Пътник
+search.openTicket: 'Билет с отворено връщане'
+email.tickets.subject: 'Eurotours: Билет'
+email.tickets.introduction: 'Добър ден, благодарим Ви за доверието. В този имейл ще намерите поръчаните от Вас билети за по-долу изброените линии. Моля, отпечатайте билетите.'
+order.selectPassengerSeats: 'Изберете места'
+homepage.searchFormTitle: 'Търси билети за цяла Европа'
+homepage.claim.title: 'Билети за всички европейски превозвачи.'
+homepage.contactBox.title: 'Посетете ни, обадете ни се или ни напишете'
+homepage.contactBox.florenc: 'Автогара Прага Флоренц'
+route.canPayOnline: 'Възможност за плащане онлайн'
+order.fillEmail: 'Моля, попълнете Вашия e-mail'
+order.selectRouteDescription: 'Моля изберете конкретна линия и тип билети'
+order.selectRouteTwoWayDescription: 'Моля, изберете конкретна линия и изберете вида на отделните билети. Общият брой пътници трябва да бъде еднакъв при пътуването на отиване и връшане.'
+order.selectRoute: 'Изберете конкретна линия и вид билет'
+searchForm.checkDate: 'Проверете датата'
+searchForm.switchDatesSecond: 'Датата за връщане трябва да бъде по-късна от датата за отиване'
+searchForm.switchDates: 'Датата за отиване трябва да бъде по-ранна от датата за връщане'
+menu.claim: 'Международни автобусни билети онлайн'
+route.SelectTariff: 'Изберете тариф и брой билети'
+order.clueNotAvailableSeat: 'мястото е заето'
+order.clueAvailableSeat: 'свободно място'
+order.clueOtherPassenger: 'следващ пътник'
+order.clueSelectedSeat: 'избрано място'
+order.selectedSeat: 'избрана седалка'
+order.selectSeats: 'изберете седалки'
+order.changeOrder: 'промени данните по поръчката'
+order.lackOfSeatsCall: 'Все пак ще се опитаме да осигурим свободно място за вас. Моля, свържете се с диспечера на +420 724 132 365.'
+homepage.claim.subtitle3: 'Плащане с карта, на банкова сметка или в брой'

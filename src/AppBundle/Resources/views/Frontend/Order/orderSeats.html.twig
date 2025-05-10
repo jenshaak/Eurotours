@@ -1,0 +1,139 @@
+{% extends 'AppBundle:Frontend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+
+    <script type="text/javascript">
+        var busIdents = [];
+    </script>
+
+	<div class="row">
+		<div class="col-md-3">
+			<div id="left-search" class="left-search-order">
+				{{ widget("frontend.searchForm") }}
+			</div>
+		</div>
+		<div class="col-md-9">
+			<form action="" method="post" data-action='orderForm' data-action-reservation="{{ path("order_reservation", { order: order.id }) }}" data-action-buy="{{ path("order_buy", { order: order.id }) }}">
+				<div class="row">
+					<div class="col-md-3">
+						<div style="margin-bottom: 20px">
+							<a href="{{ path("order", { order: order.id }) }}" class="btn btn-warning"><i class="fa fa-angle-double-left"></i> {{ 'order.changeOrder'|trans }}</a>
+						</div>
+					</div>
+					<div class="col-md-8 col-md-offset-1">
+						<p style="font-size: 1.5em; font-weight: bold; padding: 3px 10px; background-color: #EC02A6; color: white">{{ "search.totalPrice"|trans }} {{ "order.withSellerFee"|trans }}: {{ order.priceWithSellerFeeCurrency|priceCurrency }}</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<h2>{{ 'order.selectSeats'|trans }}</h2>
+					</div>
+				</div>
+				<div class="row">
+					{% for selectSeat in selectSeats if not selectSeat.booked %}
+                        {% set selectSeatNumber = loop.index %}
+						<div class="col-md-8">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h3 style="margin-top: 5px;">{{ selectSeat.orderPerson.name }}</h3>
+									<h4>{{ selectSeat.route.fromCity.name|language }} =&gt; {{ selectSeat.route.toCity.name|language }}</h4>
+								</div>
+								<div class="panel-body">
+									<div class="row">
+										<div class="col-md-6">
+                                            {% if selectSeat.seatsPlan.rowsOfSeats|length > 1 %}
+                                                <ul class="nav nav-tabs" role="tablist">
+                                                    <li role="option" class="active"><a href="#floor-{{ selectSeatNumber }}-1" aria-controls="floor-{{ selectSeatNumber }}-1" role="tab" data-toggle="tab">1. poschodí</a></li>
+                                                    <li role="option"><a href="#floor-{{ selectSeatNumber }}-2" aria-controls="floor-{{ selectSeatNumber }}-2" role="tab" data-toggle="tab">2. poschodí</a></li>
+                                                </ul>
+                                            {% endif %}
+                                            <script type="text/javascript">
+                                                busIdents.push("{{ selectSeat.busIdent }}");
+                                            </script>
+											<input type="hidden" name="selectedSeat[{{ selectSeat.orderPersonRouteTariff.id }}][]" value="{{ selectSeat.selectedSeat.number }}" data-bus-ident="{{ selectSeat.busIdent }}">
+                                            <div class="tab-content">
+                                                {% for floor in selectSeat.seatsPlan.rowsOfSeats %}
+                                                    <div role="tabpanel" class="tab-pane{% if loop.index == 1 %} active{% endif %}" id="floor-{{ selectSeatNumber }}-{{ loop.index }}">
+                                                        <table class="select-seat" style="margin: 0 auto;" data-bus-ident="{{ selectSeat.busIdent }}" data-order-person-route-tariff="{{ selectSeat.orderPersonRouteTariff.id }}">
+                                                            <tbody>
+                                                            {% for x in floor %}
+                                                                <tr>
+                                                                    {% for y in 0..4 %}
+                                                                        {% if x[y] is not defined %}
+                                                                            <td></td>
+                                                                        {% elseif x[y].available and x[y].number not in selectSeat.notAvailableSeatNumbers %}
+                                                                            <td class="seat-available" data-seat-number="{{ x[y].number }}">{{ x[y].number }}</td>
+                                                                        {% else %}
+                                                                            <td class="seat">{{ x[y].number }}</td>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                </tr>
+                                                            {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+										</div>
+										<div class="col-md-6">
+											<div style="font-weight: bold; margin-bottom: 30px; font-size: 18px">
+												{{ 'order.selectedSeat'|trans }}: <span class="selected-seat-span">{{ selectSeat.selectedSeat.number }}</span>
+											</div>
+
+											<p>
+												<span style="width: 12px; height: 12px; background-color: green; float: left; margin: 5px 15px 0 0; border: 1px solid black"></span>
+												{{ 'order.clueSelectedSeat'|trans }}
+											</p>
+											<p>
+												<span style="width: 12px; height: 12px; background-color: yellow; float: left; margin: 5px 15px 0 0; border: 1px solid black"></span>
+												{{ 'order.clueOtherPassenger'|trans }}
+											</p>
+											<p>
+												<span style="width: 12px; height: 12px; background-color: orange; float: left; margin: 5px 15px 0 0; border: 1px solid black"></span>
+												{{ 'order.clueAvailableSeat'|trans }}
+											</p>
+											<p>
+												<span style="width: 12px; height: 12px; background-color: silver; float: left; margin: 5px 15px 0 0; border: 1px solid black"></span>
+												{{ 'order.clueNotAvailableSeat'|trans }}
+											</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+                        {% if loop.index % 2 == 0 %}
+                            </div><div class="row">
+                        {% endif %}
+					{% endfor %}
+				</div>
+			</form>
+            <div class="row">
+                <div class="col-md-12">
+                    {% if order.orderType == "order" %}
+                        <button type="button" data-action="buy" class="btn btn-success btn-lg"><i class="fa fa-credit-card"></i> {{ "order.buy"|trans }}</button>
+                    {% elseif order.orderType == "reservation" %}
+                        <button type="button" data-action="reservation" class="btn btn-success btn-lg"><i class="fa fa-check"></i> {{ "order.book"|trans }}</button>
+                    {% endif %}
+                </div>
+            </div>
+            <br><br><br><br><br>
+		</div>
+	</div>
+
+	<div id="search-bar" class="search-bar-order">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3 col-md-offset-3">
+					<p>{{ "order.selectPassengerSeats"|trans }}</p>
+				</div>
+				<div class="col-md-6">
+					{% if order.orderType == "order" %}
+					    <button type="button" data-action="buy" style="margin-top: 10px; margin-left: 20px" class="btn btn-success pull-right btn-lg"><i class="fa fa-credit-card"></i> {{ "order.buy"|trans }}</button>
+					{% elseif order.orderType == "reservation" %}
+					    <button type="button" data-action="reservation" style="margin-top: 10px" class="btn btn-success pull-right btn-lg"><i class="fa fa-check"></i> {{ "order.book"|trans }}</button>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

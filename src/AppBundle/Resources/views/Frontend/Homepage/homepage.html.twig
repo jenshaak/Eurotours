@@ -1,0 +1,254 @@
+{% extends "AppBundle:Frontend/Layout:Skeleton.html.twig" %}
+
+{% block container %}
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3">
+				{{ widget("frontend.languageCurrencySwitcher") }}
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid" id="home-header">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-offset-3 col-md-6">
+					<div id="home-search">
+						<h2 class="text-center">{{ 'homepage.searchFormTitle'|trans }}</h2>
+                        {% if homepageNotice.show %}
+                            <div class="homepage-notice">
+                                {{ homepageNotice.content|language|nl2br }}
+                            </div>
+                        {% endif %}
+						{{ widget("frontend.searchForm", { type: "home" }) }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container" style="margin-top: 30px">
+		<div class="row">
+			<div class="col-md-8">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="homebox">
+							<h3>{{ 'homepage.claim.title'|trans }}</h3>
+							<p style="font-size: 19px">{{ 'homepage.claim.subtitle1'|trans }} <span style="margin: 0 18px; text-align: center">|</span> {{ 'homepage.claim.subtitle2'|trans }} <span style="margin: 0 18px; text-align: center">|</span> {{ 'homepage.claim.subtitle3'|trans }}</p>
+                            <p style="font-size: 24px; font-weight: 500">{{ 'homepage.claim.subtitle4'|trans }} <span style="margin: 0 18px; text-align: center">|</span> {{ 'homepage.claim.subtitle5'|trans }} <span style="margin: 0 18px; text-align: center">|</span> {{ 'homepage.claim.subtitle6'|trans }}</p>
+						</div>
+						<div class="carriers">
+							<table>
+								<tr>
+									<td>
+										<img src="{{ asset("bundles/app/frontend/carriers-logos/1-flixbus.gif") }}" alt="Flixbus" class="img-responsive" />
+									</td>
+
+									<td>
+										<img src="{{ asset("bundles/app/frontend/carriers-logos/2-ecolines.jpg") }}" alt="Ecolines" class="img-responsive" />
+									</td>
+
+									<td>
+										<img src="{{ asset("bundles/app/frontend/carriers-logos/3-regiojet.png") }}" alt="Regiojet" class="img-responsive" />
+									</td>
+
+									<td>
+										<img src="{{ asset("bundles/app/frontend/carriers-logos/4-tourist-service.jpg") }}" alt="Tourist Service" class="img-responsive" />
+									</td>
+								</tr>
+
+								<tr>
+									<td>
+										<img src="{{ asset("bundles/app/frontend/carriers-logos/5-arda.png") }}" alt="Arda" class="img-responsive" />
+									</td>
+
+									<td>
+										<img src="{{ asset("bundles/app/frontend/carriers-logos/6-regabus.png") }}" alt="Regabus" class="img-responsive" />
+									</td>
+
+									<td>
+										<img src="{{ asset("bundles/app/frontend/carriers-logos/7-nikolo.png") }}" alt="Nikolo" class="img-responsive" />
+									</td>
+
+									<td>
+										<img src="{{ asset("bundles/app/frontend/carriers-logos/8-east-express.jpg") }}" alt="EastExpress" class="img-responsive" />
+									</td>
+								</tr>
+
+								<tr>
+									<td>
+										<img src="{{ asset("bundles/app/frontend/carriers-logos/9-dmd.jpg") }}" alt="DMD" class="img-responsive" />
+									</td>
+
+									<td>
+										<img src="{{ asset("bundles/app/frontend/carriers-logos/10-svd-trans.png") }}" alt="SVD Trans" class="img-responsive" />
+									</td>
+
+									<td>
+										<img src="{{ asset("bundles/app/frontend/carriers-logos/11-transtempo.png") }}" alt="TransTempo" class="img-responsive" />
+									</td>
+
+									<td>
+										<img src="{{ asset("bundles/app/frontend/carriers-logos/12-scoka.jpg") }}" alt="Scoka" class="img-responsive" />
+									</td>
+								</tr>
+
+								<tr>
+									<td>
+										<img src="{{ asset("bundles/app/frontend/carriers-logos/13-sym.jpg") }}" alt="SYM" class="img-responsive" />
+									</td>
+
+									<td>
+										<img src="{{ asset("bundles/app/frontend/carriers-logos/14-ki-trans.jpg") }}" alt="Ki Trans" class="img-responsive" />
+									</td>
+
+									<td>
+										<img src="{{ asset("bundles/app/frontend/carriers-logos/27-infobus.png") }}" alt="InfoBus" class="img-responsive" />
+									</td>
+
+									<td>
+										<img src="{{ asset("bundles/app/frontend/carriers-logos/16-vo.jpg") }}" alt="VO" class="img-responsive" />
+									</td>
+								</tr>
+
+                                <tr>
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/17-avtotranzit.jpg") }}" alt="Avtotranzit" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/18-vasilkiv.png") }}" alt="Vasilkiv" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/19-vilar.jpg") }}" alt="Vilar" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/20-gdamaler.png") }}" alt="Gdamaler" class="img-responsive" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/21-lubjano.png") }}" alt="Lubjano" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/22-likebus.png") }}" alt="Likebus" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/23-klr-bus.png") }}" alt="KLR Bus" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/24-megabus.jpg") }}" alt="Megabus" class="img-responsive" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/25-andanas.jpg") }}" alt="Andanas" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/26-bus-trans-int.jpg") }}" alt="Bus Trans Int" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/28-ukrbus.png") }}" alt="Ukrbus" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/29-express-busline.jpg") }}" alt="Express Busline" class="img-responsive" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/30-ivkoni.png") }}" alt="Ivkoni" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/31-racic.png") }}" alt="Racic" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/32-radina.jpg") }}" alt="Radina" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/33-group.jpg") }}" alt="Group" class="img-responsive" />
+                                    </td>
+                                </tr>
+
+
+                                <tr>
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/34-tisnov.png") }}" alt="Tisnov" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/35-noblessline.jpg") }}" alt="Noblessline" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/36-tourbus.png") }}" alt="Tourbus" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/37-blueline.png") }}" alt="Blueline" class="img-responsive" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/38-comati.jpg") }}" alt="Comati" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/39-ednateric.png") }}" alt="Ednateric Trans" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/40-svs.png") }}" alt="SVS" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/41-korona.png") }}" alt="Korona" class="img-responsive" />
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/42-visit.jpg") }}" alt="Visit" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/43-bavi.png") }}" alt="Bavi" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/44-eurobus.png") }}" alt="Eurobus" class="img-responsive" />
+                                    </td>
+
+                                    <td>
+                                        <img src="{{ asset("bundles/app/frontend/carriers-logos/15-portas.jpg") }}" alt="Portas" class="img-responsive" />
+                                    </td>
+                                </tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				{{ widget("frontend.contactBox") }}
+			</div>
+		</div>
+		<br><br>
+	</div>
+
+
+{% endblock %}

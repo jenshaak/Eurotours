@@ -1,0 +1,93 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% import "@App/Backend/Macro/line.html.twig" as lineMacro %}
+
+{% block content %}
+
+	<div class="container">
+		<form action="" method="get">
+			<div class="row">
+				<div class="col-md-2">
+					<div class="form-group">
+						<label for="filterFromCity">Odkud</label><br>
+						<select id="filterFromCity" name="filterFromCity" class="selectpicker" data-live-search="true" data-live-search-style="startsWith" data-width="100%">
+							<option value="">Odkud</option>
+							{% for country in countries %}
+								<optgroup label="{{ country.name|language }}">
+									{% for city in country.cities %}
+										<option data-tokens="{{ city.allLanguagesNames|join(" ") }} {{ city.nextVariations }}" value="{{ city.id }}"{% if routeFilter.fromCity == city or (routeFilter.fromCity is null and fromCity == city)%} selected{% endif %}>{{ city.name|language }}</option>
+									{% endfor %}
+								</optgroup>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label for="filterToCity">Kam</label><br>
+						<select id="filterToCity" name="filterToCity" class="selectpicker" data-live-search="true" data-live-search-style="startsWith" data-width="100%">
+							<option value="">Kam</option>
+							{% for country in countries %}
+								<optgroup label="{{ country.name|language }}">
+									{% for city in country.cities %}
+										<option data-tokens="{{ city.allLanguagesNames|join(" ") }} {{ city.nextVariations }}" value="{{ city.id }}"{% if routeFilter.toCity == city or (routeFilter.toCity is null and toCity == city)%} selected{% endif %}>{{ city.name|language }}</option>
+									{% endfor %}
+								</optgroup>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<label for="filterDay">Datum</label><br>
+					<input type="text" class="form-control" value="{% if routeFilter.dateDay %}{{ routeFilter.dateDay|dateFormat }}{% else %}{{ "now"|dateFormat }}{% endif %}" name="filterDay" id="filterDay" style="width: 100%">
+				</div>
+				<div class="col-md-2">
+					<button type="submit" class="btn btn-success btn-block" style="margin-top: 25px"><i class="fa fa-refresh"></i> Obnovit</button>
+				</div>
+			</div>
+		</form>
+
+		<div class="row">
+			<div class="col-md-12">
+				{% for carrier in carriers %}
+					{% set exists = false %}
+					{% for schedule in schedules if schedule.line.carrier == carrier %}
+						{% set exists = true %}
+					{% endfor %}
+					{% if exists %}
+						<h2>{{ carrier.name }}</h2>
+						<table class="table table-bordered table-hover">
+							<thead>
+							<tr>
+								<th>Linka</th>
+								<th>Vyjíždí z</th>
+								<th>Odkud</th>
+								<th>Kam</th>
+								<th>Konečná stanice</th>
+								<th>Dny v týdnu</th>
+								<th>Míst</th>
+								<th>Koupených</th>
+							</tr>
+							</thead>
+							<tbody>
+							{% for schedule in schedules if schedule.line.carrier == carrier %}
+								<tr>
+									<td><a href="{{ path("backend_line", { line: schedule.line.id }) }}" class="td-a">{{ schedule.line.code }}</a></td>
+									<td><a href="{{ path("backend_line", { line: schedule.line.id }) }}" class="td-a">{{ schedule.firstScheduleLineStation.lineStation.city.name|language }} {{ schedule.firstScheduleLineStation.time.departureTime }}</a></td>
+									<td><a href="{{ path("backend_line", { line: schedule.line.id }) }}" class="td-a"><i class="fa fa-angle-double-right"></i> <strong>{{ schedule.scheduleLineStationForCity(routeFilter.fromCity).lineStation.city.name|language }} {{ schedule.scheduleLineStationForCity(routeFilter.fromCity).time.departureTime }}</strong></a></td>
+									<td><a href="{{ path("backend_line", { line: schedule.line.id }) }}" class="td-a"><i class="fa fa-angle-double-right"></i> <strong>{{ schedule.scheduleLineStationForCity(routeFilter.toCity).lineStation.city.name|language }} {{ schedule.scheduleLineStationForCity(routeFilter.toCity).time.departureTime }}</strong></a></td>
+									<td><a href="{{ path("backend_line", { line: schedule.line.id }) }}" class="td-a"><i class="fa fa-angle-double-right"></i> {{ schedule.lastScheduleLineStation.lineStation.city.name|language }} {{ schedule.lastScheduleLineStation.time.departureTime }}</a></td>
+									<td><a href="{{ path("backend_line", { line: schedule.line.id }) }}" class="td-a">{% for weekDay in schedule.weekDays %}<span style="margin-right: 5px; {% if weekDay == routeFilter.dateDay.format("N")-1 %}font-weight: bold{% endif %}">{{ weekDay }}</span>{% endfor %}</a></td>
+									<td><a href="{{ path("backend_line", { line: schedule.line.id }) }}" class="td-a"></a></td>
+									<td><a href="{{ path("backend_line", { line: schedule.line.id }) }}" class="td-a"></a></td>
+								</tr>
+							{% endfor %}
+							</tbody>
+						</table>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

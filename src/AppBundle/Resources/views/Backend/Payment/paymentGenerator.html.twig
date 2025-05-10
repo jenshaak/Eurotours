@@ -1,0 +1,72 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+	<div class="container">
+		<form action="{{ path("backend_payment_generator") }}" method="post">
+			<div class="row">
+				<div class="col-md-6">
+					<h3 style="margin-bottom: 30px">Generátor plateb</h3>
+				</div>
+				<div class="col-md-6">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">Údaje o platbě</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="price">Částka</label>
+										<input id="price" type="text" class="form-control" name="price" placeholder="Částka" value="" required>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="currency">Měna</label><br>
+										<select id="currency" name="currency" class="selectpicker">
+											{% for currency in currencies %}
+												<option value="{{ currency }}">{{ currency }}</option>
+											{% endfor %}
+										</select>
+									</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="email">E-mail</label>
+                                        <input id="email" type="text" class="form-control" name="email" placeholder="@" value="" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="validityHours">Platnost</label>
+                                        <div class="input-group" style="width: 100px">
+                                            <input id="validityHours" type="text" class="form-control" name="validityHours" style="width: 50px; text-align: right" required>
+                                            <span class="input-group-addon">hod</span>
+                                        </div>
+                                    </div>
+                                </div>
+							</div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="note">Poznámka</label>
+                                        <input id="note" type="text" class="form-control" name="note" placeholder="..." value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-success">Vygenerovat platbu</button>
+                                </div>
+                            </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+{% endblock %}

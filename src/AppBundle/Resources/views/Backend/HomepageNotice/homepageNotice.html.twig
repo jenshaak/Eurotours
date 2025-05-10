@@ -1,0 +1,87 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+
+    <div class="container">
+        <form action="" method="post">
+            <div class="row" style="margin-bottom: 20px">
+                <div class="col-md-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Sdělení na homepage
+                        </div>
+                        <div class="panel-body">
+
+                            <div class="checkbox" style="margin-bottom: 20px">
+                                <input type="hidden" name="show" value="0">
+                                <label><input type="checkbox" value="1" name="show"{% if homepageNotice.show %} checked{% endif %}>Zobrazovat sdělení</label>
+                            </div>
+
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active"><a href="#homepageNoticeCs" aria-controls="homepageNoticeCs" role="tab" data-toggle="tab">Čeština</a></li>
+                                <li role="presentation"><a href="#homepageNoticeEn" aria-controls="homepageNoticeEn" role="tab" data-toggle="tab">Anglicky</a></li>
+                                <li role="presentation"><a href="#homepageNoticeRu" aria-controls="homepageNoticeRu" role="tab" data-toggle="tab">Rusky</a></li>
+                                <li role="presentation"><a href="#homepageNoticeBg" aria-controls="homepageNoticeBg" role="tab" data-toggle="tab">Bulharsky</a></li>
+                                <li role="presentation"><a href="#homepageNoticeUk" aria-controls="homepageNoticeUk" role="tab" data-toggle="tab">Ukrajinsky</a></li>
+                            </ul>
+                            <div class="tab-content" style="padding-top: 10px">
+                                <div role="tabpanel" class="tab-pane active" id="homepageNoticeCs">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="homepageNotice_cs">Česky:</label>
+                                                <textarea name="homepageNotice[cs]" class="form-control" rows="5" id="homepageNotice_cs">{{ homepageNotice.content|languageCS }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="homepageNoticeEn">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="homepageNotice_en">Anglicky:</label>
+                                                <textarea name="homepageNotice[en]" class="form-control" rows="5" id="homepageNotice_en">{{ homepageNotice.content|languageEN }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="homepageNoticeRu">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="homepageNotice_ru">Rusky:</label>
+                                                <textarea name="homepageNotice[ru]" class="form-control" rows="5" id="homepageNotice_ru">{{ homepageNotice.content|languageRU }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="homepageNoticeBg">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="homepageNotice_bg">Bulharsky:</label>
+                                                <textarea name="homepageNotice[bg]" class="form-control" rows="5" id="homepageNotice_bg">{{ homepageNotice.content|languageBG }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="homepageNoticeUk">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="homepageNotice_uk">Ukrajinsky:</label>
+                                                <textarea name="homepageNotice[uk]" class="form-control" rows="5" id="homepageNotice_uk">{{ homepageNotice.content|languageUK }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">Uložit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

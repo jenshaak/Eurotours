@@ -1,0 +1,868 @@
+services:
+
+    # session
+
+    session:
+        class: Symfony\Component\HttpFoundation\Session\Session
+        calls:
+            - [ registerBag, [ "@bag.language" ] ]
+            - [ registerBag, [ "@bag.currency" ] ]
+
+    bag.language:
+        class: AppBundle\VO\LanguageBag
+
+    bag.currency:
+        class: AppBundle\VO\CurrencyBag
+
+
+    # others
+
+    Symfony\Bundle\AsseticBundle\AsseticBundle:
+        public: true
+
+
+    # controller
+
+    controller.backend.line:
+        class: AppBundle\Controller\Backend\LineController
+        autowire: true
+
+    controller.backend.tariff:
+        class: AppBundle\Controller\Backend\TariffController
+        autowire: true
+
+    controller.backend.external:
+        class: AppBundle\Controller\Backend\ExternalController
+        autowire: true
+
+    controller.frontend.route:
+        class: AppBundle\Controller\Frontend\RouteController
+        autowire: true
+
+    controller.frontend.order:
+        class: AppBundle\Controller\Frontend\OrderController
+        autowire: true
+
+    controller.frontend.homepage:
+        class: AppBundle\Controller\Frontend\HomepageController
+        autowire: true
+
+    controller.backend.order:
+        class: AppBundle\Controller\Backend\OrderController
+        autowire: true
+
+    controller.frontend.payment:
+        class: AppBundle\Controller\Frontend\PaymentController
+        autowire: true
+
+    controller.backend.homepage:
+        class: AppBundle\Controller\Frontend\HomepageController
+        autowire: true
+
+    controller.backend.city:
+        class: AppBundle\Controller\Backend\CityController
+        autowire: true
+
+    controller.backend.station:
+        class: AppBundle\Controller\Backend\StationController
+        autowire: true
+
+    controller.frontend.language:
+        class: AppBundle\Controller\Frontend\LanguageController
+        autowire: true
+
+    controller.frontend.currency:
+        class: AppBundle\Controller\Frontend\CurrencyController
+        autowire: true
+
+    controller.frontend.translate:
+        class: AppBundle\Controller\Backend\TranslateController
+        autowire: true
+
+    controller.frontend.externalTicket:
+        class: AppBundle\Controller\Frontend\ExternalTicketController
+        autowire: true
+
+    controller.backend.carrier:
+        class: AppBundle\Controller\Backend\CarrierController
+        autowire: true
+
+    controller.backend.ticket:
+        class: AppBundle\Controller\Backend\TicketController
+        autowire: true
+
+    controller.backend.payment:
+        class: AppBundle\Controller\Backend\PaymentController
+        autowire: true
+
+    controller.backend.schedule:
+        class: AppBundle\Controller\Backend\ScheduleController
+        autowire: true
+
+    controller.frontend.login:
+        class: AppBundle\Controller\Frontend\LoginController
+        autowire: true
+
+    controller.frontend.seo:
+        class: AppBundle\Controller\Frontend\SeoController
+        autowire: true
+
+    controller.backend.seat:
+        class: AppBundle\Controller\Backend\SeatController
+        autowire: true
+
+    controller.backend.user:
+        class: AppBundle\Controller\Backend\UserController
+        autowire: true
+
+    controller.backend.seatsSold:
+        class: AppBundle\Controller\Backend\SeatsSoldController
+        autowire: true
+
+    controller.backend.seatsSettings:
+        class: AppBundle\Controller\Backend\SeatsSettingsController
+        autowire: true
+
+    controller.backend.testTicket:
+        class: AppBundle\Controller\Frontend\TestTicketController
+        autowire: true
+
+    controller.frontend.oldSite:
+        class: AppBundle\Controller\Frontend\OldSiteController
+        autowire: true
+
+    controller.backend.homepageNotice:
+        class: AppBundle\Controller\Backend\HomepageNoticeController
+        autowire: true
+
+
+    # service
+
+    service.carrier:
+        class: AppBundle\Service\CarrierService
+        autowire: true
+
+    service.city:
+        class: AppBundle\Service\CityService
+        autowire: true
+
+    service.country:
+        class: AppBundle\Service\CountryService
+        autowire: true
+
+    service.language:
+        class: AppBundle\Service\LanguageService
+        autowire: true
+
+    service.line:
+        class: AppBundle\Service\LineService
+        autowire: true
+
+    service.station:
+        class: AppBundle\Service\StationService
+        autowire: true
+
+    service.lineStation:
+        class: AppBundle\Service\LineStationService
+        autowire: true
+
+    service.schedule:
+        class: AppBundle\Service\ScheduleService
+        autowire: true
+
+    service.fare:
+        class: AppBundle\Service\FareService
+        autowire: true
+
+    service.tariff:
+        class: AppBundle\Service\TariffService
+        autowire: true
+
+    service.router:
+        class: AppBundle\Service\RouteService
+        autowire: true
+
+    service.scheduleLineStation:
+        class: AppBundle\Service\ScheduleLineStationService
+        autowire: true
+
+    service.externalCity:
+        class: AppBundle\Service\ExternalCityService
+        autowire: true
+
+    service.externalStation:
+        class: AppBundle\Service\ExternalStationService
+        autowire: true
+
+    service.externalRoute:
+        class: AppBundle\Service\ExternalRouteService
+        autowire: true
+
+    service.dateFormat:
+        class: AppBundle\Service\DateFormatService
+        autowire: true
+
+    service.search:
+        class: AppBundle\Service\SearchService
+        autowire: true
+
+    service.searchExternal:
+        class: AppBundle\Service\SearchExternalService
+        autowire: true
+
+    service.externalTariff:
+        class: AppBundle\Service\ExternalTariffService
+        autowire: true
+
+    service.routeTariff:
+        class: AppBundle\Service\RouteTariffService
+        autowire: true
+
+    service.order:
+        class: AppBundle\Service\OrderService
+        autowire: true
+
+    service.orderPerson:
+        class: AppBundle\Service\OrderPersonService
+        autowire: true
+
+    service.payment:
+        class: AppBundle\Service\PaymentService
+        autowire: true
+
+    service.routeCombination:
+        class: AppBundle\Service\RouteCombinationService
+        autowire: true
+
+    service.keyValue:
+        class: AppBundle\Service\KeyValueService
+        autowire: true
+
+    service.buy:
+        class: AppBundle\Service\BuyService
+        autowire: true
+
+    service.externalTicket:
+        class: AppBundle\Service\ExternalTicketService
+        autowire: true
+
+    service.webDriver:
+        class: AppBundle\Service\WebDriverService
+        autowire: true
+        arguments:
+            - "%selenium_url%"
+
+    service.gotenberg:
+        class: AppBundle\Service\GotenbergService
+        autowire: true
+        arguments:
+            - "%gotenberg_url%"
+
+    service.job:
+        class: AppBundle\Service\JobService
+        autowire: true
+
+    service.email:
+        class: AppBundle\Service\EmailService
+        calls:
+            - [ setMailer, [ "@mailer" ] ]
+            - [ setTwigEngine, [ "@templating" ] ]
+            - [ setLanguageService, [ "@service.language" ] ]
+            - [ setContainer, [ "@service_container" ] ]
+            - [ setTranslator, [ "@translator" ] ]
+            - [ setUploadService, [ "@service.upload" ] ]
+
+    service.user:
+        class: AppBundle\Service\UserService
+        autowire: true
+
+    service.externalTicketGenerator:
+        class: AppBundle\Service\ExternalTicketGeneratorService
+        autowire: true
+
+    service.upload:
+        class: AppBundle\Service\UploadService
+        autowire: true
+        arguments:
+            - "%upload_folder%"
+            - "%web_folder%"
+
+    service.book:
+        class: AppBundle\Service\BookService
+        autowire: true
+
+    service.seatsPlan:
+        class: AppBundle\Service\SeatsPlanService
+        autowire: true
+
+    service.seat:
+        class: AppBundle\Service\SeatService
+        autowire: true
+
+    service.internalTicket:
+        class: AppBundle\Service\InternalTicketService
+        autowire: true
+
+    service.dateTimeService:
+        class: AppBundle\Service\DateTimeService
+        autowire: true
+
+    service.selectSeat:
+        class: AppBundle\Service\SelectSeatService
+        autowire: true
+
+    service.flash:
+        class: AppBundle\Service\FlashService
+        autowire: true
+
+    service.internalTicketGenerator:
+        class: AppBundle\Service\InternalTicketGeneratorService
+        autowire: true
+
+    service.simpleInternalTicketGenerator:
+        class: AppBundle\Service\SimpleInternalTicketGeneratorService
+        autowire: true
+
+    service.activity:
+        class: AppBundle\Service\ActivityService
+        autowire: true
+
+    service.seoCityCombination:
+        class: AppBundle\Service\SeoCityCombinationService
+        autowire: true
+
+    service.stringService:
+        class: AppBundle\Service\StringService
+        autowire: true
+
+
+    # repository
+
+    repository.language:
+        class: AppBundle\Repository\LanguageRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:Language" ]
+
+    repository.carrier:
+        class: AppBundle\Repository\CarrierRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:Carrier" ]
+
+    repository.country:
+        class: AppBundle\Repository\CountryRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:Country" ]
+
+    repository.city:
+        class: AppBundle\Repository\CityRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:City" ]
+
+    repository.line:
+        class: AppBundle\Repository\LineRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:Line" ]
+
+    repository.station:
+        class: AppBundle\Repository\StationRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:Station" ]
+
+    repository.lineStation:
+        class: AppBundle\Repository\LineStationRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:LineStation" ]
+
+    repository.schedule:
+        class: AppBundle\Repository\ScheduleRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:Schedule" ]
+
+    repository.scheduleLineStation:
+        class: AppBundle\Repository\ScheduleLineStationRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:ScheduleLineStation" ]
+
+    repository.fare:
+        class: AppBundle\Repository\FareRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:Fare" ]
+
+    repository.tariff:
+        class: AppBundle\Repository\TariffRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:Tariff" ]
+
+    repository.externalCity:
+        class: AppBundle\Repository\ExternalCityRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:ExternalCity" ]
+
+    repository.externalStation:
+        class: AppBundle\Repository\ExternalStationRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:ExternalStation" ]
+
+    repository.search:
+        class: AppBundle\Repository\SearchRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:Search" ]
+
+    repository.route:
+        class: AppBundle\Repository\RouteRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:Route" ]
+
+    repository.searchExternal:
+        class: AppBundle\Repository\SearchExternalRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:SearchExternal" ]
+
+    repository.order:
+        class: AppBundle\Repository\OrderRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:Order" ]
+
+    repository.externalTariff:
+        class: AppBundle\Repository\ExternalTariffRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:ExternalTariff" ]
+
+    repository.routeTariff:
+        class: AppBundle\Repository\RouteTariffRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:RouteTariff" ]
+
+    repository.orderPerson:
+        class: AppBundle\Repository\OrderPersonRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:OrderPerson" ]
+
+    repository.payment:
+        class: AppBundle\Repository\PaymentRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:Payment" ]
+
+    repository.routeCombination:
+        class: AppBundle\Repository\RouteCombinationRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:RouteCombination" ]
+
+    repository.routeTariffCombination:
+        class: AppBundle\Repository\RouteTariffCombinationRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:RouteTariffCombination" ]
+
+    repository.keyValue:
+        class: AppBundle\Repository\KeyValueRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:KeyValue" ]
+
+    repository.externalTicket:
+        class: AppBundle\Repository\ExternalTicketRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:ExternalTicket" ]
+
+    repository.job:
+        class: JMS\JobQueueBundle\Entity\Repository\JobRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments:
+            - JMS\JobQueueBundle\Entity\Job
+        calls:
+            - [ setDispatcher, [ "@event_dispatcher" ] ]
+            - [ setRegistry, [ "@doctrine" ] ]
+
+    repository.book:
+        class: AppBundle\Repository\BookRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:Book" ]
+
+    repository.seatsPlan:
+        class: AppBundle\Repository\SeatsPlanRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:SeatsPlan" ]
+
+    repository.seat:
+        class: AppBundle\Repository\SeatRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:Seat" ]
+
+    repository.internalTicket:
+        class: AppBundle\Repository\InternalTicketRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:InternalTicket" ]
+
+    repository.orderPersonRouteTariff:
+        class: AppBundle\Repository\OrderPersonRouteTariffRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:OrderPersonRouteTariff" ]
+
+    repository.user:
+        class: AppBundle\Repository\UserRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:User" ]
+
+    repository.activity:
+        class: AppBundle\Repository\ActivityRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:Activity" ]
+
+    repository.seoCityCombinatio:
+        class: AppBundle\Repository\SeoCityCombinationRepository
+        factory: [ "@doctrine", "getRepository" ]
+        arguments: [ "AppBundle:SeoCityCombination" ]
+
+
+    # widgets
+
+    widget.backend.menu:
+        class: AppBundle\Widget\Backend\MenuWidget
+        autowire: true
+        parent: motvicka_widget.widget.abstract
+
+    widget.frontend.searchForm:
+        class: AppBundle\Widget\Frontend\SearchFormWidget
+        autowire: true
+        parent: motvicka_widget.widget.abstract
+
+    widget.frontend.route:
+        class: AppBundle\Widget\Frontend\RouteWidget
+        autowire: true
+        parent: motvicka_widget.widget.abstract
+
+    widget.frontend.routes:
+        class: AppBundle\Widget\Frontend\RoutesWidget
+        autowire: true
+        parent: motvicka_widget.widget.abstract
+
+    widget.frontend.languageCurrencySwitcher:
+        class: AppBundle\Widget\Frontend\LanguageCurrencySwitcherWidget
+        autowire: true
+        parent: motvicka_widget.widget.abstract
+
+    widget.backend.tariffConditions:
+        class: AppBundle\Widget\Backend\TariffConditionsWidget
+        autowire: true
+        parent: motvicka_widget.widget.abstract
+
+    widget.backend.externalTariffConditions:
+        class: AppBundle\Widget\Backend\ExternalTariffConditionsWidget
+        autowire: true
+        parent: motvicka_widget.widget.abstract
+
+    widget.frontend.scheduleTimeTable:
+        class: AppBundle\Widget\Frontend\ScheduleTimeTableWidget
+        autowire: true
+        parent: motvicka_widget.widget.abstract
+
+    widget.backend.seatsPlan:
+        class: AppBundle\Widget\Backend\SeatsPlanWidget
+        autowire: true
+        parent: motvicka_widget.widget.abstract
+
+    widget.backend.scheduleSeatsOverview:
+        class: AppBundle\Widget\Backend\ScheduleSeatsOverviewWidget
+        autowire: true
+        parent: motvicka_widget.widget.abstract
+
+    widget.backend.flash:
+        class: AppBundle\Widget\Backend\FlashWidget
+        autowire: true
+        parent: motvicka_widget.widget.abstract
+
+    widget.backend.scheduleSeatsSettings:
+        class: AppBundle\Widget\Backend\ScheduleSeatsSettingsWidget
+        autowire: true
+        parent: motvicka_widget.widget.abstract
+
+    widget.backend.activity:
+        class: AppBundle\Widget\Backend\ActivityWidget
+        autowire: true
+        parent: motvicka_widget.widget.abstract
+
+    widget.backend.scheduleNote:
+        class: AppBundle\Widget\Backend\ScheduleNoteWidget
+        autowire: true
+        parent: motvicka_widget.widget.abstract
+
+    widget.frontend.menu:
+        class: AppBundle\Widget\Frontend\MenuWidget
+        autowire: true
+        parent: motvicka_widget.widget.abstract
+
+    widget.frontend.contactBox:
+        class: AppBundle\Widget\Frontend\ContactBoxWidget
+        autowire: true
+        parent: motvicka_widget.widget.abstract
+
+
+    # twig
+
+    twig.extension.languageString:
+        class: AppBundle\Twig\LanguageStringExtension
+        calls:
+            - [ setLanguageService, [ "@service.language" ] ]
+        tags: [{ name: twig.extension }]
+
+    twig.extension.externalType:
+        class: AppBundle\Twig\ExternalTypeExtension
+        tags: [{ name: twig.extension }]
+
+    twig.extension.dateFormat:
+        class: AppBundle\Twig\DateFormatExtension
+        tags: [{ name: twig.extension }]
+        autowire: true
+
+    twig.extension.timeAgo:
+        class: AppBundle\Twig\TimeAgoExtension
+        tags: [{ name: twig.extension }]
+        autowire: true
+
+    twig.extension.routeCombinationsJson:
+        class: AppBundle\Twig\RouteCombinationsJsonExtension
+        tags: [{ name: twig.extension }]
+        autowire: true
+
+    twig.extension.priceCurrency:
+        class: AppBundle\Twig\PriceCurrencyExtension
+        tags: [{ name: twig.extension }]
+        autowire: true
+
+    twig.extension.domain:
+        class: AppBundle\Twig\DomainExtension
+        tags: [{ name: twig.extension }]
+        autowire: true
+
+    twig.extension.dayInWeek:
+        class: AppBundle\Twig\DayInWeekExtension
+        tags: [{ name: twig.extension }]
+        autowire: true
+
+    twig.extension.userRole:
+        class: AppBundle\Twig\UserRoleExtension
+        tags: [{ name: twig.extension }]
+        autowire: true
+
+    twig.extension.ticketType:
+        class: AppBundle\Twig\TicketTypeExtension
+        tags: [{ name: twig.extension }]
+        autowire: true
+
+    twig.extension.nonBreakingSpace:
+        class: AppBundle\Twig\NonBreakingSpaceExtension
+        tags: [{ name: twig.extension }]
+        autowire: true
+
+    twig.extension.bookType:
+        class: AppBundle\Twig\BookTypeExtension
+        tags: [{ name: twig.extension }]
+        autowire: true
+
+
+    # command
+
+    command.importLocations:
+        class: AppBundle\Command\ImportLocationsCommand
+        autowire: true
+        tags:
+            - { name: console.command }
+
+    command.importCarriers:
+        class: AppBundle\Command\ImportCarriersCommand
+        autowire: true
+        tags:
+            - { name: console.command }
+
+    command.importLines:
+        class: AppBundle\Command\ImportLinesCommand
+        autowire: true
+        tags:
+            - { name: console.command }
+
+    command.testStudentAgency:
+        class: AppBundle\Command\TestStudentAgencyCommand
+        autowire: true
+        tags:
+            - { name: console.command }
+
+    command.processAdapters:
+        class: AppBundle\Command\ProcessAdaptersCommand
+        autowire: true
+        tags:
+            - { name: console.command }
+
+    command.importTariffs:
+        class: AppBundle\Command\ImportTariffsCommand
+        autowire: true
+        tags:
+            - { name: console.command }
+
+    command.buyOrder:
+        class: AppBundle\Command\BuyOrderCommand
+        autowire: true
+        tags:
+            - { name: console.command }
+
+    command.doctrine.fillObjectType:
+        class: AppBundle\Command\FillDoctrineObjectTypeCommand
+        autowire: true
+        tags:
+            - { name: console.command }
+
+    command.syncExternals:
+        class: AppBundle\Command\SyncExternalsCommand
+        autowire: true
+        tags:
+            - { name: console.command }
+
+    command.createOrderPersonRouteTariffs:
+        class: AppBundle\Command\CreateOrderPersonRouteTariffsCommand
+        autowire: true
+        tags:
+            - { name: console.command }
+
+    command.seoPages:
+        class: AppBundle\Command\SeoPagesCommand
+        autowire: true
+        tags:
+            - { name: console.command }
+
+    command.cancelExpireOrders:
+        class: AppBundle\Command\CancelExpiredOrdersCommand
+        autowire: true
+        tags:
+            - { name: console.command }
+
+    command.cleanDatabase:
+        class: AppBundle\Command\CleanDatabaseCommand
+        autowire: true
+        tags:
+            - { name: console.command }
+
+    command.nikoloTariffsFix:
+        class: AppBundle\Command\NikoloTariffsFixCommand
+        autowire: true
+        tags:
+            - { name: console.command }
+
+    command.regabusCityNameCheck:
+        class: AppBundle\Command\RegabusCityNameCheckCommand
+        autowire : true
+        tags:
+            - { name: console.command }
+
+    command.externalTariffFix:
+        class: AppBundle\Command\ExternalTariffsFixCommand
+        autowire: true
+        tags:
+            - { name: console.command }
+            
+    command.sendTestEmail:
+        class: AppBundle\Command\SendTestEmailCommand
+        autowire: true
+        tags:
+            - { name: console.command }
+
+    # routers
+
+    router.studentAgency:
+        class: AppBundle\Routers\StudentAgencyRouter
+        autowire: true
+
+    router.ecolines:
+        class: AppBundle\Routers\EcolinesRouter
+        autowire: true
+
+    router.eastExpress:
+        class: AppBundle\Routers\EastExpressRouter
+        autowire: true
+
+    router.flixbus:
+        class: AppBundle\Routers\FlixbusRouter
+        autowire: true
+
+    router.eurolines:
+        class: AppBundle\Routers\EurolinesRouter
+        autowire: true
+
+    router.nikolo:
+        class: AppBundle\Routers\NikoloRouter
+        autowire: true
+        calls:
+            - [ "setConnector", [ "@connector.nikolo" ] ]
+
+    router.infobus:
+        class: AppBundle\Routers\InfobusRouter
+        autowire: true
+        calls:
+            - [ "setConnector", [ "@connector.infobus" ] ]
+
+    router.regabus:
+        class: AppBundle\Routers\RegabusRouter
+        autowire: true
+
+    router.blabla:
+        class: AppBundle\Routers\BlablaRouter
+        autowire: true
+
+    router.transTempo:
+        class: AppBundle\Routers\TransTempoRouter
+        autowire: true
+
+    router.LikeBus:
+        class: AppBundle\Routers\LikeBusRouter
+        autowire: true
+
+    # connectors
+
+    connector.studentAgency:
+        class: AppBundle\Connectors\StudentAgencyConnector
+        autowire: true
+
+    connector.ecolines:
+        class: AppBundle\Connectors\EcolinesConnector
+        autowire: true
+
+    connector.infobus:
+        class: AppBundle\Connectors\InfobusConnector
+        autowire: true
+
+    connector.eastExpress:
+        class: AppBundle\Connectors\EastExpressConnector
+        autowire: true
+
+    connector.flixbus:
+        class: AppBundle\Connectors\FlixbusConnector
+        autowire: true
+
+    connector.eurolines:
+        class: AppBundle\Connectors\EurolinesConnector
+        autowire: true
+
+    connector.eurolinesOLD:
+        class: AppBundle\Connectors\EurolinesConnectorOLD
+        autowire: true
+
+    connector.nikolo:
+        class: AppBundle\Connectors\NikoloConnector
+        autowire: true
+
+    connector.regabus:
+        class: AppBundle\Connectors\RegabusConnector
+        autowire: true
+
+    connector.transTempo:
+        class: AppBundle\Connectors\TransTempoConnector
+        autowire: true
+
+    connector.LikeBus:
+        class: AppBundle\Connectors\LikeBusConnector
+        autowire: true
+
+    # listeners
+
+    listener.language:
+        class: AppBundle\EventListener\LanguageListener
+        autowire: true
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 15 }

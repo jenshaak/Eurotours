@@ -1,0 +1,11 @@
+{% macro weekDays(schedule) %}
+	<select name="weekDays[{{ schedule.id }}][]" class="selectpicker" multiple data-width="142px">
+		<option title="1" value="0"{% if 0 in schedule.weekDays %} selected{% endif %}>Pondělí</option>
+		<option title="2" value="1"{% if 1 in schedule.weekDays %} selected{% endif %}>Úterý</option>
+		<option title="3" value="2"{% if 2 in schedule.weekDays %} selected{% endif %}>Středa</option>
+		<option title="4" value="3"{% if 3 in schedule.weekDays %} selected{% endif %}>Čtvrtek</option>
+		<option title="5" value="4"{% if 4 in schedule.weekDays %} selected{% endif %}>Pátek</option>
+		<option title="6" value="5"{% if 5 in schedule.weekDays %} selected{% endif %}>Sobota</option>
+		<option title="7" value="6"{% if 6 in schedule.weekDays %} selected{% endif %}>Neděle</option>
+	</select>
+{% endmacro %}

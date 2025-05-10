@@ -1,0 +1,64 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+
+	<div class="container">
+		<form action="{{ path("backend_externals_cities_save") }}" method="post">
+			<div class="row">
+				<div class="col-md-12">
+					<table class="table table-striped">
+						<thead>
+						<tr>
+							<th>Dopravce</th>
+							<th>Externí město</th>
+							<th>Interní město</th>
+						</tr>
+						</thead>
+						<tbody>
+						{% for externalCity in externalCities|slice(0, 5) %}
+							<tr>
+								<td>
+									{% if externalCity is externalCityEastExpress %}
+										EastExpress
+									{% elseif externalCity is externalCityEcolines %}
+										Ecolines
+									{% elseif externalCity is externalCityEurolines %}
+										Eurolines
+									{% elseif externalCity is externalCityFlixbus %}
+										Flixbus
+									{% elseif externalCity is externalCityInfobus %}
+										Infobus
+									{% elseif externalCity is externalCityNikolo %}
+										Nikolo
+									{% elseif externalCity is externalCityStudentAgency %}
+										StudentAgency
+									{% elseif externalCity is externalCityRegabus %}
+										Regabus
+									{% endif %}
+								</td>
+								<td>
+									{{ externalCity.name|language }}
+								</td>
+								<td>
+									<select name="cities[{{ externalCity.id }}]" class="selectpicker" data-live-search="true">
+										<option value="" style="color: silver;">Zvolte odpovídající město</option>
+										{% for city in cities %}
+											<option data-tokens="{{ city.allLanguagesNames|join(" ") }}" value="{{ city.id }}"{% if externalCity.city == city %} selected{% endif %}>{{ city.name|language }}</option>
+										{% endfor %}
+									</select>
+								</td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<button type="submit" class="btn btn-success">Uložit</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+{% endblock %}

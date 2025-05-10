@@ -1,0 +1,92 @@
+menu.homepage: 'Vyhledat spoj'
+menu.claim: 'Mezinárodní autobusové jízdenky online'
+menu.bulgaria: Bulharsko
+menu.turkish: Turecko
+menu.timetables: 'Jízdní řády'
+menu.airtickets: Letenky
+menu.contact: Kontakty
+menu.links: Odkazy
+searchForm.find: Vyhledat
+route.selectLine: 'Zvolit spoj'
+route.arrival: příjezd
+route.variablePrice: 'variabilní cena'
+route.ofDay: dne
+route.way: Cesta
+route.canPayOnline: 'Možnost platit online'
+search.totalPrice: 'Celková cena'
+search.orderTickets: 'Objednat jízdenky'
+order.fullName: 'Jméno a příjmení'
+order.email: 'E-mailová adresa'
+order.phone: Telefon
+order.dob: Dátum narození
+order.documentNumber: Číslo dokumentu
+order.tariffThere: 'Tarif tam'
+order.tariffBack: 'Tarif zpět'
+order.fillPassengerData: 'Vyplňte údaje o cestujících'
+order.buy: Zakoupit
+order.book: Rezervovat
+order.passenger: cestující
+order.termsAndConditionsCheck: 'Souhlasím s [1-obchodními podmínkami] a se [2-zpracováním osobních údajů].'
+order.termsAndConditionsError: 'Je nutné zaškrtnout souhlas.'
+searchForm.iWantReturn: 'Chci i zpáteční jízdenku'
+searchForm.onlyOpenReturn: 'Pouze otevřené zpáteční'
+searchForm.dateDeparture: 'Datum odjezdu'
+searchForm.to: Kam
+searchForm.from: Odkud
+searchForm.switchDates: 'Datum odjezdu musí být dříve než datum návratu.'
+searchForm.switchDatesSecond: 'Datum návratu musí být později než datum příjezdu.'
+searchForm.checkDate: 'Zkontrolujte datum'
+search.openTicket: 'otevřená zpáteční'
+email.tickets.subject: 'Eurotours: Jízdenka'
+email.tickets.introduction: 'Dobrý den, děkujeme za vaší důvěru. V tomto e-mailu naleznete vámi objednané jízdenky na níže uvedené spoje. Jízdenky si, prosím, vytiskněte.'
+order.selectPassengerSeats: 'Vyberte sedadla'
+homepage.searchFormTitle: 'Vyhledej jízdenky po celé Evropě'
+homepage.claim.title: 'Autobusové jízdenky všech evropských dopravců'
+homepage.claim.subtitle1: '!'
+homepage.claim.subtitle2: '!'
+homepage.claim.subtitle3: 'Možnost platit kartou, na bankovní účet i hotově'
+homepage.claim.subtitle4: 'Telefonní karty'
+homepage.claim.subtitle5: 'Letenky'
+homepage.claim.subtitle6: 'Expresní převody peněz'
+homepage.contactBox.title: 'Navštivte nás, zavolejte nebo napište'
+homepage.contactBox.florenc: 'Autobusové nádraží Praha Florenc'
+homepage.contactBox.address: 'Křižíkova 2110/2b, Praha 8, 186 00'
+homepage.contactBox.place: 'HALA 1, POKLADNA 15 a 19'
+homepage.contactBox.facebook: 'Facebooková stránka Eurotours'
+footer.adminLogin: 'Přihlášení administrátora'
+order.selectRoute: 'Vyberte konkrétní spoj a typ jízdného'
+order.selectRouteTwoWayDescription: 'Vyberte, prosím, konkrétní spoj a zvolte typ jednotlivých jízdenek. Celkový počet cestujících musí být shodny na cestě tam i zpět.'
+order.selectRouteDescription: 'Vyberte, prosím, konkrétní spoj a zvolte typ jednotlivých jízdenek.'
+order.backToSearch: 'Zpět na vyhledávání'
+order.fillName: 'Vyplňte prosím Vaše jméno.'
+order.fillEmail: 'Vyplňte prosím Váš e-mail.'
+order.fillPhone: 'Vyplňte prosím své telefonní číslo.'
+order.fillPassengerName: 'Vyplňte jméno cestujícího.'
+order.fillPassengerPhone: 'Vyplňte telefonní číslo cestujícího.'
+order.fillPassengerDob: Vyplňte dátum narození cestujícího
+order.fillPassengerDocumentNumber: Vyplňte číslo dokumentu cestujícího
+order.priceThere: 'Cena (cesta tam)'
+order.priceBack: 'Cena (cesta zpět)'
+order.sellerFeeThere: 'Tax (cesta tam)'
+order.sellerFeeBack: 'Tax (cesta zpět)'
+order.thanksReservation: 'Děkujeme za vaší rezervaci'
+order.thanksOrder: 'Děkujeme za vaší objednávku'
+order.paymentOfOrder: 'Platba objednávky'
+order.yourOrder: 'Vaše objednávka'
+order.payByCard: 'Zaplatit jízdenku platební kartou'
+order.reservationSuccess: 'Vaše rezervace byla úspěšně odeslána. Děkujeme Vám, že jste si rezervovali jízdenku u naší společnosti. V nejbližší době Vás budeme kontaktovat na uvedené kontaktní údaje.'
+order.paymentSuccess: 'Platba proběhla v pořádku. Děkujeme Vám, že jste si rezervovali jízdenku u naší společnosti.'
+order.ticketsInEmail: 'Jízdenky máte ve svém e-mailu.'
+order.price: Cena
+order.sellerFee: Tax
+order.withSellerFee: 's taxou'
+order.lackOfSeats: 'Na zvolený spoj není dostatek volných míst.'
+order.lackOfSeatsCall: 'Pokusíme se vám i tak volné místo zajistit. Kontaktuje prosím dispečera na čísle +420 724 132 365.'
+order.changeOrder: 'Změnit údaje objednávky'
+order.selectSeats: 'Vyberte sedadla'
+order.selectedSeat: 'Zvolené sedadlo'
+order.clueSelectedSeat: 'vybrané sedadlo'
+order.clueOtherPassenger: spolucestující
+order.clueAvailableSeat: 'volné sedadlo'
+order.clueNotAvailableSeat: 'nedostupné sedadlo'
+route.SelectTariff: 'Vyberte tarif a počet jízdenek.'

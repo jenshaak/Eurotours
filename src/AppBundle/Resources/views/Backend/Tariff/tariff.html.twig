@@ -1,0 +1,479 @@
+{% extends "AppBundle:Backend/Layout:Skeleton.html.twig" %}
+
+{% block menu %}
+<div class="container-fluid container-tariff-header">
+	<div class="line-header">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-2">
+					<a href="{{ path("backend_line", { line: tariff.line.id, direction: "there" }) }}" class="btn btn-default" style="margin-top: 12px"><i class="fa fa-angle-left"></i><i class="fa fa-angle-left"></i> Detail linky</a>
+				</div>
+				<div class="col-md-7">
+					<p>Editace tarifu <strong>{{ tariff.name|language }}</strong> ({{ tariff.currency }}) linky <strong>{{ tariff.line.code }}</strong> ({{ tariff.line.carrier.name }})</p>
+				</div>
+				<div class="col-md-3">
+					<button type="submit" class="btn btn-success pull-right" data-action="submitTariffForm">Uložit změny</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<form action="" method="post" data-action="tariffForm">
+	<button type="submit" style="display: none"></button>
+	<div class="container-fluid container-tariff">
+
+		<ul class="nav nav-tabs" role="tablist">
+			{% if tariff.type == "prices" %}
+			<li role="presentation" class="active"><a href="#tariffStationsThere" aria-controls="lineStationsThere" role="tab" data-toggle="tab">Ceník jízdného TAM</a></li>
+			<li role="presentation"><a href="#tariffStationsBack" aria-controls="lineStationsBack" role="tab" data-toggle="tab">Ceník jízdného ZPĚT</a></li>
+			<li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Nastavení tarifu</a></li>
+			{% else %}
+			<li role="presentation" class="active"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Nastavení tarifu</a></li>
+			{% endif %}
+			{% if tariff.temporaryFromTariff is null %}
+			<li role="presentation"><a href="#temporaryTariff" aria-controls="temporaryTariff" role="tab" data-toggle="tab">Vytvořit limitovaný tarif</a></li>
+			{% endif %}
+			<li role="presentation"><a href="#removeTariff" aria-controls="removeTariff" role="tab" data-toggle="tab">Odstranění / duplikace tarifu</a></li>
+		</ul>
+
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane{% if tariff.type == "prices" %} active{% endif %}" id="tariffStationsThere">
+				<div class="row">
+					<div class="col-md-12">
+                        <div class="table-tariff-container">
+                            <div class="table-tariff-top">
+                                <div></div>
+                                {% for toLineStation in tariff.line.getActiveLineStations("there") %}
+                                    <div>
+                                        {{ toLineStation.city.name|language }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div>
+                            </div>
+                            <div class="table-tariff-left">
+                                {% for fromLineStation in tariff.line.getActiveLineStations("there") if (tariff.line.id != 39 or fromLineStation.city.id == 41) %}
+                                    <div>
+                                        <strong>{{ fromLineStation.city.name|language }}</strong><br>
+                                        <small>{{ fromLineStation.station.name|language }}</small>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="table-tariff-content">
+                                {% for fromLineStation in tariff.line.getActiveLineStations("there") if (tariff.line.id != 39 or fromLineStation.city.id == 41) %}
+                                    <div class="table-tariff-content-row">
+                                        {% for toLineStation in tariff.line.getActiveLineStations("there") %}
+                                            <div class="table-tariff-content-col">
+                                                {% if toLineStation.weight > fromLineStation.weight %}
+                                                    {% set fare = tariff.getFareForLineStations(fromLineStation, toLineStation) %}
+                                                    <div class="form-group">
+                                                        <input type="text" name="price[{{ fromLineStation.id }}][{{ toLineStation.id }}]" class="form-control input-sm" value="{% if fare %}{% if fare.variablePrice %}v{% elseif fare.notAvailable %}n{% else %}{{ fare.priceCurrency|priceCurrency(false, tariff.currency) }}{% endif %}{% endif %}" style="width: 60px; text-align: right;">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="text" name="priceReturnAdd[{{ fromLineStation.id }}][{{ toLineStation.id }}]" class="form-control input-sm" value="{% if fare %}{% if fare.variablePriceReturn %}v{% elseif fare.notAvailableReturn %}n{% else %}{{ fare.priceReturnAddCurrency|priceCurrency(false, tariff.currency) }}{% endif %}{% endif %}" style="width: 60px; text-align: right;" {% if tariff.backWayByPercentDiscount != null %}readonly{% endif %}>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+					</div>
+				</div>
+			</div>
+
+			<div role="tabpanel" class="tab-pane" id="tariffStationsBack">
+				<div class="row">
+					<div class="col-md-12">
+                        <div class="table-tariff-container">
+                            <div class="table-tariff-top">
+                                <div></div>
+                                {% for toLineStation in tariff.line.getActiveLineStations("back") %}
+                                    <div>
+                                        {{ toLineStation.city.name|language }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div>
+                            </div>
+                            <div class="table-tariff-left">
+                                {% for fromLineStation in tariff.line.getActiveLineStations("back") if (tariff.line.id != 39 or fromLineStation.city.id == 41) %}
+                                    <div>
+                                        <strong>{{ fromLineStation.city.name|language }}</strong><br>
+                                        <small>{{ fromLineStation.station.name|language }}</small>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="table-tariff-content">
+                                {% for fromLineStation in tariff.line.getActiveLineStations("back") if (tariff.line.id != 39 or fromLineStation.city.id == 41) %}
+                                    <div class="table-tariff-content-row">
+                                        {% for toLineStation in tariff.line.getActiveLineStations("back") %}
+                                            <div class="table-tariff-content-col">
+                                                {% if toLineStation.weight > fromLineStation.weight %}
+                                                    {% set fare = tariff.getFareForLineStations(fromLineStation, toLineStation) %}
+                                                    <div class="form-group">
+                                                        <input type="text" name="price[{{ fromLineStation.id }}][{{ toLineStation.id }}]" class="form-control input-sm" value="{% if fare %}{% if fare.variablePrice %}v{% elseif fare.notAvailable %}n{% else %}{{ fare.priceCurrency|priceCurrency(false, tariff.currency) }}{% endif %}{% endif %}" style="width: 60px; text-align: right;">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="text" name="priceReturnAdd[{{ fromLineStation.id }}][{{ toLineStation.id }}]" class="form-control input-sm" value="{% if fare %}{% if fare.variablePriceReturn %}v{% elseif fare.notAvailableReturn %}n{% else %}{{ fare.priceReturnAddCurrency|priceCurrency(false, tariff.currency) }}{% endif %}{% endif %}" style="width: 60px; text-align: right;" {% if tariff.backWayByPercentDiscount != null %}readonly{% endif %}>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-small btn-default" style="margin: 15px 0" data-action="setPricesBackFromThere" data-url="{{ path('backend_ajax_tariff_setPricesBackFromThere', { tariff: tariff.id }) }}">
+                            Převzít ceny směru ZPĚT ze směru TAM
+                        </button>
+					</div>
+				</div>
+			</div>
+
+			<div role="tabpanel" class="tab-pane{% if tariff.type == "percent" %} active{% endif %}" id="settings">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row" style="margin-top: 20px">
+							<div class="col-md-12">
+								<div class="row">
+									<div class="col-md-2">
+										<div class="form-group">
+											<label for="name">Název tarifu (česky)</label>
+											<input id="name" type="text" class="form-control" name="name[cs]" placeholder="Název tarifu" value="{{ tariff.name|languageCS }}">
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											<label for="name">Název tarifu (anglicky)</label>
+											<input id="name" type="text" class="form-control" name="name[en]" placeholder="Název tarifu" value="{{ tariff.name|languageEN }}">
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="form-group">
+											<label for="name">Název tarifu (rusky)</label>
+											<input id="name" type="text" class="form-control" name="name[ru]" placeholder="Název tarifu" value="{{ tariff.name|languageRU }}">
+										</div>
+									</div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="name">Název tarifu (bulharsky)</label>
+                                            <input id="name" type="text" class="form-control" name="name[bg]" placeholder="Název tarifu" value="{{ tariff.name|languageBG }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="name">Název tarifu (ukrajinsky)</label>
+                                            <input id="name" type="text" class="form-control" name="name[uk]" placeholder="Název tarifu" value="{{ tariff.name|languageUK }}">
+                                        </div>
+                                    </div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								{% if tariff.temporaryFromTariff is not null %}
+									<h3>Limitovaný tarif</h3>
+									{% for temp in tariff.temporaryTariffRanges %}
+									<div class="panel panel-default" data-action="temporaryTariffPanel">
+										<div class="panel-body">
+											<div class="row">
+												<div class="col-md-4">
+													<div class="form-group" style="max-width: 280px">
+														<label>Datum platnosti limitovaného tarifu</label>
+														<div class="input-group input-daterange">
+															<input type="text" class="form-control" name="temporaryDateFrom[{{ temp.randomIdent }}]" value="{{ temp.dateFrom ? temp.dateFrom|date("j.n.Y") : "" }}">
+															<div class="input-group-addon">&nbsp;do&nbsp;</div>
+															<input type="text" class="form-control" name="temporaryDateTo[{{ temp.randomIdent }}]" value="{{ temp.dateTo ? temp.dateTo|date("j.n.Y") : ""}}">
+														</div>
+													</div>
+												</div>
+												<div class="col-md-4">
+													<div class="form-group">
+														<label>Deaktivovat následující slevové tarify</label>
+														<select name="temporaryExcludeTariffs[{{ temp.randomIdent }}][]" class="selectpicker" data-width="300px" multiple>
+															{% for t in line.percentTariffs if tariff.temporaryFromTariff == t.percentFromTariff %}
+																<option value="{{ t.id }}"{% if t.id in temp.excludeTariffs %} selected{% endif %}>{{ t.name|language }} ({% if t.currency %}{{ t.currency }}{% elseif (t.percentFromTariff) %}{{ t.percent }}% z {{ t.percentFromTariff.name|language }}{% endif %})</option>
+															{% endfor %}
+														</select>
+													</div>
+												</div>
+												<div class="col-md-2">
+													<div class="checkbox" style="margin-top: 20px">
+														<label><input type="checkbox" value="there" name="temporaryWay[{{ temp.randomIdent }}][]"{% if temp.there %} checked{% endif %}>Cesta TAM</label>
+													</div>
+													<div class="checkbox">
+														<label><input type="checkbox" value="back" name="temporaryWay[{{ temp.randomIdent }}][]"{% if temp.back %} checked{% endif %}>Cesta ZPĚT</label>
+													</div>
+												</div>
+												<div class="col-md-2">
+													{% if temp.randomIdent != "new" %}
+														<button type="button" class="btn btn-danger" style="margin-top: 25px; float: right" data-action="removeTemporaryRule"><i class="fa fa-times"></i></button>
+													{% endif %}
+												</div>
+											</div>
+										</div>
+									</div>
+									{% endfor %}
+								{% endif %}
+								{% if tariff.temporaryFromTariff is null %}
+									<button class="btn btn-default" type="button" style="margin-bottom: 20px" data-action="editTariffConditions" data-url="{{ path("backend_ajax_tariff_conditions", { tariff: tariff.id }) }}"><i class="fa fa-file-text-o"></i> Upravit podmínky tarifu</button>
+
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label for="allowDays">Tento tarif je dostupný jen X dní předem</label>
+                                                <input id="allowDays" type="text" class="form-control" name="allowDays" placeholder="vždy" value="{{ tariff.allowDays }}" style="width: 80px">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="excludeDays">Tento tarif není dostupný tyto dny</label>
+                                                <input id="excludeDays" type="text" class="form-control" name="excludeDays" placeholder="vždy" value="{{ tariff.excludeDays.string }}" style="width: 200px">
+                                            </div>
+                                            {% if tariff.type == "prices" %}
+                                                <div class="form-group">
+                                                    <label for="currency">Měna</label><br>
+                                                    <select name="currency" class="selectpicker">
+                                                        <option value="CZK"{% if tariff.currency == "CZK" %} selected{% endif %}>CZK</option>
+                                                        <option value="EUR"{% if tariff.currency == "EUR" %} selected{% endif %}>EUR</option>
+                                                        <option value="PLN"{% if tariff.currency == "PLN" %} selected{% endif %}>PLN</option>
+                                                        <option value="UAH"{% if tariff.currency == "UAH" %} selected{% endif %}>UAH</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="otherCurrencyTariff">Stejný tarif druhé měny</label><br>
+                                                    <select name="otherCurrencyTariff" class="selectpicker">
+                                                        <option value="">Tarif jen jedné měny</option>
+                                                        {% for t in line.tariffs if t != tariff %}
+                                                            <option value="{{ t.id }}"{% if t == tariff.otherCurrencyTariff %} selected{% endif %}>{{ t.name|language }} ({{ t.currency }})</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            {% endif %}
+                                            {% if tariff.type == "percent" %}
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="percent">Sleva</label>
+                                                            <div class="input-group" style="width: 100px">
+                                                                <input name="percent" type="text" id="percent" class="form-control text-right" value="{{ tariff.percent }}">
+                                                                <span class="input-group-addon">%</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group">
+                                                            <label for="percentFromTariff">z tarifu</label>
+                                                            <select name="percentFromTariff" class="selectpicker">
+                                                                <option value="" style="color: silver">Zvolte tarif</option>
+                                                                {% for t in line.tariffs if t != tariff %}
+                                                                    <option value="{{ t.id }}"{% if tariff.percentFromTariff == t %} selected{% endif %}>{{ t.name|language }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="checkbox">
+                                                <input type="hidden" name="backWayByPercentDiscountEnabled" value="0">
+                                                <label><input type="checkbox" value="1" name="backWayByPercentDiscountEnabled"{% if tariff.backWayByPercentDiscount != null%} checked{% endif %}>Cena zpáteční jízdenky je definována procentem slevy</label>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="backWayByPercentDiscount">Zpáteční jízdenka sleva</label>
+                                                <div class="input-group" style="width: 100px">
+                                                    <input name="backWayByPercentDiscount" type="text" id="backWayByPercentDiscount" class="form-control text-right" value="{{ tariff.backWayByPercentDiscount }}" placeholder="0" {% if tariff.backWayByPercentDiscount == null%} disabled{% endif %}>
+                                                    <span class="input-group-addon">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+								{% endif %}
+								{% if tariff.type == "percent" %}
+									<h3>Úprava slevy v termínech</h3>
+									<div class="row">
+										<div class="col-md-9">
+											{% for temp in tariff.temporaryPercentTariffRanges %}
+												<div class="panel panel-default" data-action="temporaryTariffPanel">
+													<div class="panel-body">
+														<div class="row">
+															<div class="col-md-5">
+																<div class="form-group" style="max-width: 280px">
+																	<label>Datum platnosti jiné výše slevy</label>
+																	<div class="input-group input-daterange">
+																		<input type="text" class="form-control" name="temporaryPercentDateFrom[{{ temp.randomIdent }}]" value="{{ temp.dateFrom ? temp.dateFrom|date("j.n.Y") : "" }}">
+																		<div class="input-group-addon">&nbsp;do&nbsp;</div>
+																		<input type="text" class="form-control" name="temporaryPercentDateTo[{{ temp.randomIdent }}]" value="{{ temp.dateTo ? temp.dateTo|date("j.n.Y") : ""}}">
+																	</div>
+																</div>
+															</div>
+															<div class="col-md-3">
+																<div class="form-group">
+																	<label>Sleva</label>
+																	<div class="input-group" style="width: 100px">
+																		<input name="temporaryPercent[{{ temp.randomIdent }}]" type="text" id="percent" class="form-control text-right" placeholder="{{ tariff.percent }}" value="{{ temp.percent }}">
+																		<span class="input-group-addon">%</span>
+																	</div>
+																</div>
+															</div>
+															<div class="col-md-2">
+																<div class="checkbox" style="margin-top: 20px">
+																	<label><input type="checkbox" value="there" name="temporaryPercentWay[{{ temp.randomIdent }}][]"{% if temp.there %} checked{% endif %}>Cesta TAM</label>
+																</div>
+																<div class="checkbox">
+																	<label><input type="checkbox" value="back" name="temporaryPercentWay[{{ temp.randomIdent }}][]"{% if temp.back %} checked{% endif %}>Cesta ZPĚT</label>
+																</div>
+															</div>
+															<div class="col-md-2">
+																{% if temp.randomIdent != "new" %}
+																	<button type="button" class="btn btn-danger" style="margin-top: 25px; float: right" data-action="removeTemporaryPercentRule"><i class="fa fa-times"></i></button>
+																{% endif %}
+															</div>
+														</div>
+													</div>
+												</div>
+											{% endfor %}
+										</div>
+									</div>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div role="tabpanel" class="tab-pane" id="temporaryTariff">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row" style="margin-top: 20px">
+							<div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="temporaryTariffNameLanguageCS">Název limitovaného tarifu (cs)</label>
+                                            <input id="temporaryTariffNameLanguageCS" type="text" class="form-control" name="temporaryTariffName[cs]" placeholder="Název tarifu" value="{{ tariff.name|languageCS }}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="temporaryTariffNameLanguageEN">Název limitovaného tarifu (en)</label>
+                                            <input id="temporaryTariffNameLanguageEN" type="text" class="form-control" name="temporaryTariffName[en]" placeholder="Název tarifu" value="{{ tariff.name|languageEN }}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="temporaryTariffNameLanguageRU">Název limitovaného tarifu (ru)</label>
+                                            <input id="temporaryTariffNameLanguageRU" type="text" class="form-control" name="temporaryTariffName[ru]" placeholder="Název tarifu" value="{{ tariff.name|languageRU }}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="temporaryTariffNameLanguageBG">Název limitovaného tarifu (bg)</label>
+                                            <input id="temporaryTariffNameLanguageBG" type="text" class="form-control" name="temporaryTariffName[bg]" placeholder="Název tarifu" value="{{ tariff.name|languageBG }}" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="temporaryTariffNameLanguageUK">Název limitovaného tarifu (ua)</label>
+                                            <input id="temporaryTariffNameLanguageUK" type="text" class="form-control" name="temporaryTariffName[uk]" placeholder="Název tarifu" value="{{ tariff.name|languageUK }}" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="max-width: 280px">
+                                    <label>Datum platnosti limitovaného tarifu</label>
+                                    <div class="input-group input-daterange">
+                                        <input type="text" class="form-control" name="temporaryDateFrom[0]">
+                                        <div class="input-group-addon">&nbsp;do&nbsp;</div>
+                                        <input type="text" class="form-control" name="temporaryDateTo[0]">
+                                    </div>
+                                </div>
+                                <div class="checkbox" style="margin-top: 15px">
+                                    <label><input type="checkbox" value="there" name="temporaryWay[0][]">Cesta TAM</label>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="back" name="temporaryWay[0][]">Cesta ZPĚT</label>
+                                </div>
+
+								<div class="row" style="margin-top: 20px">
+									<div class="col-md-3">
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<div class="checkbox" style="margin: 0">
+													<input type="hidden" name="addToTemporaryTariff" value="">
+													<label><input type="checkbox" value="percent" name="addToTemporaryTariff">Přidat procenta</label>
+												</div>
+											</div>
+											<div class="panel-body">
+												<div class="form-group">
+													<label for="percent">Přidat %</label>
+													<div class="input-group" style="width: 100px">
+														<input name="addToTemporaryTariffPercent" type="text" id="addToTemporaryTariffPercent" class="form-control text-right" disabled>
+														<span class="input-group-addon">%</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<div class="panel panel-default">
+											<div class="panel-heading">
+												<div class="checkbox" style="margin: 0">
+													<input type="hidden" name="addToTemporaryTariff" value="">
+													<label><input type="checkbox" value="fix" name="addToTemporaryTariff">Přidat pevnou částku</label>
+												</div>
+											</div>
+											<div class="panel-body">
+												<div class="form-group">
+													<label for="percent">Přidat Kč</label>
+													<div class="input-group" style="width: 100px">
+														<input name="addToTemporaryTariffFix" type="text" id="addToTemporaryTariffFix" class="form-control text-right" disabled>
+														<span class="input-group-addon">Kč</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<button type="button" class="btn btn-success" data-action="createTemporaryTariff">Vytvořit limitovaný tarif</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div role="tabpanel" class="tab-pane" id="removeTariff">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row" style="margin-top: 20px">
+							<div class="col-md-6">
+								<button type="button" class="btn btn-danger" data-action="removeTariff">Odstranit tarif "{{ tariff.name|language }}"</button>
+                                <button type="button" class="btn btn-info" data-action="duplicateTariff">Duplikovat tariff "{{ tariff.name|language }}"</button>
+                            </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+<form action="{{ path("backend_tariff_remove", { tariff: tariff.id }) }}" method="post" data-action="removeTariff"></form>
+    <form action="{{ path("backend_tarif_duplicate", { tariff: tariff.id }) }}" method="post" data-action="duplicateTariff"></form>
+<form action="{{ path("backend_tariff_create_temporary", { tariff: tariff.id }) }}" method="post" data-action="createTemporaryTariff">
+	<input type="hidden" name="name[cs]" value="" />
+    <input type="hidden" name="name[en]" value="" />
+    <input type="hidden" name="name[ru]" value="" />
+    <input type="hidden" name="name[bg]" value="" />
+    <input type="hidden" name="name[uk]" value="" />
+	<input type="hidden" name="addToTemporaryTariff" value="" />
+    <input type="hidden" name="addToTemporaryTariffValue" value="" />
+	<input type="hidden" name="temporaryDateFrom[0]" value="" />
+    <input type="hidden" name="temporaryDateTo[0]" value="" />
+    <input type="hidden" name="temporaryWay[0][0]" value="" />
+    <input type="hidden" name="temporaryWay[0][1]" value="" />
+</form>
+{% endblock %}

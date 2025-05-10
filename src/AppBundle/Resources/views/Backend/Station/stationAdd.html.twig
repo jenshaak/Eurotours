@@ -1,0 +1,57 @@
+{% extends 'AppBundle:Backend/Layout:Skeleton.html.twig' %}
+
+{% block content %}
+
+	<form action="" method="post">
+		<div class="container">
+			<div class="row" style="margin-top: 20px">
+				<div class="col-md-12">
+					<h1>Vytvořit novou stanici</h1>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label for="city">Město</label><br>
+						<select id="city" name="city" class="selectpicker" data-live-search="true" data-width="100%" required>
+							<option value="">Zvolte město</option>
+							{% for country in countries %}
+								<optgroup label="{{ country.name|language }}">
+									{% for c in country.cities %}
+										<option data-tokens="{{ c.allLanguagesNames|join(" ") }}" value="{{ c.id }}">{{ c.name|language }}</option>
+									{% endfor %}
+								</optgroup>
+							{% endfor %}
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label for="name_en">Název anglicky</label>
+						<input id="name_en" type="text" class="form-control" name="name[en]" placeholder="Název anglicky" value="" required>
+					</div>
+
+					<div class="form-group">
+						<label for="name_cs">Název česky</label>
+						<input id="name_cs" type="text" class="form-control" name="name[cs]" placeholder="Název česky" value="" required>
+					</div>
+
+					<div class="form-group">
+						<label for="name_ru">Název rusky</label>
+						<input id="name_ru" type="text" class="form-control" name="name[ru]" placeholder="Název rusky" value="" required>
+					</div>
+
+                    <div class="form-group">
+                        <label for="name_bg">Název bulharsky</label>
+                        <input id="name_bg" type="text" class="form-control" name="name[bg]" placeholder="Název bulharsky" value="" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name_uk">Název ukrajinsky</label>
+                        <input id="name_uk" type="text" class="form-control" name="name[uk]" placeholder="Název ukrajinsky" value="" required>
+                    </div>
+
+					<button type="submit" class="btn btn-success">Vytvořit stanici</button>
+				</div>
+			</div>
+		</div>
+	</form>
+
+{% endblock %}

@@ -1,0 +1,55 @@
+<div>
+	<form action="{{ actionUrl }}">
+		<script type="text/javascript">
+			var ticketNumbers = [{% for ticket in internalTickets %}{{ ticket.number }}{% if not loop.last %},{% endif %}{% endfor %}];
+            {% if isCarrier() %}
+                var bookedNumbers = [];
+                {% for book in books %}
+                    ticketNumbers.push({{ book.seatNumber }});
+                {% endfor %}
+            {% else %}
+                var bookedNumbers = [{% for book in books %}{{ book.seatNumber }}{% if not loop.last %},{% endif %}{% endfor %}];
+            {% endif %}
+			var onlyForCarrier = {{ onlyForCarrier ? "true" : "false" }};
+		</script>
+		<input type="hidden" name="dateDay" value="{% if dateDay %}{{ dateDay|date("Y-m-d") }}{% endif %}">
+		<div class="row">
+			<div class="{% if onlyForCarrier %}col-md-12{% else %}col-md-5{% endif %}">
+				{% if not onlyForCarrier %}
+				<button type="button" class="btn btn-default pull-right btn-block" data-action="addRow">+ Přidat řadu</button>
+				<br><br>
+				{% endif %}
+				<table class="seats-plan">
+					<tbody>
+					{% for row in seatsPlan.rowsOfSeats[0] %}
+					<tr>
+						{% for x in 0..4 %}
+							{% if row[x] is not defined %}
+								<td></td>
+							{% elseif row[x].available %}
+								<td class="seat-available"></td>
+							{% else %}
+								<td class="seat"></td>
+							{% endif %}
+						{% endfor %}
+						{% if not onlyForCarrier %}
+						<td class="control"><button type="button" class="btn btn-default btn-xs" data-action="removeRow">-</button></td>
+						{% endif %}
+					</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+			{% if not onlyForCarrier %}
+			<div class="col-md-7">
+				{% if (seatsPlan.dateDay is null and seatsPlan.id) or seatsPlan.dateDay %}
+				<button type="button" class="btn btn-primary pull-right" data-action="setForDate" {% if dateDay %}style="display:none"{% endif %}>Nastavit na konkrétní datum</button>
+				<button type="button" class="btn btn-primary pull-right" data-action="setForSchedule" {% if dateDay is null %}style="display:none"{% endif %}>Nastavit pro celý spoj</button>
+				<br><br>
+				<div class="calendar pull-right" {% if dateDay is null %}style="display:none"{% endif %}></div>
+				{% endif %}
+			</div>
+			{% endif %}
+		</div>
+	</form>
+</div>

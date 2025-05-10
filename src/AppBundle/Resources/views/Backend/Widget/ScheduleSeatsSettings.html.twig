@@ -1,0 +1,13 @@
+<tr>
+	<td>{{ schedule.line.code }}</td>
+	<td>{{ schedule.firstScheduleLineStation.lineStation.city.name|language }} {{ schedule.firstScheduleLineStation.time.departureTime }}</td>
+	<td><i class="fa fa-angle-double-right"></i> {{ schedule.lastScheduleLineStation.lineStation.city.name|language }} {{ schedule.lastScheduleLineStation.time.departureTime }}</td>
+	<td>{{ seatsPlan.countOfAvailableSeats }}</td>
+    {% if isCarrier() %}
+        <td>{{ internalTickets|length + books|length }}</td>
+    {% else %}
+        <td>{{ internalTickets|length }}</td>
+        <td>{{ books|length }}</td>
+    {% endif %}
+	<td><button type="button" data-url="{{ path("backend_ajax_schedule_seats_plan", { line: schedule.line.id, schedule: schedule.id, dateDay: dateDay|date("Y-m-d"), onlyForCarrier: true }) }}" data-action="seatsPlan" class="btn btn-default btn-xs btn-block" style="max-width: 200px;"><i class="fa fa-users"></i> Nastavit místa</button></td>
+</tr>

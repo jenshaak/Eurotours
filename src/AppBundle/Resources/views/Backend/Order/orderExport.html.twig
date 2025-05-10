@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+	<meta charset="utf-8">
+	<style type="text/css">
+		body {
+			font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+		}
+
+		table {
+			width: 800px;
+			clear: both;
+		}
+
+		th {
+			text-align: left;
+			padding: 5px 0;
+		}
+
+		td {
+			padding: 5px 0;
+		}
+
+		h1 {
+			float: left;
+			margin: 20px 0 20px 0;
+			font-size: 30px;
+		}
+
+		h2 {
+			color: rgba(0, 0, 0, 0.51);
+			float: left;
+			font-size: 22px;
+			margin: 28px 0 0 25px;
+		}
+	</style>
+</head>
+<body>
+
+    {% for currency in currencies %}
+
+        <h1>
+            {% if orderFilter.carrier %}{{ orderFilter.carrier.name }}{% endif %}
+            <small>{{ currency }}</small>
+        </h1>
+
+        {% if orderFilter.monthOrder %}<h2>objednáno v {{ orderFilter.monthOrder|czechMonth }} {{ orderFilter.monthOrder|date("Y") }}</h2>{% endif %}
+        {% if orderFilter.monthDeparture %}<h2>odjezd v {{ orderFilter.monthDeparture|czechMonth }} {{ orderFilter.monthDeparture|date("Y") }}</h2>{% endif %}
+        {% if orderFilter.dateRangePaid %}<h2>zaplaceno {{ orderFilter.dateRangePaid.from|date("j.n.Y") }} - {{ orderFilter.dateRangePaid.to|date("j.n.Y") }}</h2>{% endif %}
+        {% if orderFilter.dateRangeBilled %}<h2>vyúčtováno {{ orderFilter.dateRangeBilled.from|date("j.n.Y") }} - {{ orderFilter.dateRangeBilled.to|date("j.n.Y") }}</h2>{% endif %}
+        {% if orderFilter.dateRangeDeparture %}<h2>odjezd {{ orderFilter.dateRangeDeparture.from|date("j.n.Y") }} - {{ orderFilter.dateRangeDeparture.to|date("j.n.Y") }}</h2>{% endif %}
+        {% if orderFilter.dateRangeOrder %}<h2>objednáno {{ orderFilter.dateRangeOrder.from|date("j.n.Y") }} - {{ orderFilter.dateRangeOrder.to|date("j.n.Y") }}</h2>{% endif %}
+
+        <table>
+            <thead>
+            <tr>
+                <th>Zákazník</th>
+                <th>Trasa</th>
+                <th style="text-align: right">Cesta tam</th>
+                <th style="text-align: right">Cesta zpět</th>
+                <th style="text-align: right">Cena</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for ticket in tickets if ticket.currency == currency %}
+                <tr>
+                    <td>{{ ticket.orderPerson.name }}</td>
+                    <td>{{ ticket.route.simpleFromCityName|language }} &#187; {{ ticket.route.simpleToCityName|language }}</td>
+                    <td style="text-align: right">{{ ticket.route.datetimeDeparture|date("j.n.Y") }}</td>
+                    <td style="text-align: right">{{ ticket.isFirstWayForInReturnTicketTheSameCarrier ? ticket.order.routeBack.datetimeDeparture|date("j.n.Y") : "" }}</td>
+                    <td style="text-align: right">{{ ticket.priceCurrency|priceCurrency(true, ticket.order.priceCurrency.currency) }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="5" style="text-align: right; font-weight: bold">
+                    <span style="background-color: #EEEEEE; padding: 5px 10px;">Celkem: {{ sumPrices[currency]|priceCurrency(true, currency) }}</span>
+                </td>
+            </tr>
+            {% if commissionPrices %}
+                <tr>
+                    <td colspan="5" style="text-align: right; font-weight: bold">Celkem provize: {{ commissionPrices[currency]|priceCurrency(true, currency) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="5" style="text-align: right">K zaplacení: <span style="font-weight: bold">{{ toPaidPrices[currency]|priceCurrency(true, currency) }}</span></td>
+                </tr>
+            {% endif %}
+            </tfoot>
+        </table>
+
+    {% endfor %}
+</body>
+</html>
