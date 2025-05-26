@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c4de44ab5ef6ad839ad7b9dc5c8424d6",
+    "content-hash": "43004af571a2e920043683f4781834c4",
     "packages": [
         {
             "name": "adamstipak/webpay-php",
@@ -177,6 +177,62 @@
                 }
             ],
             "time": "2020-10-02T12:38:20+00:00"
+        },
+        {
+            "name": "coinremitterphp/coinremitter-php",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CoinRemitter/coinremitter-php.git",
+                "reference": "49697eb99bc287bbe774060407effac0c4dfff19"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CoinRemitter/coinremitter-php/zipball/49697eb99bc287bbe774060407effac0c4dfff19",
+                "reference": "49697eb99bc287bbe774060407effac0c4dfff19",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4 <=8.4"
+            },
+            "require-dev": {
+                "php": ">=5.4 <=8.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "CoinRemitter": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Coinremitter",
+                    "email": "coinremitter@outlook.com"
+                }
+            ],
+            "description": "Official PHP SDK for coinremitter cryptocurrency payment gateway",
+            "homepage": "https://coinremitter.com/",
+            "keywords": [
+                "api",
+                "coinremitter",
+                "cryptocurrency",
+                "payment gateway",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/CoinRemitter/coinremitter-php/issues",
+                "source": "https://github.com/CoinRemitter/coinremitter-php/tree/1.0.0"
+            },
+            "time": "2025-01-08T03:53:34+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
@@ -6468,9 +6524,9 @@
         "ext-iconv": "*",
         "ext-json": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "platform-overrides": {
         "php": "7.4.5"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }

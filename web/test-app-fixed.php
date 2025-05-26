@@ -19,18 +19,9 @@ require_once __DIR__.'/../app/AppKernel.php';
 date_default_timezone_set("Europe/Prague");
 
 ini_set("memory_limit", "1G");
-// Don't set session settings here - let Symfony handle it
-// ini_set("session.gc_maxlifetime", 60*60*24*7);
-// ini_set("session.cookie_lifetime", 60*60*24*7);
 
 // Determine environment
-$isDevEnvironment = (
-	(isset($_SERVER['SYMFONY_ENV']) and $_SERVER['SYMFONY_ENV'] === "dev")
-	||
-	(isset($_SERVER['SERVER_SOFTWARE']) and preg_match("~Symfony Local Server~", $_SERVER['SERVER_SOFTWARE']))
-	||
-	(($_ENV['SYMFONY_ENV'] ?? null) === "dev")
-);
+$isDevEnvironment = true;
 
 if ($isDevEnvironment) {
 	Debug::enable();
@@ -48,13 +39,15 @@ try {
 	$response->send();
 	$kernel->terminate($request, $response);
 } catch (\Exception $e) {
-	// In development, show the error
-	if ($isDevEnvironment) {
-		throw $e;
-	} else {
-		// In production, log the error and show a generic error page
-		error_log('Application error: ' . $e->getMessage());
-		http_response_code(500);
-		echo 'An error occurred. Please try again later.';
-	}
-}
+	// Show detailed error information
+	echo "<h1>🔧 Application Test Results</h1>";
+	echo "<h2>❌ Error Occurred</h2>";
+	echo "<p><strong>Error:</strong> " . htmlspecialchars($e->getMessage()) . "</p>";
+	echo "<p><strong>File:</strong> " . htmlspecialchars($e->getFile()) . "</p>";
+	echo "<p><strong>Line:</strong> " . $e->getLine() . "</p>";
+	echo "<h3>Stack Trace:</h3>";
+	echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre>";
+	
+	echo "<h2>🔍 Debugging Information</h2>";
+	echo "<p>This test helps identify what's still causing issues with the main application.</p>";
+} 

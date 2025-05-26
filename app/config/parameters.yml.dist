@@ -30,6 +30,10 @@ parameters:
     webpay_merchant_number: 2000301041
     webpay_url: "https://3dsecure.gpwebpay.com/pgw/order.do"
 
+    # CoinRemitter crypto payment configuration
+    coinremitter_api_key: 'your_coinremitter_api_key_here'
+    coinremitter_password: 'your_coinremitter_password_here'
+
     email_sender: 'info@eurotours.cz'
     domain: "http://new.eurotours.cz"
     jms_job_queue.statistics: true

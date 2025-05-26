@@ -5,10 +5,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 umask(0000);
 
-// Ensure no output before this point
-if (ob_get_level()) {
-    ob_end_clean();
-}
+// Start output buffering to prevent any accidental output
+ob_start();
 
 /**
  * @var Composer\Autoload\ClassLoader
@@ -19,20 +17,18 @@ require_once __DIR__.'/../app/AppKernel.php';
 date_default_timezone_set("Europe/Prague");
 
 ini_set("memory_limit", "1G");
+
 // Don't set session settings here - let Symfony handle it
 // ini_set("session.gc_maxlifetime", 60*60*24*7);
 // ini_set("session.cookie_lifetime", 60*60*24*7);
 
-// Determine environment
-$isDevEnvironment = (
+if (
 	(isset($_SERVER['SYMFONY_ENV']) and $_SERVER['SYMFONY_ENV'] === "dev")
 	||
 	(isset($_SERVER['SERVER_SOFTWARE']) and preg_match("~Symfony Local Server~", $_SERVER['SERVER_SOFTWARE']))
 	||
 	(($_ENV['SYMFONY_ENV'] ?? null) === "dev")
-);
-
-if ($isDevEnvironment) {
+) {
 	Debug::enable();
 	$kernel = new AppKernel('dev', true);
 	$kernel->loadClassCache();
@@ -42,19 +38,11 @@ if ($isDevEnvironment) {
 	$kernel->loadClassCache();
 }
 
-try {
-	$request = Request::createFromGlobals();
-	$response = $kernel->handle($request);
-	$response->send();
-	$kernel->terminate($request, $response);
-} catch (\Exception $e) {
-	// In development, show the error
-	if ($isDevEnvironment) {
-		throw $e;
-	} else {
-		// In production, log the error and show a generic error page
-		error_log('Application error: ' . $e->getMessage());
-		http_response_code(500);
-		echo 'An error occurred. Please try again later.';
-	}
-}
+// Clean any buffered output before handling request
+ob_end_clean();
+
+$request = Request::createFromGlobals();
+$response = $kernel->handle($request);
+$response->send();
+
+$kernel->terminate($request, $response); 

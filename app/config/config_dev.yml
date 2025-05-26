@@ -14,11 +14,11 @@ web_profiler:
 doctrine:
     dbal:
         driver: pdo_mysql
-        host: mysql
+        host: 127.0.0.1
         port: 3306
-        dbname: eurotours
-        user: eurotours
-        password: eurotours
+        dbname: symfony
+        user: root
+        password: null
         charset: UTF8
         server_version: '5.7'
 

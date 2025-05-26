@@ -55,6 +55,10 @@ services:
         class: AppBundle\Controller\Frontend\PaymentController
         autowire: true
 
+    controller.frontend.cryptoPayment:
+        class: AppBundle\Controller\Frontend\CryptoPaymentController
+        autowire: true
+
     controller.backend.homepage:
         class: AppBundle\Controller\Frontend\HomepageController
         autowire: true
@@ -228,6 +232,10 @@ services:
 
     service.payment:
         class: AppBundle\Service\PaymentService
+        autowire: true
+
+    service.cryptoPayment:
+        class: AppBundle\Service\CryptoPaymentService
         autowire: true
 
     service.routeCombination:

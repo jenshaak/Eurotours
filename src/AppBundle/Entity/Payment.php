@@ -102,6 +102,24 @@ class Payment
 	 */
 	private $datetimeExpire = null;
 
+	/**
+	 * @var string|null
+	 * @ORM\Column(name="payment_method", type="string", length=50, nullable=true)
+	 */
+	private $paymentMethod;
+
+	/**
+	 * @var string|null
+	 * @ORM\Column(name="crypto_invoice_id", type="string", length=255, nullable=true)
+	 */
+	private $cryptoInvoiceId;
+
+	/**
+	 * @var string|null
+	 * @ORM\Column(name="crypto_currency", type="string", length=10, nullable=true)
+	 */
+	private $cryptoCurrency;
+
 	public function __construct()
 	{
 		$this->datetimeCreated = new \DateTime;
@@ -337,5 +355,61 @@ class Payment
 	public function setDatetimeExpire(?\DateTime $datetimeExpire): void
 	{
 		$this->datetimeExpire = $datetimeExpire;
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function getPaymentMethod()
+	{
+		return $this->paymentMethod;
+	}
+
+	/**
+	 * @param string|null $paymentMethod
+	 */
+	public function setPaymentMethod($paymentMethod)
+	{
+		$this->paymentMethod = $paymentMethod;
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function getCryptoInvoiceId()
+	{
+		return $this->cryptoInvoiceId;
+	}
+
+	/**
+	 * @param string|null $cryptoInvoiceId
+	 */
+	public function setCryptoInvoiceId($cryptoInvoiceId)
+	{
+		$this->cryptoInvoiceId = $cryptoInvoiceId;
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function getCryptoCurrency()
+	{
+		return $this->cryptoCurrency;
+	}
+
+	/**
+	 * @param string|null $cryptoCurrency
+	 */
+	public function setCryptoCurrency($cryptoCurrency)
+	{
+		$this->cryptoCurrency = $cryptoCurrency;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isCryptoPayment()
+	{
+		return $this->paymentMethod === 'crypto';
 	}
 }

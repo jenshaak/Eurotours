@@ -17,12 +17,41 @@ class LanguageListener
 {
 	public function onKernelRequest(GetResponseEvent $event)
 	{
-		/** @var LanguageBag $languageBag */
-		$languageBag = $event->getRequest()->getSession()->getBag(LanguageBag::class);
-		if ($languageBag->getLanguage() === null) {
-			$languageBag->setLanguageId("cs");
+		// Only process master requests
+		if (!$event->isMasterRequest()) {
+			return;
 		}
 
-		$event->getRequest()->setLocale($languageBag->getLanguage());
+		$request = $event->getRequest();
+		
+		// Check if session is available and started
+		if (!$request->hasSession()) {
+			return;
+		}
+
+		$session = $request->getSession();
+		
+		// Make sure session is started before accessing bags
+		if (!$session->isStarted()) {
+			try {
+				$session->start();
+			} catch (\Exception $e) {
+				// If session can't be started, just return without setting language
+				return;
+			}
+		}
+
+		try {
+			/** @var LanguageBag $languageBag */
+			$languageBag = $session->getBag(LanguageBag::class);
+			if ($languageBag->getLanguage() === null) {
+				$languageBag->setLanguageId("cs");
+			}
+
+			$request->setLocale($languageBag->getLanguage());
+		} catch (\Exception $e) {
+			// If there's any issue with the language bag, set a default locale
+			$request->setLocale('cs');
+		}
 	}
 }
