@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Widget Debug</title>
+    <link href="vendor/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css" rel="stylesheet">
+    <link href="compiled-css/frontend.css" rel="stylesheet">
+</head>
+<body data-page="homepage">
+    <div class="container" style="margin-top: 50px;">
+        <h1>Widget Debug</h1>
+        
+        <!-- Simulate the widget structure -->
+        <div id="test-widget">
+            <form action="/search" method="post">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="searchFrom">From</label>
+                        <select id="searchFrom" name="searchFrom" class="selectpicker" data-live-search="true" data-width="100%">
+                            <option value="">From</option>
+                            <option value="1">Prague</option>
+                            <option value="2">Vienna</option>
+                            <option value="3">Budapest</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="searchDay">Date</label>
+                        <input type="text" class="form-control" name="searchDay" id="searchDay" style="width: 100%">
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-md-6">
+                        <label for="searchTo">To</label>
+                        <select id="searchTo" name="searchTo" class="selectpicker" data-live-search="true" data-width="100%">
+                            <option value="">To</option>
+                            <option value="1">Prague</option>
+                            <option value="2">Vienna</option>
+                            <option value="3">Budapest</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label>
+                            <input type="checkbox" name="type" value="return">
+                            Return trip
+                        </label><br>
+                        <input type="text" class="form-control" name="searchBack" id="searchBack" style="width: 100%; display:none">
+                        <label id="onlyOpen" style="display:none">
+                            <input type="checkbox" name="onlyOpen" value="1">
+                            Only open return
+                        </label>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-success btn-block">Search</button>
+                    </div>
+                </div>
+            </form>
+            
+            <!-- Widget script tag that the widget system looks for -->
+            <script data-widget="test-widget-123" data-widget-name="frontend.searchForm"></script>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <h3>Debug Info:</h3>
+            <div id="debug-info"></div>
+        </div>
+    </div>
+
+    <script>
+        var registerWidgets = [];
+        var registerWidget = function (name, id) {
+            var scripts = document.getElementsByTagName("script");
+            for (var i = 0; i < scripts.length; i++) {
+                if (scripts[i].getAttribute("data-widget") == id) {
+                    registerWidgets.push({ name: name, id: id, node: scripts[i].parentNode });
+                }
+            }
+            if (typeof refreshWidgets == 'function') refreshWidgets();
+        };
+
+        var language = "cs";
+        var currentCurrency = "CZK";
+        var currentCurrencyString = "Kč";
+        var dateFormat = "dd.mm.yyyy";
+
+        var translations = {
+            "searchForm.switchDates": "Switch dates",
+            "searchForm.switchDatesSecond": "Switch dates second",
+            "searchForm.checkDate": "Check date"
+        };
+    </script>
+
+    <script src="vendor/jquery/dist/jquery.min.js"></script>
+    <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="vendor/bootstrap-select/js/bootstrap-select.js"></script>
+    <script src="vendor/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="vendor/bootstrap-datepicker/dist/locales/bootstrap-datepicker.cs.min.js"></script>
+    <script src="vendor/bootstrap3-dialog/dist/js/bootstrap-dialog.min.js"></script>
+    <script src="compiled-js/frontend.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            var debugInfo = $('#debug-info');
+            
+            debugInfo.append('<p>jQuery loaded: ' + (typeof $ !== 'undefined') + '</p>');
+            debugInfo.append('<p>Bootstrap loaded: ' + (typeof $.fn.modal !== 'undefined') + '</p>');
+            debugInfo.append('<p>Bootstrap Select loaded: ' + (typeof $.fn.selectpicker !== 'undefined') + '</p>');
+            debugInfo.append('<p>Bootstrap Datepicker loaded: ' + (typeof $.fn.datepicker !== 'undefined') + '</p>');
+            debugInfo.append('<p>Widget system loaded: ' + (typeof widgets !== 'undefined') + '</p>');
+            debugInfo.append('<p>SearchForm widget available: ' + (typeof widgets !== 'undefined' && widgets['frontend.searchForm'] !== 'undefined') + '</p>');
+            debugInfo.append('<p>RegisterWidgets array: ' + JSON.stringify(registerWidgets) + '</p>');
+            
+            // Manually register the widget
+            registerWidget('frontend.searchForm', 'test-widget-123');
+            
+            debugInfo.append('<p>After manual registration: ' + JSON.stringify(registerWidgets) + '</p>');
+            
+            setTimeout(function() {
+                debugInfo.append('<p>Selectpicker elements found: ' + $('.selectpicker').length + '</p>');
+                debugInfo.append('<p>Bootstrap-select applied: ' + $('.bootstrap-select').length + '</p>');
+            }, 1000);
+        });
+    </script>
+</body>
+</html> 

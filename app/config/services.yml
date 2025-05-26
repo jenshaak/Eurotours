@@ -871,6 +871,7 @@ services:
 
     listener.language:
         class: AppBundle\EventListener\LanguageListener
-        autowire: true
+        arguments:
+            - '@translator'
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 15 }

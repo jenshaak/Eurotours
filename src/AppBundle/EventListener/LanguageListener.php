@@ -12,9 +12,20 @@ namespace AppBundle\EventListener;
 use AppBundle\Service\LanguageService;
 use AppBundle\VO\LanguageBag;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class LanguageListener
 {
+	/**
+	 * @var TranslatorInterface
+	 */
+	private $translator;
+
+	public function __construct(TranslatorInterface $translator)
+	{
+		$this->translator = $translator;
+	}
+
 	public function onKernelRequest(GetResponseEvent $event)
 	{
 		// Only process master requests
@@ -48,10 +59,16 @@ class LanguageListener
 				$languageBag->setLanguageId("cs");
 			}
 
-			$request->setLocale($languageBag->getLanguage());
+			$locale = $languageBag->getLanguage();
+			
+			// Set both request locale and translator locale
+			$request->setLocale($locale);
+			$this->translator->setLocale($locale);
+			
 		} catch (\Exception $e) {
 			// If there's any issue with the language bag, set a default locale
 			$request->setLocale('cs');
+			$this->translator->setLocale('cs');
 		}
 	}
 }

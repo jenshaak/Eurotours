@@ -112,5 +112,31 @@
 output='compiled-js/frontend.js' %}
 <script src="{{ asset_url }}"></script>
 {% endjavascripts %}
+
+<script>
+$(document).ready(function() {
+    // Global fallback initialization for selectpickers and datepickers
+    setTimeout(function() {
+        // Initialize any selectpickers that haven't been initialized yet
+        $('.selectpicker').each(function() {
+            if (!$(this).hasClass('bs-select-hidden')) {
+                $(this).selectpicker();
+            }
+        });
+        
+        // Initialize any datepickers that haven't been initialized yet
+        $('input[name="searchDay"], input[name="searchBack"]').each(function() {
+            if (!$(this).hasClass('hasDatepicker')) {
+                $(this).datepicker({
+                    format: dateFormat,
+                    language: language,
+                    weekStart: 1,
+                    keyboardNavigation: false
+                });
+            }
+        });
+    }, 500);
+});
+</script>
 </body>
 </html>

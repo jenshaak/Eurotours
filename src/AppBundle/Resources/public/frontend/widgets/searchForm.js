@@ -14,6 +14,9 @@ FrontendSearchFormWidget.prototype.create = function () {
 
 	var self = this;
 
+	// Initialize Bootstrap Select dropdowns
+	self.$object.find('.selectpicker').selectpicker();
+
 	self.$typeReturnCheckbox.on("change", function () {
 		if (self.$typeReturnCheckbox.is(":checked")) {
 			self.$dateBackInput.show();

@@ -95,7 +95,8 @@ class LanguageService
 	{
 		$languageId = $this->languageBag->getLanguage();
 		if ($languageId === null) {
-			$this->setCurrentLanguage($this->getAllLanguages()[0]);
+			// Default to Czech language instead of first in database
+			$this->setCurrentLanguage($this->getCzech());
 			return $this->getCurrentLanguage();
 		}
 
