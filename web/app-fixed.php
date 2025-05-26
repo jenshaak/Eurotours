@@ -19,9 +19,6 @@ require_once __DIR__.'/../app/AppKernel.php';
 date_default_timezone_set("Europe/Prague");
 
 ini_set("memory_limit", "1G");
-// Don't set session settings here - let Symfony handle it
-// ini_set("session.gc_maxlifetime", 60*60*24*7);
-// ini_set("session.cookie_lifetime", 60*60*24*7);
 
 // Determine environment
 $isDevEnvironment = (
@@ -71,4 +68,4 @@ try {
 		http_response_code(500);
 		echo 'An error occurred. Please try again later.';
 	}
-}
+} 
