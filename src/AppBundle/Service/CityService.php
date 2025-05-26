@@ -54,6 +54,6 @@ class CityService
 	 */
 	public function getPragueCity()
 	{
-		return $this->getCity(41);
+		return $this->getCity(921);
 	}
 }

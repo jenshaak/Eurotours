@@ -10,7 +10,7 @@
 						{% for country in countries %}
 							<optgroup label="{{ country.name|language }}">
 								{% for city in country.activeCities %}
-									<option data-tokens="{{ city.allLanguagesNames|join(" ") }} {{ city.nextVariations }}" value="{{ city.id }}"{% if routeFilter.fromCity == city or (routeFilter.fromCity is null and fromCity == city)%} selected{% endif %}>{{ city.name|language }}</option>
+									<option data-tokens="{{ city.name|language }} {{ city.nextVariations }}" value="{{ city.id }}"{% if routeFilter.fromCity == city or (routeFilter.fromCity is null and fromCity == city)%} selected{% endif %}>{{ city.name|language }}</option>
 								{% endfor %}
 							</optgroup>
 						{% endfor %}
@@ -30,7 +30,7 @@
 						{% for country in countries %}
 							<optgroup label="{{ country.name|language }}">
 								{% for city in country.activeCities %}
-									<option data-tokens="{{ city.allLanguagesNames|join(" ") }} {{ city.nextVariations }}" value="{{ city.id }}"{% if routeFilter.toCity == city %} selected{% endif %}>{{ city.name|language }}</option>
+									<option data-tokens="{{ city.name|language }} {{ city.nextVariations }}" value="{{ city.id }}"{% if routeFilter.toCity == city %} selected{% endif %}>{{ city.name|language }}</option>
 								{% endfor %}
 							</optgroup>
 						{% endfor %}
